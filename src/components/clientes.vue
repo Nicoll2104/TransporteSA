@@ -102,7 +102,7 @@ async function AgregarCliente() {
   };
 
   try {
-    let res = await axios.post("https://boleto.onrender.com/api/cliente/agregar", data); 
+    let res = await axios.post("cliente/agregar", data); 
     console.log(res);
     
 
