@@ -138,23 +138,29 @@ async function AgregarRuta() {
 obtener()
 
 const activar = async (id) => {
-const ruta = await axios.put(`ruta/activar/${id}`);
-  console.log(ruta);
-  if (ruta == null) {
-    return;
+  try {
+    const response = await axios.put(`ruta/activar/${id}`);
+    const ruta = response.data.rutas;
+    if (ruta) {
+      const buscar = DatosData.value.findIndex((r) => r._id === id);
+      DatosData.value.splice(buscar, 1, ruta);
+    }
+  } catch (error) {
+    console.error('Error al activar conductor:', error);
   }
-  const buscar = DatosData.value.findIndex((r) => r._id == id);
-  DatosData.value.splice(buscar, 1, ruta.data.ruta);
 };
 
 const desactivar = async (id) => {
-const ruta = await axios.put(`ruta/inactivar/${id}`);
-  console.log(ruta);
-  if (ruta == null) {
-    return;
+  try {
+    const response = await axios.put(`ruta/inactivar/${id}`);
+    const ruta = response.data.rutas;
+    if (ruta) {
+      const buscar = DatosData.value.findIndex((r) => r._id === id);
+      DatosData.value.splice(buscar, 1, ruta);
+    }
+  } catch (error) {
+    console.error('Error al desactivar conductor:', error);
   }
-  const buscar = DatosData.value.findIndex((r) => r._id == id);
-  DatosData.value.splice(buscar, 1, ruta.data.ruta);
 };
 
 </script>-

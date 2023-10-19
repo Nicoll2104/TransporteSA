@@ -128,30 +128,27 @@ async function AgregarBus() {
 obtener()
 
 const activar = async (id) => {
-  try {
-    const response = await axios.put(`bus/activar/${id}`);
-    const bus = response.data.bus;
-    if (bus) {
-      const buscar = DatosData.value.findIndex((r) => r._id === id);
-      DatosData.value.splice(buscar, 1, bus);
-    }
-  } catch (error) {
-    console.error('Error al activar buses:', error);
+const bus = await axios.put(`bus/activar/${id}`);
+  console.log(bus);
+  if (bus == null) {
+    return;
   }
+  const buscar = DatosData.value.findIndex((r) => r._id == id);
+  DatosData.value.splice(buscar, 1, bus.data.bus);
 };
 
 const desactivar = async (id) => {
-  try {
-    const response = await axios.put(`bus/inactivar/${id}`);
-    const bus = response.data.bus;
-    if (bus) {
-      const buscar = DatosData.value.findIndex((r) => r._id === id);
-      DatosData.value.splice(buscar, 1, bus);
-    }
-  } catch (error) {
-    console.error('Error al desactivar buses:', error);
+const bus = await axios.put(`bus/inactivar/${id}`);
+  console.log(bus);
+  if (bus == null) {
+    return;
   }
+  const buscar = DatosData.value.findIndex((r) => r._id == id);
+  DatosData.value.splice(buscar, 1, bus.data.bus);
 };
+
+
+
 </script>
   
 <style scoped>
