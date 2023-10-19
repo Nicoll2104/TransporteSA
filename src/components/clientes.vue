@@ -130,7 +130,7 @@ function EditarCliente(cliente) {
 obtener()
 
 const activar = async (id) => {
-    const cliente = await axios.put(`https://boleto.onrender.com/api/cliente/activar/${id}`);
+  const cliente = await axios.put(`cliente/activar/${id}`);
     console.log(cliente);
     if (cliente == null) {
       return;
@@ -141,7 +141,7 @@ const activar = async (id) => {
 
 const desactivar = async (id) => {
 
-    const cliente = await axios.put(`https://boleto.onrender.com/api/cliente/inactivar/${id}`);
+    const cliente = await axios.put(`cliente/inactivar/${id}`);
     console.log(cliente);
     if (cliente == null) {
       return;
