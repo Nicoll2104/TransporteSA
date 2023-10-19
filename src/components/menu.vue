@@ -33,7 +33,7 @@
           </router-link>
         </button>
         <button class="btn">
-          <router-link to="/"
+          <router-link to="/conductor"
             ><img
               src="https://cdn-icons-png.flaticon.com/128/1480/1480682.png"
               style="height: 30px; width: 30px"
@@ -49,7 +49,7 @@
           >
         </button>
         <button class="btn">
-          <router-link to="/"
+          <router-link to="/bus"
             ><img
               src="https://cdn-icons-png.flaticon.com/128/89/89111.png"
               style="height: 30px; width: 30px"
