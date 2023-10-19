@@ -135,28 +135,32 @@ async function AgregarConductor() {
 
 obtener()
 
+
 const activar = async (id) => {
-  const conductor = await axios.put(`conductor/activar/${id}`);
-    console.log(conductor);
-    if (conductor == null) {
-      return;
+  try {
+    const response = await axios.put(`conductor/activar/${id}`);
+    const conductor = response.data.conductores;
+    if (conductor) {
+      const buscar = DatosData.value.findIndex((r) => r._id === id);
+      DatosData.value.splice(buscar, 1, conductor);
     }
-    const buscar = DatosData.value.findIndex((r) => r._id == id);
-    DatosData.value.splice(buscar, 1, conductor.data.conductor);
+  } catch (error) {
+    console.error('Error al activar conductor:', error);
+  }
 };
 
 const desactivar = async (id) => {
-  const conductor = await axios.put(`conductor/inactivar/${id}`);
-    console.log(conductor);
-    if (conductor == null) {
-      return;
+  try {
+    const response = await axios.put(`conductor/inactivar/${id}`);
+    const conductor = response.data.conductores;
+    if (conductor) {
+      const buscar = DatosData.value.findIndex((r) => r._id === id);
+      DatosData.value.splice(buscar, 1, conductor);
     }
-    const buscar = DatosData.value.findIndex((r) => r._id == id);
-    DatosData.value.splice(buscar, 1, conductor.data.conductor);
+  } catch (error) {
+    console.error('Error al desactivar conductor:', error);
+  }
 };
-
-
-
 </script>
     
 <style scoped>
