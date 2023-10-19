@@ -65,7 +65,7 @@
           >
         </button>
         <button class="btn">
-          <router-link to="/"
+          <router-link to="/ruta"
             ><img
               src="https://cdn-icons-png.flaticon.com/128/3419/3419596.png"
               style="height: 30px; width: 30px"
