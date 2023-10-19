@@ -39,14 +39,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url("https://www.granadahoy.com/2019/02/04/granada/Estacion-autobuses-Granada_1324978032_94494412_667x375.jpg");
+    background-image: url("../assets/4931029.jpg");
     background-size:cover ;
 }
 
 .form{
     display: flex;
     width: 500px;
-    height: 65%;
+    height: 70%;
     background: linear-gradient(160deg, #a9babb, #9fb2b7);
     flex-direction: column;
     box-shadow: 20px 17px 50px rgb(90, 88, 88);
@@ -92,6 +92,7 @@
     background-image: url("https://static.vecteezy.com/system/resources/thumbnails/007/794/726/small/travel-bus-illustration-logo-on-light-background-free-vector.jpg");
     background-size: cover;
     width: 100px;
+    margin-top: 10px;
     height: 100px;
 }
 
