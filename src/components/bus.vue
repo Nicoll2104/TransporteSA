@@ -37,7 +37,7 @@
 
             <div class="ilDatos">
               <label class="labelDatos" for="soat" > Soat:</label>
-              <input class="inputDatos" type="text" id=" soat" v-model="  soat" />
+              <input class="inputDatos" type="number" id=" soat" v-model="soat" />
             </div>
 
             <div class="ilDatos">
@@ -99,32 +99,30 @@ try {
 };
 
 async function AgregarBus() {
-const data = {
-  placa: placa.value,
-  modelo: modelo.value,
-  soat: soat.value,
-  n_asiento: n_asiento.value,
-  empresa_asignada: empresa_asignada.value,
-  status: status.value 
-};
+  const data = {
+    placa: placa.value,
+    modelo: modelo.value,
+    soat: soat.value,
+    n_asiento: n_asiento.value,
+    empresa_asignada: empresa_asignada.value,
+    status: status.value 
+  };
 
-try {
-  let res = await axios.post("bus/agregar", data); 
-  console.log(res);
+  try {
+    let res = await axios.post("bus/agregar", data);
+    console.log(res);
   
+    placa.value = "";
+    modelo.value = "";
+    soat.value = "";
+    n_asiento.value = "";
+    empresa_asignada.value = ""; 
+    status.value = "";
 
-  placa.value = "";
-  modelo.value = "";
-  soat.value = "";
-  n_asiento.value = "";
-  empresa_asignada = "";
-  status.value = "";
-
-
-  obtener();
-} catch (error) {
-  console.log(error);
-}
+    obtener();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 obtener()
