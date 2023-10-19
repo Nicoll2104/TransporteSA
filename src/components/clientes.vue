@@ -84,7 +84,7 @@ const columns = [
 
 const obtener = async () => {
   try {
-    const response = await axios.get(`https://boleto.onrender.com/api/cliente/ver`);
+    const response = await axios.get("cliente/ver");
     DatosData.value = response.data; 
   } catch (error) {
     console.error('Error al obtener clientes:', error);
@@ -102,7 +102,7 @@ async function AgregarCliente() {
   };
 
   try {
-    let res = await axios.post(`https://boleto.onrender.com/api/cliente/agregar`, data); // Envía los datos del cliente en la solicitud
+    let res = await axios.post("cliente/agregar", data); 
     console.log(res);
     
 
@@ -119,13 +119,7 @@ async function AgregarCliente() {
   }
 }
 
-function editarCliente(cliente) {
-  cedula.value = cliente.cedula;
-  nombre.value = cliente.nombre;
-  telefono.value = cliente.telefono;
-  email.value = cliente.email;
-  modal.value = true; 
-}
+
 
 obtener()
 

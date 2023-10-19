@@ -9,7 +9,7 @@ import '@quasar/extras/material-icons/material-icons.css'
 
 
 
-axios.defaults.baseURL = "https://boleto.onrender.com/api/cliente"
+axios.defaults.baseURL = "https://boleto.onrender.com/api/"
 
 
 const pinia = createPinia()
