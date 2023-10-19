@@ -92,9 +92,9 @@ const columns = [
 
 const obtener = async () => {
 try {
-  const response = await axios.get("conductor/ver");
-  console.log("Datos de conductores:", response.data); // Verificar no muestra en la tabla 
-  DatosData.value = response.data.conductor;
+  const response = await axios.get("https://boleto.onrender.com/api/conductor/ver");
+  console.log("Datos de conductores:", response.data); 
+  DatosData.value = response.data;
 } catch (error) {
   console.error('Error al obtener conductor:', error);
 }
