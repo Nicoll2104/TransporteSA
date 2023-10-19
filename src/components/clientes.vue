@@ -9,7 +9,7 @@
       </template>
       <template v-slot:body-cell-acciones="props">
     <q-td key="acciones" :props="props">
-      <q-btn class="btnEditar" icon="edit" color="amber" @click="editarCliente(props.row)"></q-btn>
+      <q-btn class="btnEditar" icon="edit" color="amber" @click="EditarCliente(props.row)">Editar</q-btn>
       <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
       <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
     </q-td>
@@ -102,7 +102,7 @@ async function AgregarCliente() {
   };
 
   try {
-    let res = await axios.post("cliente/agregar", data); 
+    let res = await axios.post("https://boleto.onrender.com/api/cliente/agregar", data); 
     console.log(res);
     
 
@@ -119,7 +119,13 @@ async function AgregarCliente() {
   }
 }
 
-
+function EditarCliente(cliente) {
+  cedula.value = cliente.cedula;
+  nombre.value = cliente.nombre;
+  telefono.value = cliente.telefono;
+  email.value = cliente.email;
+  modal.value = true; 
+}
 
 obtener()
 
@@ -144,9 +150,13 @@ const desactivar = async (id) => {
     DatosData.value.splice(buscar, 1, cliente.data.cliente);
 };
 
-
-
 </script>
+
+
+
+
+
+
     
 <style scoped>
 .color1 {
