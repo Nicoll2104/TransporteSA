@@ -92,7 +92,7 @@ const columns = [
 
 const obtener = async () => {
 try {
-  const response = await axios.get("https://boleto.onrender.com/api/conductor/ver");
+  const response = await axios.get("conductor/ver");
   console.log("Datos de conductores:", response.data); 
   DatosData.value = response.data;
 } catch (error) {

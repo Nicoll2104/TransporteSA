@@ -146,7 +146,7 @@ const activar = async (id) => {
       DatosData.value.splice(buscar, 1, ruta);
     }
   } catch (error) {
-    console.error('Error al activar conductor:', error);
+    console.error('Error al activar rutas:', error);
   }
 };
 
@@ -159,7 +159,7 @@ const desactivar = async (id) => {
       DatosData.value.splice(buscar, 1, ruta);
     }
   } catch (error) {
-    console.error('Error al desactivar conductor:', error);
+    console.error('Error al desactivar rutas:', error);
   }
 };
 
