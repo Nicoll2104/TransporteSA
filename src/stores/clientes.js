@@ -26,6 +26,9 @@ export const useClienteStore = defineStore("cliente", () => {
     const activarCliente = async (clienteId) => {
         try {
             const response = await axios.put(`cliente/activar/${clienteId}`);
+            console.log(response.data); // Registra la respuesta del servidor
+            obtener();
+            return response.data.cliente; // Devuelve el cliente activado
         } catch (error) {
             console.error('Error al activar cliente:', error);
             throw error;
@@ -35,6 +38,9 @@ export const useClienteStore = defineStore("cliente", () => {
     const desactivarCliente = async (clienteId) => {
         try {
             const response = await axios.put(`cliente/inactivar/${clienteId}`);
+            console.log(response.data); 
+            obtener();
+            return response.data.cliente;
         } catch (error) {
             console.error('Error al desactivar cliente:', error);
             throw error;

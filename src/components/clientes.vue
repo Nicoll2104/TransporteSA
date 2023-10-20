@@ -106,7 +106,8 @@ async function AgregarCliente() {
 
 async function activar(id) {
   try {
-    await clienteStore.activarCliente(id);
+    const cliente = await clienteStore.activarCliente(id); 
+    console.log('Cliente activado:', cliente);
     obtenerClientes();
   } catch (error) {
     console.error('Error al activar cliente:', error);
@@ -115,7 +116,8 @@ async function activar(id) {
 
 async function desactivar(id) {
   try {
-    await clienteStore.desactivarCliente(id);
+    const cliente = await clienteStore.desactivarCliente(id);
+    console.log('Cliente desactivado:', cliente);
     obtenerClientes();
   } catch (error) {
     console.error('Error al desactivar cliente:', error);
