@@ -9,7 +9,7 @@
       </template>
       <template v-slot:body-cell-acciones="props">
         <q-td key="acciones" :props="props">
-          <q-btn class="btnEditar" icon="edit" color="amber" @click="EditarBus(props.row)"></q-btn>
+          <q-btn class="btnEditar" icon="edit" color="amber" @click="editarBus(props.row)"></q-btn>
           <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
           <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
         </q-td>
@@ -37,7 +37,7 @@
 
             <div class="ilDatos">
               <label class="labelDatos" for="soat"> Soat:</label>
-              <input class="inputDatos" type="number" id="soat" v-model="soat" />
+              <input class="inputDatos" type="text" id="soat" v-model="soat" />
             </div>
 
             <div class="ilDatos">
@@ -56,8 +56,8 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn flat label="Cerrar" color="primary" v-close-popup />
-          <q-btn flat label="Aceptar" color="primary" @click="AgregarBus" v-close-popup />
+          <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
+          <q-btn flat label="Aceptar" color="primary" @click="agregarEditarBus" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -80,6 +80,7 @@ const modelo = ref("");
 const soat = ref("");
 const n_asiento = ref("");
 const empresa_asignada = ref("");
+const busEditando = ref(null);
 
 async function obtenerBus() {
   try {
@@ -92,32 +93,71 @@ async function obtenerBus() {
 }
 
 
-async function AgregarBus() {
-  const nuevoBus = {
-    placa: placa.value,
-    modelo: modelo.value,
-    soat: soat.value,
-    n_asiento: n_asiento.value,
-    empresa_asignada: empresa_asignada.value,
-  };
-  console.log("Bus agregado:", nuevoBus);
-
-  try {
-    await busStore.agregarBus(nuevoBus);
-
-    placa.value = "";
-    modelo.value = "";
-    soat.value = "";
-    n_asiento.value = "";
-    empresa_asignada.value = "";
-
-    modal.value = false;
-
-    obtenerBus();
-  } catch (error) {
-    console.error('Error al agregar un bus:', error);
+const agregarEditarBus = async () => {
+  if (busEditando.value) {
+    const busEditado = {
+      _id: busEditando.value._id,
+      placa: placa.value,
+      modelo: modelo.value,
+      soat: soat.value,
+      n_asiento: n_asiento.value,
+      empresa_asignada: empresa_asignada.value,
+    };
+    try {
+      await busStore.editarBus(busEditado);
+      placa.value = "";
+      modelo.value = "";
+      soat.value = "";
+      n_asiento.value = "";
+      empresa_asignada.value = "";
+      modal.value = false;
+      busEditando.value = null;
+      obtenerBus();
+    } catch (error) {
+      console.error('Error al editar el cliente:', error);
+    }
+  } else {
+    const nuevoBus = {
+      placa: placa.value,
+      modelo: modelo.value,
+      soat: soat.value,
+      n_asiento: n_asiento.value,
+      empresa_asignada: empresa_asignada.value,
+    };
+    try {
+      await busStore.agregarBus(nuevoBus);
+      placa.value = "";
+      modelo.value = "";
+      soat.value = "";
+      n_asiento.value = "";
+      empresa_asignada.value = "";
+      modal.value = false;
+      obtenerBus();
+      limpiar();
+    } catch (error) {
+      console.error('Error al agregar el bus:', error);
+    }
   }
 }
+
+const editarBus = (bus) => {
+  placa.value = bus.placa;
+  modelo.value = bus.modelo;
+  soat.value = bus.soat;
+  n_asiento.value = bus.n_asiento;
+  empresa_asignada.value = bus.empresa_asignada;
+  busEditando.value = bus;
+  modal.value = true;
+}
+
+const limpiar = () => {
+  placa.value = "";
+  modelo.value = "";
+  soat.value = "";
+  n_asiento.value = "";
+  empresa_asignada.value = "";
+};
+
 
 async function activar(id) {
   try {
@@ -148,7 +188,7 @@ onMounted(() => {
 
 
 const columns = [
-  { name: "placa",required: true, label: "Placa", align: "left", field: "placa", format: (val) => val,},
+  { name: "placa", required: true, label: "Placa", align: "left", field: "placa", format: (val) => val, },
   { name: "modelo", required: true, label: "Modelo", align: "left", field: "modelo", sortable: true },
   { name: "soat", required: true, label: "Soat", align: "left", field: "soat", sortable: true },
   { name: "n_asiento", required: true, label: "N_asiento", align: "left", field: "n_asiento", sortable: true },

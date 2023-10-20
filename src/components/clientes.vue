@@ -31,13 +31,13 @@
             </div>
 
             <div class="ilDatos">
-              <label class="labelDatos" for="telefono">Nombre:</label>
+              <label class="labelDatos" for="nombre">Nombre:</label>
               <input class="inputDatos" type="text" id="nombre" v-model="nombre" />
             </div>
 
             <div class="ilDatos">
               <label class="labelDatos" for="telefono">Telefono:</label>
-              <input class="inputDatos" type="text" id="telefono" v-model="telefono" />
+              <input class="inputDatos" type="number" id="telefono" v-model="telefono" />
             </div>
 
             <div class="ilDatos">

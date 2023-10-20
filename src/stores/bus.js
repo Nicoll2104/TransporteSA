@@ -19,9 +19,20 @@ export const useBusStore = defineStore("bus", () => {
     const agregarBus = async (nuevoBus) => {
         try {
             const response = await axios.post("bus/agregar", nuevoBus);
-            return response.data;
+            console.log("bus Agregado",response.data);
         } catch (error) {
             console.error('Error al agregar el bus:', error);
+            throw error;
+        }
+    };
+
+    const editarBus = async (busEditado) => {
+        try {
+            const response = await axios.put(`bus/modificar/${busEditado._id}`, busEditado);
+            console.log("bus Editado",response.data);
+            obtener();
+        } catch (error) {
+            console.error('Error al editar bus:', error);
             throw error;
         }
     };
@@ -55,6 +66,7 @@ export const useBusStore = defineStore("bus", () => {
         datosData,
         obtener,
         agregarBus,
+        editarBus,
         activarBus,
         desactivarBus,
 
