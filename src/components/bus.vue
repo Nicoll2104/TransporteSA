@@ -147,8 +147,6 @@ const bus = await axios.put(`bus/inactivar/${id}`);
   DatosData.value.splice(buscar, 1, bus.data.bus);
 };
 
-
-
 </script>
   
 <style scoped>

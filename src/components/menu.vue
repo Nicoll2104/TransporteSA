@@ -51,9 +51,9 @@
         <button class="btn">
           <router-link to="/bus"
             ><img
-              src="https://cdn-icons-png.flaticon.com/128/89/89111.png"
+              src="https://cdn-icons-png.flaticon.com/128/0/308.png"
               style="height: 30px; width: 30px"
-            />Vehiculos</router-link
+            />Buses</router-link
           >
         </button>
         <button class="btn">
