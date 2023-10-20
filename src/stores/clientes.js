@@ -9,7 +9,7 @@ export const useClienteStore = defineStore("cliente", () => {
         try {
             const response = await axios.get("cliente/ver");
             datosData.value = response.data;
-            return response.data; 
+            return response.data;
         } catch (error) {
             console.error('Error al obtener clientes:', error);
             throw error;
@@ -18,9 +18,22 @@ export const useClienteStore = defineStore("cliente", () => {
 
     const agregarCliente = async (nuevoCliente) => {
         try {
-            const response = await axios.post("cliente/agregar", nuevoCliente);
+            const response = await axios.post('cliente/agregar', nuevoCliente);
+            console.log("cliente Agregado",response.data);
+            obtener(); 
         } catch (error) {
             console.error('Error al agregar cliente:', error);
+            throw error;
+        }
+    };
+
+    const editarCliente = async (clienteEditado) => {
+        try {
+            const response = await axios.put(`cliente/modificar/${clienteEditado._id}`, clienteEditado);
+            console.log("cliente Editado",response.data);
+            obtener();
+        } catch (error) {
+            console.error('Error al editar cliente:', error);
             throw error;
         }
     };
@@ -28,9 +41,8 @@ export const useClienteStore = defineStore("cliente", () => {
     const activarCliente = async (clienteId) => {
         try {
             const response = await axios.put(`cliente/activar/${clienteId}`);
-            /* console.log(response.data); */ 
+            console.log("cliente Activado",response.data);
             obtener();
-            return response.data.cliente;
         } catch (error) {
             console.error('Error al activar cliente:', error);
             throw error;
@@ -40,9 +52,8 @@ export const useClienteStore = defineStore("cliente", () => {
     const desactivarCliente = async (clienteId) => {
         try {
             const response = await axios.put(`cliente/inactivar/${clienteId}`);
-            /* console.log(response.data); */
+            console.log("cliente Desactivado",response.data); 
             obtener();
-            return response.data.cliente;
         } catch (error) {
             console.error('Error al desactivar cliente:', error);
             throw error;
@@ -53,6 +64,7 @@ export const useClienteStore = defineStore("cliente", () => {
         datosData,
         obtener,
         agregarCliente,
+        editarCliente,
         activarCliente,
         desactivarCliente
     };

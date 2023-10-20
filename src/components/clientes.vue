@@ -9,7 +9,7 @@
       </template>
       <template v-slot:body-cell-acciones="props">
         <q-td key="acciones" :props="props">
-          <q-btn class="btnEditar" icon="edit" color="amber" @click="EditarCliente(props.row)"></q-btn>
+          <q-btn class="btnEditar" icon="edit" color="amber" @click="editarCliente(props.row)"></q-btn>
           <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
           <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
         </q-td>
@@ -51,8 +51,8 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn flat label="Cerrar" color="primary" v-close-popup />
-          <q-btn flat label="Aceptar" color="primary" @click="AgregarCliente" v-close-popup />
+          <q-btn flat label="Cerrar" color="primary"  @click="limpiar" v-close-popup />
+          <q-btn flat label="Aceptar" color="primary" @click="agregarEditarCliente" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -73,68 +73,7 @@ const cedula = ref("");
 const nombre = ref("");
 const telefono = ref("");
 const email = ref("");
-
-async function obtenerClientes() {
-  try {
-    const clientes = await clienteStore.obtener();
-    console.log('Clientes obtenidos:', clientes); 
-    rows.value = clienteStore.datosData;
-  } catch (error) {
-    console.error('Error al obtener los clientes:', error);
-  }
-}
-
-
-async function AgregarCliente() {
-  const nuevoCliente = {
-    cedula: cedula.value,
-    nombre: nombre.value,
-    telefono: telefono.value,
-    email: email.value,
-  };
-
-  try {
-    await clienteStore.agregarCliente(nuevoCliente);
-
-    cedula.value = "";
-    nombre.value = "";
-    telefono.value = "";
-    email.value = "";
-
-    modal.value = false;
-
-    obtenerClientes();
-  } catch (error) {
-    console.error('Error al agregar cliente:', error);
-  }
-}
-
-
-async function activar(id) {
-  try {
-    const cliente = await clienteStore.activarCliente(id); 
-    console.log('Cliente activado:', cliente);
-    obtenerClientes();
-  } catch (error) {
-    console.error('Error al activar cliente:', error);
-  }
-}
-
-async function desactivar(id) {
-  try {
-    const cliente = await clienteStore.desactivarCliente(id);
-    console.log('Cliente desactivado:', cliente);
-    obtenerClientes();
-  } catch (error) {
-    console.error('Error al desactivar cliente:', error);
-  }
-}
-
-
-onMounted(() => {
-  obtenerClientes()
-});
-
+const clienteEditando = ref(null);
 
 const columns = [
   { name: "cedula", required: true, label: "Cédula", align: "left", field: "cedula", sortable: true },
@@ -145,6 +84,101 @@ const columns = [
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
+async function obtenerClientes() {
+  try {
+    const clientes = await clienteStore.obtener();
+    console.log('Clientes obtenidos:', clientes);
+    rows.value = clienteStore.datosData;
+  } catch (error) {
+    console.error('Error al obtener los clientes:', error);
+  }
+}
+
+
+const agregarEditarCliente = async () => {
+  if (clienteEditando.value) {
+    const clienteEditado = {
+      _id: clienteEditando.value._id,
+      cedula: cedula.value,
+      nombre: nombre.value,
+      telefono: telefono.value,
+      email: email.value,
+    };
+    try {
+      await clienteStore.editarCliente(clienteEditado);
+      cedula.value = "";
+      nombre.value = "";
+      telefono.value = "";
+      email.value = "";
+      modal.value = false;
+      clienteEditando.value = null;
+      obtenerClientes();
+    } catch (error) {
+      console.error('Error al editar el cliente:', error);
+    }
+  } else {
+    const nuevoCliente = {
+      cedula: cedula.value,
+      nombre: nombre.value,
+      telefono: telefono.value,
+      email: email.value,
+    };
+    try {
+      await clienteStore.agregarCliente(nuevoCliente);
+      cedula.value = "";
+      nombre.value = "";
+      telefono.value = "";
+      email.value = "";
+      modal.value = false;
+      obtenerClientes();
+      limpiar();
+    } catch (error) {
+      console.error('Error al agregar cliente:', error);
+    }
+  }
+}
+
+const editarCliente = (cliente) => {
+  cedula.value = cliente.cedula;
+  nombre.value = cliente.nombre;
+  telefono.value = cliente.telefono;
+  email.value = cliente.email;
+  clienteEditando.value = cliente;
+  modal.value = true;
+}
+
+
+async function activar(id) {
+  try {
+    const cliente = await clienteStore.activarCliente(id);
+    obtenerClientes();
+  } catch (error) {
+    console.error('Error al activar cliente:', error);
+  }
+}
+
+async function desactivar(id) {
+  try {
+    const cliente = await clienteStore.desactivarCliente(id);
+    obtenerClientes();
+  } catch (error) {
+    console.error('Error al desactivar cliente:', error);
+  }
+}
+
+const limpiar = () => {
+  cedula.value = "";
+  nombre.value = "";
+  telefono.value = "";
+  email.value = "";
+};
+
+
+onMounted(() => {
+  obtenerClientes()
+});
+
+
 </script>
 
 
@@ -154,6 +188,8 @@ const columns = [
 
     
 <style scoped>
+
+
 .color1 {
   color: rgb(136, 226, 0);
 }
@@ -187,7 +223,7 @@ const columns = [
   padding: 5px;
 }
 
-.btnEditar{
+.btnEditar {
   margin: 5px;
 }
 
@@ -195,6 +231,5 @@ const columns = [
 label {
   margin-right: 20px;
 }
-
 </style>
     
