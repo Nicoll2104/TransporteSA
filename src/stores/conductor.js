@@ -19,9 +19,20 @@ export const useConductorStore = defineStore("conductor", () => {
     const agregarConductor = async (nuevoConductor) => {
         try {
             const response = await axios.post("conductor/agregar", nuevoConductor);
-            return response.data;
+            console.log("conductor Agregado",response.data);
         } catch (error) {
             console.error('Error al agregar el conductor:', error);
+            throw error;
+        }
+    };
+
+    const editarConductor = async (conductorEditado) => {
+        try {
+            const response = await axios.put(`conductor/modificar/${conductorEditado._id}`, conductorEditado);
+            console.log(response.data);
+            obtener();
+        } catch (error) {
+            console.error('Error al editar conductor:', error);
             throw error;
         }
     };
@@ -54,6 +65,7 @@ export const useConductorStore = defineStore("conductor", () => {
         datosData,
         obtener,
         agregarConductor,
+        editarConductor,
         activarConductor,
         desactivarConductor
     };

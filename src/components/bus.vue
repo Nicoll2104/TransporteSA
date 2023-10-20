@@ -82,6 +82,16 @@ const n_asiento = ref("");
 const empresa_asignada = ref("");
 const busEditando = ref(null);
 
+const columns = [
+  { name: "placa", required: true, label: "Placa", align: "left", field: "placa", format: (val) => val, },
+  { name: "modelo", required: true, label: "Modelo", align: "left", field: "modelo", sortable: true },
+  { name: "soat", required: true, label: "Soat", align: "left", field: "soat", sortable: true },
+  { name: "n_asiento", required: true, label: "N_asiento", align: "left", field: "n_asiento", sortable: true },
+  { name: "empresa_asignada", required: true, label: "Empresa_asignada", align: "left", field: "empresa_asignada", sortable: true },
+  { name: "status", label: "Status", align: "left", field: "status", sortable: true },
+  { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
+];
+
 async function obtenerBus() {
   try {
     const buses = await busStore.obtener();
@@ -114,7 +124,7 @@ const agregarEditarBus = async () => {
       busEditando.value = null;
       obtenerBus();
     } catch (error) {
-      console.error('Error al editar el cliente:', error);
+      console.error('Error al editar el bus:', error);
     }
   } else {
     const nuevoBus = {
@@ -185,17 +195,6 @@ onMounted(() => {
   obtenerBus()
 })
 
-
-
-const columns = [
-  { name: "placa", required: true, label: "Placa", align: "left", field: "placa", format: (val) => val, },
-  { name: "modelo", required: true, label: "Modelo", align: "left", field: "modelo", sortable: true },
-  { name: "soat", required: true, label: "Soat", align: "left", field: "soat", sortable: true },
-  { name: "n_asiento", required: true, label: "N_asiento", align: "left", field: "n_asiento", sortable: true },
-  { name: "empresa_asignada", required: true, label: "Empresa_asignada", align: "left", field: "empresa_asignada", sortable: true },
-  { name: "status", label: "Status", align: "left", field: "status", sortable: true },
-  { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
-];
 
 
 </script>
