@@ -9,8 +9,10 @@ export const useClienteStore = defineStore("cliente", () => {
         try {
             const response = await axios.get("cliente/ver");
             datosData.value = response.data;
+            return response.data; 
         } catch (error) {
             console.error('Error al obtener clientes:', error);
+            throw error;
         }
     };
 
@@ -26,9 +28,9 @@ export const useClienteStore = defineStore("cliente", () => {
     const activarCliente = async (clienteId) => {
         try {
             const response = await axios.put(`cliente/activar/${clienteId}`);
-            console.log(response.data); // Registra la respuesta del servidor
+            /* console.log(response.data); */ 
             obtener();
-            return response.data.cliente; // Devuelve el cliente activado
+            return response.data.cliente;
         } catch (error) {
             console.error('Error al activar cliente:', error);
             throw error;
@@ -38,7 +40,7 @@ export const useClienteStore = defineStore("cliente", () => {
     const desactivarCliente = async (clienteId) => {
         try {
             const response = await axios.put(`cliente/inactivar/${clienteId}`);
-            console.log(response.data); 
+            /* console.log(response.data); */
             obtener();
             return response.data.cliente;
         } catch (error) {

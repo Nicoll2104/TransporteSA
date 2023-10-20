@@ -75,9 +75,15 @@ const telefono = ref("");
 const email = ref("");
 
 async function obtenerClientes() {
-  let r = await clienteStore.obtener()
-  rows.value = clienteStore.datosData
-};
+  try {
+    const clientes = await clienteStore.obtener();
+    console.log('Clientes obtenidos:', clientes); 
+    rows.value = clienteStore.datosData;
+  } catch (error) {
+    console.error('Error al obtener los clientes:', error);
+  }
+}
+
 
 async function AgregarCliente() {
   const nuevoCliente = {
