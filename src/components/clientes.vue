@@ -1,19 +1,19 @@
 <template>
   <div class="q-pa-md">
-    <q-table title="DATOS TICKETS" :rows="DatosData" :columns="columns" row-key="cedula">
+    <q-table title="DATOS TICKETS" :rows="rows" :columns="columns" row-key="cedula">
       <template v-slot:body-cell-status="props">
         <q-td key="status" :props="props">
           <span class="color1" v-if="props.row.status == 1">Activo</span>
-          <span class="color2" v-else >Inactivo</span>
+          <span class="color2" v-else>Inactivo</span>
         </q-td>
       </template>
       <template v-slot:body-cell-acciones="props">
-    <q-td key="acciones" :props="props">
-      <q-btn class="btnEditar" icon="edit" color="amber" @click="EditarCliente(props.row)">Editar</q-btn>
-      <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
-      <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
-    </q-td>
-  </template>
+        <q-td key="acciones" :props="props">
+          <q-btn class="btnEditar" icon="edit" color="amber" @click="EditarCliente(props.row)"></q-btn>
+          <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
+          <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
+        </q-td>
+      </template>
     </q-table>
     <q-dialog v-model="modal">
       <q-card>
@@ -26,22 +26,22 @@
         <q-card-section style="max-height: 50vh" class="scroll">
           <div class="infoDatos">
             <div class="ilDatos">
-              <label class="labelDatos" for="cedula" >Cedula:</label>
-              <input class="inputDatos" type="text" id="cedula" v-model="cedula"  />
+              <label class="labelDatos" for="cedula">Cedula:</label>
+              <input class="inputDatos" type="text" id="cedula" v-model="cedula" />
             </div>
 
             <div class="ilDatos">
-              <label class="labelDatos" for="telefono" >Nombre:</label>
+              <label class="labelDatos" for="telefono">Nombre:</label>
               <input class="inputDatos" type="text" id="nombre" v-model="nombre" />
             </div>
 
             <div class="ilDatos">
-              <label class="labelDatos" for="telefono" >Telefono:</label>
+              <label class="labelDatos" for="telefono">Telefono:</label>
               <input class="inputDatos" type="text" id="telefono" v-model="telefono" />
             </div>
 
             <div class="ilDatos">
-              <label class="labelDatos" for="email" >Email:</label>
+              <label class="labelDatos" for="email">Email:</label>
               <input class="inputDatos" type="text" id="email" v-model="email" />
             </div>
 
@@ -62,16 +62,71 @@
 </template>
     
 <script setup>
-import { ref } from "vue";
-import axios from "axios";
+import { onMounted, ref } from "vue";
+import { useClienteStore } from '../stores/clientes.js';
 
-let modal = ref(false)
-let DatosData = ref([]);
-let cedula = ref("");
-let nombre = ref("");
-let telefono = ref("");
-let email = ref("");
-let status = ref("");
+const clienteStore = useClienteStore()
+
+const rows = ref([])
+const modal = ref(false);
+const cedula = ref("");
+const nombre = ref("");
+const telefono = ref("");
+const email = ref("");
+
+async function obtenerClientes() {
+  let r = await clienteStore.obtener()
+  rows.value = clienteStore.datosData
+};
+
+async function AgregarCliente() {
+  const nuevoCliente = {
+    cedula: cedula.value,
+    nombre: nombre.value,
+    telefono: telefono.value,
+    email: email.value,
+  };
+
+  try {
+    await clienteStore.agregarCliente(nuevoCliente);
+
+    cedula.value = "";
+    nombre.value = "";
+    telefono.value = "";
+    email.value = "";
+
+    modal.value = false;
+
+    obtenerClientes();
+  } catch (error) {
+    console.error('Error al agregar cliente:', error);
+  }
+}
+
+
+async function activar(id) {
+  try {
+    await clienteStore.activarCliente(id);
+    obtenerClientes();
+  } catch (error) {
+    console.error('Error al activar cliente:', error);
+  }
+}
+
+async function desactivar(id) {
+  try {
+    await clienteStore.desactivarCliente(id);
+    obtenerClientes();
+  } catch (error) {
+    console.error('Error al desactivar cliente:', error);
+  }
+}
+
+
+onMounted(() => {
+  obtenerClientes()
+});
+
 
 const columns = [
   { name: "cedula", required: true, label: "Cédula", align: "left", field: "cedula", sortable: true },
@@ -81,74 +136,6 @@ const columns = [
   { name: "status", label: "Status", align: "left", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
-
-const obtener = async () => {
-  try {
-    const response = await axios.get("cliente/ver");
-    DatosData.value = response.data; 
-  } catch (error) {
-    console.error('Error al obtener clientes:', error);
-  }
-};
-
-
-async function AgregarCliente() {
-  const data = {
-    cedula: cedula.value,
-    nombre: nombre.value,
-    telefono: telefono.value,
-    email: email.value,
-    status: status.value 
-  };
-
-  try {
-    let res = await axios.post("cliente/agregar", data); 
-    console.log(res);
-    
-
-    cedula.value = "";
-    nombre.value = "";
-    telefono.value = "";
-    email.value = "";
-    status.value = "";
-
-  
-    obtener();
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-function EditarCliente(cliente) {
-  cedula.value = cliente.cedula;
-  nombre.value = cliente.nombre;
-  telefono.value = cliente.telefono;
-  email.value = cliente.email;
-  modal.value = true; 
-}
-
-obtener()
-
-const activar = async (id) => {
-  const cliente = await axios.put(`cliente/activar/${id}`);
-    console.log(cliente);
-    if (cliente == null) {
-      return;
-    }
-    const buscar = DatosData.value.findIndex((r) => r._id == id);
-    DatosData.value.splice(buscar, 1, cliente.data.cliente);
-};
-
-const desactivar = async (id) => {
-
-    const cliente = await axios.put(`cliente/inactivar/${id}`);
-    console.log(cliente);
-    if (cliente == null) {
-      return;
-    }
-    const buscar = DatosData.value.findIndex((r) => r._id == id);
-    DatosData.value.splice(buscar, 1, cliente.data.cliente);
-};
 
 </script>
 
