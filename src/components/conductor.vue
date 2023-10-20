@@ -153,80 +153,8 @@ const columns = [
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
-/* const obtener = async () => {
-try {
-  const response = await axios.get("conductor/ver");
-  console.log("Datos de conductores:", response.data); 
-  DatosData.value = response.data;
-} catch (error) {
-  console.error('Error al obtener conductor:', error);
-}
-};
-
-
-
-async function AgregarConductor() {
-  const data = {
-    cedula: cedula.value,
-    nombre: nombre.value,
-    n_licencia: n_licencia.value,
-    direccion: direccion.value,
-    telefono: telefono.value,
-    status: status.value 
-  };
-
-  try {
-    let res = await axios.post("conductor/agregar", data); 
-    console.log(res);
-    
-
-    cedula.value = "";
-    nombre.value = "";
-    n_licencia.value = "";
-    direccion.value = "";
-    telefono.value = "";
-    status.value = "";
-
-  
-    obtener();
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-
-
-obtener()
-
-
-const activar = async (id) => {
-  try {
-    const response = await axios.put(`conductor/activar/${id}`);
-    const conductor = response.data.conductores;
-    if (conductor) {
-      const conductorcar = DatosData.value.findIndex((r) => r._id === id);
-      DatosData.value.splice(conductorcar, 1, conductor);
-    }
-  } catch (error) {
-    console.error('Error al activar conductor:', error);
-  }
-};
-
-const desactivar = async (id) => {
-  try {
-    const response = await axios.put(`conductor/inactivar/${id}`);
-    const conductor = response.data.conductores;
-    if (conductor) {
-      const conductorcar = DatosData.value.findIndex((r) => r._id === id);
-      DatosData.value.splice(conductorcar, 1, conductor);
-    }
-  } catch (error) {
-    console.error('Error al desactivar conductor:', error);
-  }
-}; */
-
-
 </script>
+
     
 <style scoped>
 .color1 {

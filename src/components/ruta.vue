@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-table title="DATOS RUTAS" :rows="DatosData" :columns="columns" row-key="origen">
+    <q-table title="DATOS RUTAS" :rows="rows" :columns="columns" row-key="origen" class="tableRT" >
       <template v-slot:body-cell-status="props">
         <q-td key="status" :props="props">
           <span class="color1" v-if="props.row.status == 1">Activo</span>
@@ -14,6 +14,7 @@
           <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
         </q-td>
       </template>
+      
     </q-table>
     <q-dialog v-model="modal">
       <q-card>
@@ -37,7 +38,7 @@
 
             <div class="ilDatos">
               <label class="labelDatos" for="horarios"> Horario:</label>
-              <input class="inputDatos" type="text" id=" horarios" v-model="horarios" />
+              <input class="inputDatos" type="text" id="horarios" v-model="horarios" />
             </div>
 
             <div class="ilDatos">
@@ -72,18 +73,85 @@
 </template>
   
 <script setup>
-import { ref } from "vue";
-import axios from "axios";
+import { onMounted,ref } from "vue";
+import { useRutaStore } from "../stores/ruta.js";
 
-let modal = ref(false)
-let DatosData = ref([]);
-let origen = ref("");
-let destino = ref("");
-let horarios = ref("");
-let distancia = ref("");
-let duracion = ref("");
-let fecha = ref("");
-let status = ref("");
+const rutaStore = useRutaStore()
+
+const modal = ref(false)
+const rows = ref([]);
+const origen = ref("");
+const destino = ref("");
+const horarios = ref("");
+const distancia = ref("");
+const duracion = ref("");
+const fecha = ref("");
+
+async function obtenerRuta() {
+  try {
+    const rutas = await rutaStore.obtener();
+    console.log('rutas obtenidas:', rutas); 
+    rows.value = rutaStore.datosData;
+  } catch (error) {
+    console.error('Error al obtener las rutas:', error);
+  }
+}
+
+async function AgregarRuta() {
+  const nuevoRuta = {
+    origen: origen.value,
+    destino: destino.value,
+    horarios: horarios.value,
+    distancia: distancia.value,
+    duracion: duracion.value,
+    fecha: fecha.value,
+  };
+  console.log("ruta agregada:", nuevoRuta);
+
+  try {
+    await rutaStore.agregarRuta(nuevoRuta);
+
+    origen.value = "";
+    destino.value = "";
+    horarios.value = "";
+    distancia.value = "";
+    duracion.value = "";
+    fecha.value = "";
+
+    modal.value = false;
+
+    obtenerRuta();
+  } catch (error) {
+    console.error('Error al agregar un ruta:', error);
+  }
+}
+
+async function activar(id) {
+  try {
+    const ruta = await rutaStore.activarRuta(id);
+    console.log('ruta activada:', ruta);
+    obtenerRuta();
+  } catch (error) {
+    console.error('Error al activar ruta:', error);
+  }
+}
+
+async function desactivar(id) {
+  try {
+    const ruta = await rutaStore.desactivarRuta(id);
+    console.log('ruta desactivada:', ruta);
+    obtenerRuta();
+  } catch (error) {
+    console.error('Error al desactivar ruta:', error);
+  }
+}
+
+
+
+
+onMounted(() => {
+  obtenerRuta()
+});
 
 
 const columns = [
@@ -97,73 +165,7 @@ const columns = [
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
-const obtener = async () => {
-  try {
-    const response = await axios.get("ruta/ver");
-    DatosData.value = response.data;
-  } catch (error) {
-    console.error('Error al obtener rutas:', error);
-  }
-};
-
-async function AgregarRuta() {
-  const data = {
-    origen: origen.value,
-    destino: destino.value,
-    horarios: horarios.value,
-    distancia: distancia.value,
-    duracion: duracion.value,
-    fecha: fecha.value,
-    status: status.value
-  };
-
-  try {
-    let res = await axios.post("ruta/agregar", data);
-    console.log(res);
-
-    origen.value = "";
-    destino.value = "";
-    horarios.value = "";
-    distancia.value = "";
-    duracion.value = "";
-    fecha.value = "";
-    status.value = "";
-
-    obtener();
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-obtener()
-
-const activar = async (id) => {
-  try {
-    const response = await axios.put(`ruta/activar/${id}`);
-    const ruta = response.data.rutas;
-    if (ruta) {
-      const buscar = DatosData.value.findIndex((r) => r._id === id);
-      DatosData.value.splice(buscar, 1, ruta);
-    }
-  } catch (error) {
-    console.error('Error al activar rutas:', error);
-  }
-};
-
-const desactivar = async (id) => {
-  try {
-    const response = await axios.put(`ruta/inactivar/${id}`);
-    const ruta = response.data.rutas;
-    if (ruta) {
-      const buscar = DatosData.value.findIndex((r) => r._id === id);
-      DatosData.value.splice(buscar, 1, ruta);
-    }
-  } catch (error) {
-    console.error('Error al desactivar rutas:', error);
-  }
-};
-
-</script>-
+</script>
     
 <style scoped>
 .color1 {
@@ -184,8 +186,8 @@ const desactivar = async (id) => {
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 10px;
-
 }
+
 
 .labelDatos {
   display: flex;
