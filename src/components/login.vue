@@ -1,8 +1,9 @@
 <template>
         <div class="container">
             <div class="hero">
-                <form action="" class="form"><div class="imagenLogo"></div>
-                    <div class="logo">Transporte</div><br><br><br>
+                <form action="" class="form">
+                    <div class="imagenLogo"></div>
+                    <div class="logo">Transporte</div>
                     <input type="email" name="email" id="email" required="" class="input"
                         placeholder="Phone, email address or username">
                     <input type="password" name="password" id="password" required="" class="input" placeholder="Password">
@@ -46,7 +47,7 @@
 .form{
     display: flex;
     width: 500px;
-    height: 70%;
+    height: 100%;
     background: linear-gradient(160deg, #a9babb, #9fb2b7);
     flex-direction: column;
     box-shadow: 20px 17px 50px rgb(90, 88, 88);
@@ -57,10 +58,9 @@
 }
 
 .input {
-    position: relative;
-    bottom: 60px;
     padding: 1rem 1.2rem;
     margin: 1rem;
+    margin-bottom: 40px;
     border-radius: 2rem;
     display: block;
     width: 80%;
@@ -84,15 +84,13 @@
     font-size: 3rem;
     color: rgb(255, 255, 255);
     font-weight: 600;
- 
 }
 
 .imagenLogo{
     border-radius: 50%;
-    background-image: url("https://static.vecteezy.com/system/resources/thumbnails/007/794/726/small/travel-bus-illustration-logo-on-light-background-free-vector.jpg");
+    background-image: url('https://static.vecteezy.com/system/resources/thumbnails/007/794/726/small/travel-bus-illustration-logo-on-light-background-free-vector.jpg');
     background-size: cover;
     width: 100px;
-    margin-top: 10px;
     height: 100px;
 }
 
