@@ -1,19 +1,19 @@
 <template>
   <div class="q-pa-md">
-    <q-table title="DATOS BUSES" :rows="DatosData" :columns="columns" row-key="placa">
+    <q-table title="DATOS CLIENTES" :rows="rows" :columns="columns" row-key="cedula">
       <template v-slot:body-cell-status="props">
         <q-td key="status" :props="props">
           <span class="color1" v-if="props.row.status == 1">Activo</span>
-          <span class="color2" v-else >Inactivo</span>
+          <span class="color2" v-else>Inactivo</span>
         </q-td>
       </template>
       <template v-slot:body-cell-acciones="props">
-    <q-td key="acciones" :props="props">
-      <q-btn class="btnEditar" icon="edit" color="amber" @click="editarCliente(props.row)"></q-btn>
-      <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
-      <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
-    </q-td>
-  </template>
+        <q-td key="acciones" :props="props">
+          <q-btn class="btnEditar" icon="edit" color="amber" @click="EditarBus(props.row)"></q-btn>
+          <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
+          <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
+        </q-td>
+      </template>
     </q-table>
     <q-dialog v-model="modal">
       <q-card>
@@ -26,27 +26,27 @@
         <q-card-section style="max-height: 50vh" class="scroll">
           <div class="infoDatos">
             <div class="ilDatos">
-              <label class="labelDatos" for="placa" >Placa:</label>
-              <input class="inputDatos" type="text" id="placa" v-model="placa"  />
+              <label class="labelDatos" for="placa">Placa:</label>
+              <input class="inputDatos" type="text" id="placa" v-model="placa" />
             </div>
 
             <div class="ilDatos">
-              <label class="labelDatos" for="modelo" >Modelo:</label>
+              <label class="labelDatos" for="modelo">Modelo:</label>
               <input class="inputDatos" type="text" id="modelo" v-model="modelo" />
             </div>
 
             <div class="ilDatos">
-              <label class="labelDatos" for="soat" > Soat:</label>
-              <input class="inputDatos" type="number" id=" soat" v-model="soat" />
+              <label class="labelDatos" for="soat"> Soat:</label>
+              <input class="inputDatos" type="number" id="soat" v-model="soat" />
             </div>
 
             <div class="ilDatos">
-              <label class="labelDatos" for="n_asiento" >Numero asientos:</label>
-              <input class="inputDatos" type="text" id="n_asiento" v-model="n_asiento" />
+              <label class="labelDatos" for="n_asiento">Numero asientos:</label>
+              <input class="inputDatos" type="number" id="n_asiento" v-model="n_asiento" />
             </div>
 
             <div class="ilDatos">
-              <label class="labelDatos" for="empresa_asignada" >Empresa:</label>
+              <label class="labelDatos" for="empresa_asignada">Empresa:</label>
               <input class="inputDatos" type="text" id="empresa_asignada" v-model="empresa_asignada" />
             </div>
 
@@ -67,129 +67,139 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import axios from "axios";
 
-let modal = ref(false)
-let DatosData = ref([]);
-let placa = ref("");
-let modelo = ref("");
-let soat = ref("");
-let n_asiento = ref("");
-let empresa_asignada = ref("");
-let status = ref("");
+import { onMounted, ref } from "vue";
+import { useBusStore } from '../stores/bus.js';
 
-const columns = [
-{ name: "placa", required: true, label: "Placa", align: "left", field: "placa", sortable: true },
-{ name: "modelo", required: true, label: "Modelo", align: "left", field: "modelo", sortable: true },
-{ name: "soat", required: true, label: "Soat", align: "left", field: "soat", sortable: true },
-{ name: "n_asiento", required: true, label: "N_asiento", align: "left", field: "n_asiento", sortable: true },
-{ name: "empresa_asignada", required: true, label: "Empresa_asignada", align: "left", field: "empresa_asignada", sortable: true },
-{ name: "status", label: "Status", align: "left", field: "status", sortable: true },
-{ name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
-];
+const busStore = useBusStore()
 
-const obtener = async () => {
-try {
-  const response = await axios.get("bus/ver");
-  DatosData.value = response.data.buses; 
-} catch (error) {
-  console.error('Error al obtener buses:', error);
+const rows = ref([])
+const modal = ref(false);
+const placa = ref("");
+const modelo = ref("");
+const soat = ref("");
+const n_asiento = ref("");
+const empresa_asignada = ref("");
+
+async function obtenerBus() {
+  try {
+    const buses = await busStore.obtener();
+    console.log('Buses obtenidos:', buses);
+    rows.value = busStore.datosData.buses;
+  } catch (error) {
+    console.error('Error al obtener los clientes:', error);
+  }
 }
-};
+
 
 async function AgregarBus() {
-  const data = {
+  const nuevoBus = {
     placa: placa.value,
     modelo: modelo.value,
     soat: soat.value,
     n_asiento: n_asiento.value,
     empresa_asignada: empresa_asignada.value,
-    status: status.value 
   };
+  console.log("Bus agregado:", nuevoBus);
 
   try {
-    let res = await axios.post("bus/agregar", data);
-    console.log(res);
-  
+    await busStore.agregarBus(nuevoBus);
+
     placa.value = "";
     modelo.value = "";
     soat.value = "";
     n_asiento.value = "";
-    empresa_asignada.value = ""; 
-    status.value = "";
+    empresa_asignada.value = "";
 
-    obtener();
+    modal.value = false;
+
+    obtenerBus();
   } catch (error) {
-    console.error(error);
+    console.error('Error al agregar un bus:', error);
   }
 }
 
-obtener()
-
-const activar = async (id) => {
-const bus = await axios.put(`bus/activar/${id}`);
-  console.log(bus);
-  if (bus == null) {
-    return;
+async function activar(id) {
+  try {
+    const bus = await busStore.activarBus(id);
+    console.log('Bus activado:', bus);
+    obtenerBus();
+  } catch (error) {
+    console.error('Error al activar Bus:', error);
   }
-  const buscar = DatosData.value.findIndex((r) => r._id == id);
-  DatosData.value.splice(buscar, 1, bus.data.bus);
-};
+}
 
-const desactivar = async (id) => {
-const bus = await axios.put(`bus/inactivar/${id}`);
-  console.log(bus);
-  if (bus == null) {
-    return;
+async function desactivar(id) {
+  try {
+    const bus = await busStore.desactivarBus(id);
+    console.log('Bus desactivado:', bus);
+    obtenerBus();
+  } catch (error) {
+    console.error('Error al desactivar Bus:', error);
   }
-  const buscar = DatosData.value.findIndex((r) => r._id == id);
-  DatosData.value.splice(buscar, 1, bus.data.bus);
-};
+}
+
+
+
+onMounted(() => {
+  obtenerBus()
+})
+
+
+
+const columns = [
+  { name: "placa",required: true, label: "Placa", align: "left", field: "placa", format: (val) => val,},
+  { name: "modelo", required: true, label: "Modelo", align: "left", field: "modelo", sortable: true },
+  { name: "soat", required: true, label: "Soat", align: "left", field: "soat", sortable: true },
+  { name: "n_asiento", required: true, label: "N_asiento", align: "left", field: "n_asiento", sortable: true },
+  { name: "empresa_asignada", required: true, label: "Empresa_asignada", align: "left", field: "empresa_asignada", sortable: true },
+  { name: "status", label: "Status", align: "left", field: "status", sortable: true },
+  { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
+];
+
 
 </script>
   
 <style scoped>
 .color1 {
-color: rgb(136, 226, 0);
+  color: rgb(136, 226, 0);
 }
 
 .color2 {
-color: red;
+  color: red;
 }
 
 .infoDatos {
-display: flex;
-margin: 0 auto;
-flex-direction: column;
+  display: flex;
+  margin: 0 auto;
+  flex-direction: column;
 }
 
 .ilDatos {
-display: flex;
-flex-wrap: wrap;
-margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
 
 }
 
 .labelDatos {
-display: flex;
-align-items: center;
-width: 60px;
+  display: flex;
+  align-items: center;
+  width: 60px;
 
 }
 
 .inputDatos {
-width: 200px;
-padding: 5px;
+  width: 200px;
+  padding: 5px;
 }
 
-.btnEditar{
-margin: 5px;
+.btnEditar {
+  margin: 5px;
 }
 
 label {
-margin-right: 20px;
+  margin-right: 20px;
 }
-
 </style>
   
