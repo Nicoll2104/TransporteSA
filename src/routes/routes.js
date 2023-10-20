@@ -5,6 +5,7 @@ import  menu  from "../components/menu.vue";
 import bus from "../components/bus.vue";
 import conductor from "../components/conductor.vue";
 import ruta from "../components/ruta.vue"
+import vendedor from "../components/vendedor.vue"
 import {createRouter, createWebHashHistory} from "vue-router"
 
 const routes = [
@@ -16,6 +17,7 @@ const routes = [
       { path: "/clientes", component: clientes },
       { path: "/bus", component: bus},
       { path: "/conductor", component: conductor},
+      { path: "/vendedor", component: vendedor},
       { path: "/ruta", component: ruta}
     ]}
 ]

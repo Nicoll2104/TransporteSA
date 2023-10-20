@@ -4,9 +4,10 @@
                 <form action="" class="form">
                     <div class="imagenLogo"></div>
                     <div class="logo">Transporte</div>
-                    <input type="email" name="email" id="email" required="" class="input"
-                        placeholder="Phone, email address or username">
+
+                    <input type="email" name="email" id="email" required="" class="input" placeholder="Phone, email address or username">
                     <input type="password" name="password" id="password" required="" class="input" placeholder="Password">
+                    
                     <button class="btn1" type="submit"><router-link to="/home">Acceder</router-link></button>
                     <p class="forgotten">Forgotten your login details ? <a href="#">Get help with signing in.</a></p>
                 </form>
