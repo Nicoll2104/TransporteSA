@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-table title="DATOS CONDUCTORES" :rows="DatosData" :columns="columns" row-key="cedula">
+    <q-table title="DATOS CONDUCTORES" :rows="rows" :columns="columns" row-key="cedula">
       <template v-slot:body-cell-status="props">
         <q-td key="status" :props="props">
           <span class="color1" v-if="props.row.status == 1">Activo</span>
@@ -68,17 +68,80 @@
 </template>
     
 <script setup>
-import { ref } from "vue";
-import axios from "axios";
+import {  onMounted,ref } from "vue";
+import { useConductorStore } from "../stores/conductor.js";
 
-let modal = ref(false)
-let DatosData = ref([]);
-let cedula = ref("");
-let nombre = ref("");
-let n_licencia = ref("");
-let direccion = ref("");
-let telefono = ref("");
-let status = ref("");
+const conductorStore = useConductorStore()
+
+const modal = ref(false)
+const rows = ref([]);
+const cedula = ref("");
+const nombre = ref("");
+const n_licencia = ref("");
+const direccion = ref("");
+const telefono = ref("");
+
+async function obtenerConductor() {
+  try {
+    const conductores = await conductorStore.obtener();
+    console.log('conductores obtenidos:', conductores); 
+    rows.value = conductorStore.datosData;
+  } catch (error) {
+    console.error('Error al obtener los conductores:', error);
+  }
+}
+
+async function AgregarConductor() {
+  const nuevoConductor = {
+    cedula: cedula.value,
+    nombre: nombre.value,
+    n_licencia: n_licencia.value,
+    direccion: direccion.value,
+    telefono: telefono.value
+  };
+  console.log("conductor agregado:", nuevoConductor);
+
+  try {
+    await conductorStore.agregarConductor(nuevoConductor);
+
+    cedula.value = "";
+    nombre.value = "";
+    n_licencia.value = "";
+    direccion.value = "";
+    telefono.value = "";
+
+    modal.value = false;
+
+    obtenerConductor();
+  } catch (error) {
+    console.error('Error al agregar un conductor:', error);
+  }
+}
+
+async function activar(id) {
+  try {
+    const conductor = await conductorStore.activarConductor(id);
+    console.log('conductor activado:', conductor);
+    obtenerConductor();
+  } catch (error) {
+    console.error('Error al activar conductor:', error);
+  }
+}
+
+async function desactivar(id) {
+  try {
+    const conductor = await conductorStore.desactivarConductor(id);
+    console.log('conductor desactivado:', conductor);
+    obtenerConductor();
+  } catch (error) {
+    console.error('Error al desactivar conductor:', error);
+  }
+}
+
+onMounted(() => {
+  obtenerConductor()
+});
+
 
 const columns = [
   { name: "cedula", required: true, label: "Cédula", align: "left", field: "cedula", sortable: true },
@@ -90,7 +153,7 @@ const columns = [
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
-const obtener = async () => {
+/* const obtener = async () => {
 try {
   const response = await axios.get("conductor/ver");
   console.log("Datos de conductores:", response.data); 
@@ -141,8 +204,8 @@ const activar = async (id) => {
     const response = await axios.put(`conductor/activar/${id}`);
     const conductor = response.data.conductores;
     if (conductor) {
-      const buscar = DatosData.value.findIndex((r) => r._id === id);
-      DatosData.value.splice(buscar, 1, conductor);
+      const conductorcar = DatosData.value.findIndex((r) => r._id === id);
+      DatosData.value.splice(conductorcar, 1, conductor);
     }
   } catch (error) {
     console.error('Error al activar conductor:', error);
@@ -154,13 +217,15 @@ const desactivar = async (id) => {
     const response = await axios.put(`conductor/inactivar/${id}`);
     const conductor = response.data.conductores;
     if (conductor) {
-      const buscar = DatosData.value.findIndex((r) => r._id === id);
-      DatosData.value.splice(buscar, 1, conductor);
+      const conductorcar = DatosData.value.findIndex((r) => r._id === id);
+      DatosData.value.splice(conductorcar, 1, conductor);
     }
   } catch (error) {
     console.error('Error al desactivar conductor:', error);
   }
-};
+}; */
+
+
 </script>
     
 <style scoped>
