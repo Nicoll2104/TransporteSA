@@ -26,6 +26,17 @@ export const useRutaStore = defineStore("ruta", () => {
         }
     };
 
+    const editarRuta = async (rutaEditado) => {
+        try {
+            const response = await axios.put(`ruta/modificar/${rutaEditado._id}`, rutaEditado);
+            console.log(response.data);
+            obtener();
+        } catch (error) {
+            console.error('Error al editar ruta:', error);
+            throw error;
+        }
+    };
+
     const activarRuta = async (rutaId) => {
         try {
             const response = await axios.put(`ruta/activar/${rutaId}`);
@@ -54,10 +65,9 @@ export const useRutaStore = defineStore("ruta", () => {
         datosData,
         obtener,
         agregarRuta,
+        editarRuta,
         activarRuta,
         desactivarRuta
     };
 
-
-
-})
+});
