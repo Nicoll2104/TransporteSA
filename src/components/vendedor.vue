@@ -9,7 +9,7 @@
             </template>
             <template v-slot:body-cell-acciones="props">
                 <q-td key="acciones" :props="props">
-                    <q-btn class="btnEditar" icon="edit" color="amber" @click="editarCliente(props.row)"></q-btn>
+                    <q-btn class="btnEditar" icon="edit" color="amber" @click="editarVendedor(props.row)"></q-btn>
                     <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
                     <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
                 </q-td>
@@ -62,8 +62,8 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn flat label="Cerrar" color="primary" v-close-popup />
-                    <q-btn flat label="Aceptar" color="primary" @click="AgregarVendedor" v-close-popup />
+                    <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
+                    <q-btn flat label="Aceptar" color="primary" @click="agregarEditarVendedor" v-close-popup />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -86,6 +86,7 @@ const cedula = ref("");
 const telefono = ref("");
 const usuario = ref("");
 const contrasena = ref("");
+const vendedorEditando = ref(null);
 
 async function obtenerVendedor() {
     try {
@@ -97,7 +98,79 @@ async function obtenerVendedor() {
     }
 }
 
-async function AgregarVendedor() {
+const agregarEditarVendedor = async () => {
+    if (vendedorEditando.value) {
+        const vendedorEditado = {
+            _id: vendedorEditando.value._id,
+            nombre: nombre.value,
+            apellido: apellido.value,
+            cedula: cedula.value,
+            telefono: telefono.value,
+            usuario: usuario.value,
+            contrasena: contrasena.value,
+        };
+        try {
+            await vendedorStore.editarVendedor(vendedorEditado);
+            nombre.value = "";
+            apellido.value = "";
+            cedula.value = "";
+            telefono.value = "";
+            usuario.value = "";
+            contrasena.value = "";
+
+            modal.value = false;
+            vendedorEditando.value = null;
+            obtenerVendedor();
+        } catch (error) {
+            console.error('Error al editar el vendedor:', error);
+        }
+    } else {
+        const nuevoVendedor = {
+            nombre: nombre.value,
+            apellido: apellido.value,
+            cedula: cedula.value,
+            telefono: telefono.value,
+            usuario: usuario.value,
+            contrasena: contrasena.value,
+        };
+        try {
+            await vendedorStore.agregarVendedor(nuevoVendedor);
+            nombre.value = "";
+            apellido.value = "";
+            cedula.value = "";
+            telefono.value = "";
+            usuario.value = "";
+            contrasena.value = "";
+            modal.value = false;
+            obtenerVendedor();
+            limpiar();
+        } catch (error) {
+            console.error('Error al agregar el vendedor:', error);
+        }
+    }
+}
+
+const editarVendedor = (vendedor) => {
+    nombre.value = vendedor.nombre;
+    apellido.value = vendedor.apellido;
+    cedula.value = vendedor.cedula;
+    telefono.value = vendedor.telefono;
+    usuario.value = vendedor.usuario;
+    contrasena.value = vendedor.contrasena;
+    vendedorEditando.value = vendedor;
+    modal.value = true;
+}
+
+const limpiar = () => {
+    nombre.value = "";
+    apellido.value = "";
+    cedula.value = "";
+    telefono.value = "";
+    usuario.value = "";
+    contrasena.value = "";
+};
+
+/* async function AgregarVendedor() {
     const nuevoVendedor = {
         nombre: nombre.value,
         apellido: apellido.value,
@@ -124,7 +197,7 @@ async function AgregarVendedor() {
     } catch (error) {
         console.error('Error al agregar un vendedor:', error);
     }
-}
+} */
 
 async function activar(id) {
     try {

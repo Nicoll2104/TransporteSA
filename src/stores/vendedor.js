@@ -26,6 +26,17 @@ export const useVendedorStore = defineStore("vendedor", () => {
         }
     };
 
+    const editarVendedor = async (vendedorEditado) => {
+        try {
+            const response = await axios.put(`vendedor/modificar/${vendedorEditado._id}`, vendedorEditado);
+            console.log(response.data);
+            obtener();
+        } catch (error) {
+            console.error('Error al editar el vendedor:', error);
+            throw error;
+        }
+    };
+
     const activarVendedor = async (vendedorId) => {
         try {
             const response = await axios.put(`vendedor/activar/${vendedorId}`);
@@ -54,6 +65,7 @@ export const useVendedorStore = defineStore("vendedor", () => {
         datosData,
         obtener,
         agregarVendedor,
+        editarVendedor,
         activarVendedor,
         desactivarVendedor, 
     };
