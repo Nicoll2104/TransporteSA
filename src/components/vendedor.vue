@@ -1,6 +1,6 @@
 <template>
     <div class="q-pa-md">
-        <q-table title="DATOS VENDEDOR" :rows="rows" :columns="columns" row-key="nombre" class="tableRT">
+        <q-table title="DATOS VENDEDOR" :rows="rows" :columns="columns" row-key="cedula" class="tableRT">
             <template v-slot:body-cell-status="props">
                 <q-td key="status" :props="props">
                     <span class="color1" v-if="props.row.status == 1">Activo</span>
@@ -27,6 +27,11 @@
                 <q-card-section style="max-height: 50vh" class="scroll">
                     <div class="infoDatos">
                         <div class="ilDatos">
+                            <label class="labelDatos" for="cedula"> Cedula:</label>
+                            <input class="inputDatos" type="number" id="cedula" v-model="cedula" />
+                        </div>
+
+                        <div class="ilDatos">
                             <label class="labelDatos" for="nombre">Nombre:</label>
                             <input class="inputDatos" type="text" id="nombre" v-model="nombre" />
                         </div>
@@ -34,11 +39,6 @@
                         <div class="ilDatos">
                             <label class="labelDatos" for="apellido">Apellido:</label>
                             <input class="inputDatos" type="text" id="apellido" v-model="apellido" />
-                        </div>
-
-                        <div class="ilDatos">
-                            <label class="labelDatos" for="cedula"> Cedula:</label>
-                            <input class="inputDatos" type="number" id="cedula" v-model="cedula" />
                         </div>
 
                         <div class="ilDatos">
@@ -102,18 +102,18 @@ const agregarEditarVendedor = async () => {
     if (vendedorEditando.value) {
         const vendedorEditado = {
             _id: vendedorEditando.value._id,
+            cedula: cedula.value,
             nombre: nombre.value,
             apellido: apellido.value,
-            cedula: cedula.value,
             telefono: telefono.value,
             usuario: usuario.value,
             contrasena: contrasena.value,
         };
         try {
             await vendedorStore.editarVendedor(vendedorEditado);
+            cedula.value = "";
             nombre.value = "";
             apellido.value = "";
-            cedula.value = "";
             telefono.value = "";
             usuario.value = "";
             contrasena.value = "";
@@ -126,18 +126,18 @@ const agregarEditarVendedor = async () => {
         }
     } else {
         const nuevoVendedor = {
+            cedula: cedula.value,
             nombre: nombre.value,
             apellido: apellido.value,
-            cedula: cedula.value,
             telefono: telefono.value,
             usuario: usuario.value,
             contrasena: contrasena.value,
         };
         try {
             await vendedorStore.agregarVendedor(nuevoVendedor);
+            cedula.value = "";
             nombre.value = "";
             apellido.value = "";
-            cedula.value = "";
             telefono.value = "";
             usuario.value = "";
             contrasena.value = "";
@@ -151,9 +151,9 @@ const agregarEditarVendedor = async () => {
 }
 
 const editarVendedor = (vendedor) => {
+    cedula.value = vendedor.cedula;
     nombre.value = vendedor.nombre;
     apellido.value = vendedor.apellido;
-    cedula.value = vendedor.cedula;
     telefono.value = vendedor.telefono;
     usuario.value = vendedor.usuario;
     contrasena.value = vendedor.contrasena;
@@ -162,9 +162,9 @@ const editarVendedor = (vendedor) => {
 }
 
 const limpiar = () => {
-    nombre.value = "";
-    apellido.value = "";
     cedula.value = "";
+    nombre.value = "";
+    apellido.value = ""
     telefono.value = "";
     usuario.value = "";
     contrasena.value = "";
@@ -226,9 +226,9 @@ onMounted(() => {
 
 
 const columns = [
+    { name: "cedula", required: true, label: "Cedula", align: "left", field: "cedula", sortable: true },
     { name: "nombre", required: true, label: "Nombre", align: "left", field: "nombre", sortable: true },
     { name: "apellido", required: true, label: "Apellido", align: "left", field: "apellido", sortable: true },
-    { name: "cedula", required: true, label: "Cedula", align: "left", field: "cedula", sortable: true },
     { name: "telefono", required: true, label: "Telefono", align: "left", field: "telefono", sortable: true },
     { name: "usuario", required: true, label: "Usuario", align: "left", field: "usuario", sortable: true },
     { name: "contrasena", required: true, label: "Contraseña", align: "left", field: "contrasena", sortable: true },
