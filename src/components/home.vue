@@ -3,7 +3,7 @@
     <div class="padre">
       <div class="card"><router-link to="/"><img src="https://cdn-icons-png.flaticon.com/128/1176/1176434.png" style="height: 150px; width: 150px;"> <br> Cerrar sesión</router-link></div>     
       <div class="card"><router-link to="/conductor"><img src="https://cdn-icons-png.flaticon.com/128/2684/2684218.png" style="height: 150px; width: 150px;"> <br>Conductores</router-link></div>
-      <div class="card"><router-link to="/"><img src="https://cdn-icons-png.flaticon.com/128/3859/3859309.png" style="height: 150px; width: 150px;"> <br>Vendedores</router-link></div>
+      <div class="card"><router-link to="/vendedor"><img src="https://cdn-icons-png.flaticon.com/128/3859/3859309.png" style="height: 150px; width: 150px;"> <br>Vendedores</router-link></div>
       <div class="card"><router-link to="/bus"><img src="https://cdn-icons-png.flaticon.com/128/9830/9830829.png" style="height: 150px; width: 150px;"> <br>Buses</router-link></div>
       <div class="card"><router-link to="/ruta"><img src="https://cdn-icons-png.flaticon.com/128/3124/3124383.png" style="height: 150px; width: 150px;"> <br>Rutas</router-link></div>
       <div class="card"><router-link to="/clientes"><img src="https://cdn-icons-png.flaticon.com/128/3201/3201521.png" style="height: 150px; width: 150px;"> <br> Clientes</router-link></div>
