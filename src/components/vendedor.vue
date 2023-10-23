@@ -1,6 +1,6 @@
 <template>
     <div class="q-pa-md">
-        <q-table title="DATOS VENDEDOR" :rows="rows" :columns="columns" row-key="cedula" class="tableRT">
+        <q-table title="DATOS VENDEDORES" :rows="rows" :columns="columns" row-key="cedula" class="tableRT">
             <template v-slot:body-cell-status="props">
                 <q-td key="status" :props="props">
                     <span class="color1" v-if="props.row.status == 1">Activo</span>
