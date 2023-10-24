@@ -39,8 +39,8 @@
     box-sizing: border-box;
     width: 240px;
     height: 254px;
-    background: rgba(242, 240, 240, 0.58);
-    border: 1px solid white;
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid rgb(0, 136, 255);
     box-shadow: 2px 7px 11px rgba(0, 0, 0, 0.22);
     backdrop-filter: blur(6px);
     border-radius: 17px;

@@ -17,7 +17,7 @@
         </template>
         <template v-slot:body-cell-acciones="props">
           <q-td key="acciones" :props="props">
-            <q-btn class="btnEditar" icon="edit" color="amber" @click="editarRuta(props.row)"></q-btn>
+            <q-btn class="btnEditar" icon="edit" color="blue" @click="editarRuta(props.row)"></q-btn>
             <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
             <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
           </q-td>

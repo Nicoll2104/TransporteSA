@@ -11,7 +11,7 @@
           id="email"
           required=""
           class="input"
-          placeholder="Phone, email address or username"
+          placeholder="Email o nombre de usuario"
         />
         <input
           type="password"
@@ -19,15 +19,15 @@
           id="password"
           required=""
           class="input"
-          placeholder="Password"
+          placeholder="Contraseña"
         />
 
         <button class="btn" type="submit">
           <router-link to="/home">Acceder</router-link>
         </button>
         <p class="forgotten">
-          Forgotten your login details ?
-          <a href="#">Get help with signing in.</a>
+          Olvidaste tus datos ?
+          <a href="#">ayuda para iniciar sesión.</a>
         </p>
       </form>
     </div>
@@ -45,22 +45,6 @@
   width: 100%;
 }
 
-.color1 {
-  color: #0d1b25;
-}
-.color2 {
-  color: #143745;
-}
-.color3 {
-  color: #18596f;
-}
-.color4 {
-  color: #20869f;
-}
-.color5 {
-  color: #2bbbc9;
-}
-
 .hero {
   padding: 60px 20px;
   width: 100%;
@@ -75,7 +59,7 @@
 .form {
   display: flex;
   width: 500px;
-  height: 60%;
+  height: 65%;
   background-color: #1976d28c;
   flex-direction: column;
   box-shadow: 20px 17px 50px rgb(90, 88, 88);
@@ -86,7 +70,7 @@
 
 .input {
   margin-bottom: 20px;
-  border-radius: 2rem;
+  border-radius: 10px;
   display: block;
   width: 70%;
   height: 10%;
@@ -104,15 +88,17 @@
 }
 
 .imagenLogo {
+  margin: 10px;
   border-radius: 20%;
   background-image: url(https://static.vecteezy.com/system/resources/thumbnails/007/794/726/small/travel-bus-illustration-logo-on-light-background-free-vector.jpg);
   background-size: cover;
-  width: 100px;
-  height: 100px;
+  width: 32%;
+  height: 22%;
 }
 
 ::placeholder {
   color: rgb(161, 161, 161);
+  padding: 0% 5%;
 }
 
 .forgotten {
@@ -225,5 +211,12 @@ a {
 
 .btn:where(:hover, :focus) {
   color: #fff;
+}
+
+@media (max-width: 400px) {
+  .form {
+    height: 100%;
+    width: 100%;
+  }
 }
 </style>
