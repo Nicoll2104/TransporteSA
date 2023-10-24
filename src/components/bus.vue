@@ -86,9 +86,9 @@ const columns = [
   { name: "placa", required: true, label: "Placa", align: "left", field: "placa", format: (val) => val, },
   { name: "modelo", required: true, label: "Modelo", align: "left", field: "modelo", sortable: true },
   { name: "soat", required: true, label: "Soat", align: "left", field: "soat", sortable: true },
-  { name: "n_asiento", required: true, label: "N_asiento", align: "left", field: "n_asiento", sortable: true },
+  { name: "n_asiento", required: true, label: "Número_asiento", align: "left", field: "n_asiento", sortable: true },
   { name: "empresa_asignada", required: true, label: "Empresa_asignada", align: "left", field: "empresa_asignada", sortable: true },
-  { name: "status", label: "Status", align: "left", field: "status", sortable: true },
+  { name: "status", label: "Estado", align: "left", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
