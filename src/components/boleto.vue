@@ -9,7 +9,7 @@
         </template>
         <template v-slot:body-cell-acciones="props">
           <q-td key="acciones" :props="props">
-            <q-btn class="btnEditar" icon="edit" color="amber" @click="editarRuta(props.row)"></q-btn>
+            <q-btn class="btnEditar" icon="edit" color="amber" @click="editarBoleto(props.row)"></q-btn>
             <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
             <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
           </q-td>
@@ -47,8 +47,8 @@
               </div>
   
               <div class="ilDatos">
-                <label class="labelDatos" for="precio">Precio:</label>
-                <input class="inputDatos" type="text" id="precio" v-model="precio" />
+                <label class="labelDatos" for="Precio">Precio:</label>
+                <input class="inputDatos" type="text" id="Precio" v-model="Precio" />
               </div>
   
               <div class="ilDatos">
@@ -83,7 +83,7 @@
   
           <q-card-actions align="right">
             <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
-            <q-btn flat label="Aceptar" color="primary" @click="agregarEditarRuta" v-close-popup />
+            <q-btn flat label="Aceptar" color="primary" @click="agregarEditarBoleto" v-close-popup />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -94,10 +94,10 @@
     
   <script setup>
   import { onMounted, ref } from "vue";
-  import { useRutaStore } from "../stores/ruta.js";
+  import { useboletoStore } from "../stores/boleto.js";
   
   
-  const rutaStore = useRutaStore()
+  const boletoStore = useboletoStore()
   
   const modal = ref(false)
   const rows = ref([]);
@@ -105,7 +105,7 @@
   const hora_venta = ref("");
   const fecha_salida = ref("");
   const hora_salida = ref("");
-  const precio = ref("");
+  const Precio = ref("");
   const cliente = ref("");
   const bus = ref("");
   const ruta = ref("");
@@ -114,11 +114,11 @@
   const boletoEditando = ref(null);
   
   const columns = [
-    { name: "fecha_venta", required: true, label: "Fecha_Venta", align: "left", field: "fecha_venta", sortable: true },
-    { name: "hora_venta", required: true, label: "Hora_Venta", align: "left", field: "hora_venta", sortable: true },
-    { name: "fecha_salida", required: true, label: "Fecha_Salida", align: "left", field: "fecha_salida", sortable: true },
-    { name: "hora_salida", required: true, label: "Hora_salida", align: "left", field: "hora_salida", sortable: true },
-    { name: "precio", required: true, label: "Precio", align: "left", field: "precio", sortable: true },
+    { name: "fecha_venta", required: true, label: "Fecha_Venta", align: "left", field: (row)=>row.fechas[0].fecha_salida, sortable: true },
+    { name: "hora_venta", required: true, label: "Hora_Venta", align: "left", field: (row)=>row.fechas[0].hora_venta, sortable: true },
+    { name: "fecha_salida", required: true, label: "Fecha_Salida", align: "left", field: (row)=>row.fechas[0].fecha_salida, sortable: true },
+    { name: "hora_salida", required: true, label: "Hora_salida", align: "left", field:(row)=>row.fechas[0].hora_salida, sortable: true },
+    { name: "Precio", required: true, label: "Precio", align: "left", field: "Precio", sortable: true },
     { name: "cliente", required: true, label: "Cliente", align: "left", field: "cliente", sortable: true },
     { name: "bus", required: true, label: "Bus", align: "left", field: "bus", sortable: true },
     { name: "ruta", required: true, label: "Ruta", align: "left", field: "ruta", sortable: true },
@@ -128,84 +128,116 @@
     { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
   ];
   
-  async function obtenerRuta() {
-    try {
-      const boletos = await boletoStore.obtener();
-      console.log('boleto obtenidas:', boletos);
-      rows.value = boletoStore.datosData;
-    } catch (error) {
-      console.error('Error al obtener los boletos:', error);
+  const obtenerBoleto = async () => {
+  try {
+    const response = await boletoStore.obtener();
+    console.log(response);
+    if (response && response.boletos) {
+      rows.value = response.boletos;
+    } else {
+      console.error('Respuesta inesperada del servidor:', response);
     }
+  } catch (error) {
+    console.error('Error al obtener los boletos:', error);
   }
+};
   
   const agregarEditarBoleto = async () => {
     if (boletoEditando.value) {
-      const rutaEditado = {
-        _id: rutaEditando.value._id,
-        origen: origen.value,
-        destino: destino.value,
-        horarios: horarios.value,
-        distancia: distancia.value,
-        duracion: duracion.value,
+      const boletoEditado = {
+        _id: boletoEditando.value._id,
+        fecha_venta: fecha_venta.value,
+        hora_venta: hora_venta.value,
+        fecha_salida: fecha_salida.value,
+        hora_salida: hora_salida.value,
+        Precio: Precio.value,
+        cliente: cliente.value,
+        bus: bus.value,
+        ruta: ruta.value,
+        conductor: conductor.value,
+        vendedor: vendedor.value,
         fecha: fecha.value.split('T')[0],
       };
       try {
-        await rutaStore.editarRuta(rutaEditado);
-        origen.value = "";
-        destino.value = "";
-        horarios.value = "";
-        distancia.value = "";
-        duracion.value = "";
-        fecha.value = "";
+        await boletoStore.editarBoleto(boletoEditado);
+        fecha_venta.value = "";
+        hora_venta.value = "";
+        fecha_salida.value = "";
+        hora_salida.value = "";
+        Precio.value = "";
+        cliente.value = "";
+        bus.value = "";
+        ruta.value = "";
+        conductor.value = "";
+        vendedor.value = "";
         modal.value = false;
         rutaEditando.value = null;
-        obtenerRuta();
+        obtenerBoleto();
       } catch (error) {
-        console.error('Error al editar la ruta:', error);
+        console.error('Error al editar el boleto:', error);
       }
     } else {
-      const nuevoRuta = {
-        origen: origen.value,
-        destino: destino.value,
-        horarios: horarios.value,
-        distancia: distancia.value,
-        duracion: duracion.value,
+      const nuevoBoleto = {
+        fecha_venta: fecha_venta.value,
+        hora_venta: hora_venta.value,
+        fecha_salida: fecha_salida.value,
+        hora_salida: hora_salida.value,
+        Precio: Precio.value,
+        cliente: cliente.value,
+        bus: bus.value,
+        ruta: ruta.value,
+        conductor: conductor.value,
+        vendedor: vendedor.value,
         fecha: fecha.value.split('T')[0],
       };
       try {
-        await rutaStore.agregarRuta(nuevoRuta);
-        origen.value = "";
-        destino.value = "";
-        horarios.value = "";
-        distancia.value = "";
-        duracion.value = "";
-        fecha.value = "";
+        await rutaStore.agregarBoleto(nuevoBoleto);
+        fecha_venta.value = "";
+        hora_venta.value = "";
+        fecha_salida.value = "";
+        hora_salida.value = "";
+        Precio.value = "";
+        cliente.value = "";
+        bus.value = "";
+        ruta.value = "";
+        conductor.value = "";
+        vendedor.value = "";
         modal.value = false;
-        obtenerRuta();
+        obtenerBoleto();
         limpiar();
       } catch (error) {
-        console.error('Error al agregar la ruta:', error);
+        console.error('Error al agregar el boleto:', error);
       }
     }
   }
   
-  const editarRuta = (ruta) => {
-    origen.value = ruta.origen;
-    destino.value = ruta.destino;
-    horarios.value = ruta.horarios;
-    distancia.value = ruta.distancia;
-    duracion.value = ruta.duracion;
-    fecha.value = ruta.fecha;
-    rutaEditando.value = ruta;
+  const editarBoleto = (boleto) => {
+    fecha_venta.value = boleto.fecha_venta;
+    hora_venta.value = boleto.hora_venta;
+    fecha_salida.value = boleto.fecha_salida;
+    hora_salida.value = boleto.hora_salida;
+    Precio.value = boleto.Precio;
+    cliente.value = boleto.cliente;
+    bus.value = boleto.bus;
+    ruta.value = boleto.ruta;
+    conductor.value = boleto.conductor;
+    vendedor.value = boleto.vendedor;
+    fecha.value = boleto.fecha;
+    boletoEditando.value = boleto;
     modal.value = true;
   }
   
   const limpiar = () => {
-    origen.value = "";
-    destino.value = "";
-    horarios.value = "";
-    distancia.value = "";
-    duracion.value = "";
+    fecha_venta.value = "";
+    hora_venta.value = "";
+    fecha_salida.value = "";
+    hora_salida.value = "";
+    Precio.value = "";
+    cliente.value = "";
+    bus.value = "";
+    ruta.value = "";
+    conductor.value = "";
+    vendedor.value = "";
     fecha.value = "";
   };
   
@@ -231,7 +263,7 @@
   
   
   onMounted(() => {
-    obtenerRuta()
+    obtenerBoleto()
   });
   
   </script>
