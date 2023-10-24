@@ -4,6 +4,7 @@
   <div class="title"><h3>Datos Conductores</h3>
   <div class="raya"></div>
 </div><br><br>
+
     <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
 
     <q-table
