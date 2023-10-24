@@ -1,8 +1,10 @@
 <template>
   <div class="q-pa-md">
+
     <div class="carga">
       <q-spinner v-if="loading" color="primary" size="50px" />
     </div>
+
 
     <div class="title"><h3>Datos Buses</h3>
 
