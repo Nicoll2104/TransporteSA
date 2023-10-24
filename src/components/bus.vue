@@ -1,16 +1,5 @@
 <template>
   <div class="q-pa-md">
-    <div class="carga">
-      <q-spinner v-if="loading" color="primary" size="50px" />
-    </div>
-
-    <div class="title"><h3>Datos Buses</h3>
-
-<div class="raya"></div>
-</div><br><br>
-
-<div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
-
     <q-table title="DATOS BUSES" :rows="rows" :columns="columns" row-key="cedula">
       <template v-slot:body-cell-status="props">
         <q-td key="status" :props="props">
@@ -72,7 +61,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-   
+    <q-btn label="Agregar" color="primary" @click="modal = true" />
 
   </div>
 </template>
@@ -81,7 +70,6 @@
 
 import { onMounted, ref } from "vue";
 import { useBusStore } from '../stores/bus.js';
-import { QSpinner } from 'quasar';
 
 const busStore = useBusStore()
 
@@ -92,7 +80,6 @@ const modelo = ref("");
 const soat = ref("");
 const n_asiento = ref("");
 const empresa_asignada = ref("");
-const loading = ref(false);
 const busEditando = ref(null);
 
 const columns = [
@@ -106,15 +93,12 @@ const columns = [
 ];
 
 async function obtenerBus() {
-  loading.value = true; 
   try {
     const buses = await busStore.obtener();
     console.log('Buses obtenidos:', buses);
     rows.value = busStore.datosData.buses;
   } catch (error) {
     console.error('Error al obtener los clientes:', error);
-  } finally {
-    loading.value = false; 
   }
 }
 
@@ -216,18 +200,13 @@ onMounted(() => {
 </script>
   
 <style scoped>
+
 .color1 {
   color: rgb(136, 226, 0);
 }
 
 .color2 {
   color: red;
-}
-
-.carga {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .infoDatos {
@@ -259,10 +238,10 @@ onMounted(() => {
   margin: 5px;
 }
 
+
 label {
   margin-right: 20px;
 }
-
 .agre{
   display: flex;
   justify-content: flex-end;
