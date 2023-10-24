@@ -57,7 +57,7 @@
 
         <q-separator />
 
-        <q-card-actions align="right">
+        <q-card-actions align="center">
           <q-btn flat label="Cerrar" color="primary"  @click="limpiar" v-close-popup />
           <q-btn flat label="Aceptar" color="primary" @click="agregarEditarCliente" v-close-popup />
         </q-card-actions>
@@ -83,11 +83,11 @@ const email = ref("");
 const clienteEditando = ref(null);
 
 const columns = [
-  { name: "cedula", required: true, label: "Cédula", align: "left", field: "cedula", sortable: true },
-  { name: "nombre", required: true, label: "Nombre", align: "left", field: "nombre", sortable: true },
-  { name: "telefono", required: true, label: "Teléfono", align: "left", field: "telefono", sortable: true },
-  { name: "email", required: true, label: "Email", align: "left", field: "email", sortable: true },
-  { name: "status", label: "Estado", align: "left", field: "status", sortable: true },
+  { name: "cedula", required: true, label: "Cédula", align: "center", field: "cedula", sortable: true },
+  { name: "nombre", required: true, label: "Nombre", align: "center", field: "nombre", sortable: true },
+  { name: "telefono", required: true, label: "Teléfono", align: "center", field: "telefono", sortable: true },
+  { name: "email", required: true, label: "Email", align: "center", field: "email", sortable: true },
+  { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 

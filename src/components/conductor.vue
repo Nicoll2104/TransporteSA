@@ -42,7 +42,8 @@
     </q-table>
     <q-dialog v-model="modal">
       <q-card>
-        <q-card-section>
+
+        <q-card-section class="arri">
           <div class="text-h6">DATOS DE CONDUCTORES</div>
         </q-card-section>
 
@@ -58,7 +59,7 @@
                 id="cedula"
                 v-model="cedula"
               />
-            </div>
+            </div><br>
 
             <div class="ilDatos">
               <label class="labelDatos" for="nombre">Nombre:</label>
@@ -68,17 +69,17 @@
                 id="nombre"
                 v-model="nombre"
               />
-            </div>
+            </div><br>
 
             <div class="ilDatos">
-              <label class="labelDatos" for="n_licencia">Num_licecia:</label>
+              <label class="labelDatos" for="n_licencia">Numero de licencia:</label>
               <input
                 class="inputDatos"
                 type="text"
                 id="n_licencia"
                 v-model="n_licencia"
               />
-            </div>
+            </div><br>
 
             <div class="ilDatos">
               <label class="labelDatos" for="direccion">Direccion:</label>
@@ -88,7 +89,7 @@
                 id="direccion"
                 v-model="direccion"
               />
-            </div>
+            </div><br>
 
             <div class="ilDatos">
               <label class="labelDatos" for="telefono">Telefono:</label>
@@ -98,7 +99,7 @@
                 id="telefono"
                 v-model="telefono"
               />
-            </div>
+            </div><br>
           </div>
         </q-card-section>
 
@@ -141,12 +142,12 @@ const telefono = ref("");
 const conductorEditando = ref(null);
 
 const columns = [
-  { name: "cedula", required: true, label: "Cédula", align: "left", field: "cedula", sortable: true },
-  { name: "nombre", required: true, label: "Nombre", align: "left", field: "nombre", sortable: true },
-  { name: "n_licencia", required: true, label: "N_licencia", align: "left", field: "n_licencia", sortable: true },
-  { name: "direccion", required: true, label: "Direccion", align: "left", field: "direccion", sortable: true },
-  { name: "telefono", required: true, label: "Teléfono", align: "left", field: "telefono", sortable: true },
-  { name: "status", label: "Status", align: "left", field: "status", sortable: true },
+  { name: "cedula", required: true, label: "Cédula", align: "center", field: "cedula", sortable: true },
+  { name: "nombre", required: true, label: "Nombre", align: "center", field: "nombre", sortable: true },
+  { name: "n_licencia", required: true, label: "N_licencia", align: "center", field: "n_licencia", sortable: true },
+  { name: "direccion", required: true, label: "Direccion", align: "center", field: "direccion", sortable: true },
+  { name: "telefono", required: true, label: "Teléfono", align: "center", field: "telefono", sortable: true },
+  { name: "status", label: "Status", align: "center", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
@@ -252,6 +253,18 @@ onMounted(() => {
 
     
 <style scoped>
+
+.q-card{
+    display: flex;
+    width: 50%;
+    height: 60%;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+
+
 .color1 {
   color: rgb(136, 226, 0);
 }
@@ -260,10 +273,10 @@ onMounted(() => {
   color: red;
 }
 
-.infoDatos {
-  display: flex;
-  margin: 0 auto;
-  flex-direction: column;
+.infoDatos{
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
 }
 
 .ilDatos {
@@ -275,12 +288,12 @@ onMounted(() => {
 .labelDatos {
   display: flex;
   align-items: center;
-  width: 60px;
+
 }
 
 .inputDatos {
   width: 200px;
-  padding: 5px;
+
 }
 
 .btnEditar {

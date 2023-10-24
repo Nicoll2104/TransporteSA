@@ -62,7 +62,7 @@
 
         <q-separator />
 
-        <q-card-actions align="right">
+        <q-card-actions align="center">
           <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
           <q-btn flat label="Aceptar" color="primary" @click="agregarEditarBus" v-close-popup />
         </q-card-actions>
@@ -91,12 +91,12 @@ const busEditando = ref(null);
 const isLoading = ref(false);
 
 const columns = [
-  { name: "placa", required: true, label: "Placa", align: "left", field: "placa", format: (val) => val, },
-  { name: "modelo", required: true, label: "Modelo", align: "left", field: "modelo", sortable: true },
-  { name: "soat", required: true, label: "Soat", align: "left", field: "soat", sortable: true },
-  { name: "n_asiento", required: true, label: "Número_asiento", align: "left", field: "n_asiento", sortable: true },
-  { name: "empresa_asignada", required: true, label: "Empresa_asignada", align: "left", field: "empresa_asignada", sortable: true },
-  { name: "status", label: "Estado", align: "left", field: "status", sortable: true },
+  { name: "placa", required: true, label: "Placa", align: "center", field: "placa", format: (val) => val, },
+  { name: "modelo", required: true, label: "Modelo", align: "center", field: "modelo", sortable: true },
+  { name: "soat", required: true, label: "Soat", align: "center", field: "soat", sortable: true },
+  { name: "n_asiento", required: true, label: "Número de asientos", align: "center", field: "n_asiento", sortable: true },
+  { name: "empresa_asignada", required: true, label: "Empresa_asignada", align: "center", field: "empresa_asignada", sortable: true },
+  { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
@@ -269,4 +269,6 @@ h3{
   width: 50%;
   height: 5px;
 }
+
+
 </style>

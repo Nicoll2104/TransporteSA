@@ -89,7 +89,7 @@
   
           <q-separator />
   
-          <q-card-actions align="right">
+          <q-card-actions align="center">
             <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
             <q-btn flat label="Aceptar" color="primary" @click="agregarEditarBoleto" v-close-popup />
           </q-card-actions>
@@ -127,11 +127,12 @@
     { name: "fecha_salida", required: true, label: "Fecha_Salida", align: "left", field: (row)=>row.fechas[0].fecha_salida, sortable: true },
     { name: "hora_salida", required: true, label: "Hora_salida", align: "left", field:(row)=>row.fechas[0].hora_salida, sortable: true },
     { name: "Precio", required: true, label: "Precio", align: "left", field: "Precio", sortable: true },
-    { name: "cliente", required: true, label: "Cliente", align: "left", field: (row)=>row.cliente.nombre, sortable: true },
-    { name: "bus", required: true, label: "Bus", align: "left", field: (row)=>row.bus.placa, sortable: true },
-    { name: "ruta", required: true, label: "Ruta", align: "left", field: (row)=>row.ruta.destino, sortable: true },
-    { name: "conductor", required: true, label: "Conductor", align: "left", field:(row)=>row.conductor.nombre, sortable: true },
-    { name: "vendedor", required: true, label: "Vendedor", align: "left", field: (row)=>row.vendedor.nombre, sortable: true },
+    { name: "cliente", required: true, label: "Cliente", align: "left", field: "cliente", sortable: true },
+    { name: "bus", required: true, label: "Bus", align: "left", field: "bus", sortable: true },
+    { name: "ruta", required: true, label: "Ruta", align: "left", field: "ruta", sortable: true },
+    { name: "conductor", required: true, label: "Conductor", align: "left", field: "conductor", sortable: true },
+    { name: "vendedor", required: true, label: "Vendedor", align: "left", field: "vendedor", sortable: true },
+    /* { name: "status", label: "Status", align: "left", field: "status", sortable: true }, */
     { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
   ];
   
