@@ -48,7 +48,7 @@
 .form{
     display: flex;
     width: 500px;
-    height: 100%;
+    height: 60%;
     background: linear-gradient(160deg, #a9babb, #9fb2b7);
     flex-direction: column;
     box-shadow: 20px 17px 50px rgb(90, 88, 88);
@@ -59,12 +59,11 @@
 }
 
 .input {
-    padding: 1rem 1.2rem;
-    margin: 1rem;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     border-radius: 2rem;
     display: block;
-    width: 80%;
+    width: 70%;
+    height: 10%;
     border: none;
     outline: none;
     color: rgb(161, 161, 161);
@@ -78,18 +77,19 @@
     border-radius: 10px;
     cursor: pointer;
     border: 0;
-    width: 30%;
+    width: 25%;
 }
 
 .logo {
-    font-size: 3rem;
+    font-size: 40px;
     color: rgb(255, 255, 255);
     font-weight: 600;
+    margin: 10px;
 }
 
 .imagenLogo{
-    border-radius: 50%;
-    background-image: url('https://static.vecteezy.com/system/resources/thumbnails/007/794/726/small/travel-bus-illustration-logo-on-light-background-free-vector.jpg');
+    border-radius: 20%;
+    background-image: url(https://static.vecteezy.com/system/resources/thumbnails/007/794/726/small/travel-bus-illustration-logo-on-light-background-free-vector.jpg);
     background-size: cover;
     width: 100px;
     height: 100px;
