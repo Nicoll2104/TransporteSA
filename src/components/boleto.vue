@@ -17,7 +17,7 @@
         </template>
         <template v-slot:body-cell-acciones="props">
           <q-td key="acciones" :props="props">
-            <q-btn class="btnEditar" icon="edit" color="amber" @click="editarRuta(props.row)"></q-btn>
+            <q-btn class="btnEditar" icon="edit" color="amber" @click="editarBoleto(props.row)"></q-btn>
             <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
             <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
           </q-td>
@@ -61,27 +61,27 @@
   
               <div class="ilDatos">
                 <label class="labelDatos" for="cliente">Cliente:</label>
-                <input class="inputDatos" type="date" id="cliente" v-model="cliente" />
+                <input class="inputDatos" type="text" id="cliente" v-model="cliente" />
               </div>
 
               <div class="ilDatos">
                 <label class="labelDatos" for="bus">Bus:</label>
-                <input class="inputDatos" type="date" id="bus" v-model="bus" />
+                <input class="inputDatos" type="text" id="bus" v-model="bus" />
               </div>
 
               <div class="ilDatos">
                 <label class="labelDatos" for="ruta">Ruta:</label>
-                <input class="inputDatos" type="date" id="ruta" v-model="ruta" />
+                <input class="inputDatos" type="text" id="ruta" v-model="ruta" />
               </div>
 
               <div class="ilDatos">
                 <label class="labelDatos" for="conductor">Conductor:</label>
-                <input class="inputDatos" type="date" id="conductor" v-model="conductor" />
+                <input class="inputDatos" type="text" id="conductor" v-model="conductor" />
               </div>
 
               <div class="ilDatos">
                 <label class="labelDatos" for="vendedor">Vendedor:</label>
-                <input class="inputDatos" type="date" id="vendedor" v-model="vendedor" />
+                <input class="inputDatos" type="text" id="vendedor" v-model="vendedor" />
               </div>
   
             </div>
@@ -127,28 +127,26 @@
     { name: "fecha_salida", required: true, label: "Fecha_Salida", align: "left", field: (row)=>row.fechas[0].fecha_salida, sortable: true },
     { name: "hora_salida", required: true, label: "Hora_salida", align: "left", field:(row)=>row.fechas[0].hora_salida, sortable: true },
     { name: "Precio", required: true, label: "Precio", align: "left", field: "Precio", sortable: true },
-    { name: "cliente", required: true, label: "Cliente", align: "left", field: "cliente", sortable: true },
-    { name: "bus", required: true, label: "Bus", align: "left", field: "bus", sortable: true },
-    { name: "ruta", required: true, label: "Ruta", align: "left", field: "ruta", sortable: true },
-    { name: "conductor", required: true, label: "Conductor", align: "left", field: "conductor", sortable: true },
-    { name: "vendedor", required: true, label: "Vendedor", align: "left", field: "vendedor", sortable: true },
-    /* { name: "status", label: "Status", align: "left", field: "status", sortable: true }, */
+    { name: "cliente", required: true, label: "Cliente", align: "left", field: (row)=>row.cliente.nombre, sortable: true },
+    { name: "bus", required: true, label: "Bus", align: "left", field: (row)=>row.bus.placa, sortable: true },
+    { name: "ruta", required: true, label: "Ruta", align: "left", field: (row)=>row.ruta.destino, sortable: true },
+    { name: "conductor", required: true, label: "Conductor", align: "left", field:(row)=>row.conductor.nombre, sortable: true },
+    { name: "vendedor", required: true, label: "Vendedor", align: "left", field: (row)=>row.vendedor.nombre, sortable: true },
     { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
   ];
   
   const obtenerBoleto = async () => {
-  try {
-    const response = await boletoStore.obtener();
-    console.log(response);
-    if (response && response.boletos) {
-      rows.value = response.boletos;
-    } else {
-      console.error('Respuesta inesperada del servidor:', response);
+    try {
+        const response = await boletoStore.obtener();
+        console.log(response); 
+        if (response && response.boletoPopulate) {
+            rows.value = response.boletoPopulate;
+        }
+    } catch (error) {
+        console.error('Error al obtener los boletos:', error);
     }
-  } catch (error) {
-    console.error('Error al obtener los boletos:', error);
-  }
 };
+
   
   const agregarEditarBoleto = async () => {
     if (boletoEditando.value) {
