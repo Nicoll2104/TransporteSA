@@ -232,7 +232,7 @@ const columns = [
     { name: "telefono", required: true, label: "Telefono", align: "left", field: "telefono", sortable: true },
     { name: "usuario", required: true, label: "Usuario", align: "left", field: "usuario", sortable: true },
     { name: "contrasena", required: true, label: "Contraseña", align: "left", field: "contrasena", sortable: true },
-    { name: "status", label: "Status", align: "left", field: "status", sortable: true },
+    { name: "status", label: "Estado", align: "left", field: "status", sortable: true },
     { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
