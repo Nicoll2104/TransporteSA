@@ -233,13 +233,13 @@ onMounted(() => {
 
 
 const columns = [
-    { name: "cedula", required: true, label: "Cedula", align: "left", field: "cedula", sortable: true },
-    { name: "nombre", required: true, label: "Nombre", align: "left", field: "nombre", sortable: true },
-    { name: "apellido", required: true, label: "Apellido", align: "left", field: "apellido", sortable: true },
-    { name: "telefono", required: true, label: "Telefono", align: "left", field: "telefono", sortable: true },
-    { name: "usuario", required: true, label: "Usuario", align: "left", field: "usuario", sortable: true },
-    { name: "contrasena", required: true, label: "Contraseña", align: "left", field: "contrasena", sortable: true },
-    { name: "status", label: "Estado", align: "left", field: "status", sortable: true },
+    { name: "cedula", required: true, label: "Cedula", align: "center", field: "cedula", sortable: true },
+    { name: "nombre", required: true, label: "Nombre", align: "center", field: "nombre", sortable: true },
+    { name: "apellido", required: true, label: "Apellido", align: "center", field: "apellido", sortable: true },
+    { name: "telefono", required: true, label: "Telefono", align: "center", field: "telefono", sortable: true },
+    { name: "usuario", required: true, label: "Usuario", align: "center", field: "usuario", sortable: true },
+    { name: "contrasena", required: true, label: "Contraseña", align: "center", field: "contrasena", sortable: true },
+    { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
     { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 

@@ -98,13 +98,13 @@ const fecha = ref("");
 const rutaEditando = ref(null);
 
 const columns = [
-  { name: "origen", required: true, label: "Origen", align: "left", field: "origen", sortable: true },
-  { name: "destino", required: true, label: "Destino", align: "left", field: "destino", sortable: true },
-  { name: "horarios", required: true, label: "Horario", align: "left", field: "horarios", sortable: true },
-  { name: "distancia", required: true, label: "Distancia", align: "left", field: "distancia", sortable: true },
-  { name: "duracion", required: true, label: "Duracion", align: "left", field: "duracion", sortable: true },
-  { name: "fecha", required: true, label: "Fecha", align: "left", field: "fecha", sortable: true },
-  { name: "status", label: "Status", align: "left", field: "status", sortable: true },
+  { name: "origen", required: true, label: "Origen", align: "center", field: "origen", sortable: true },
+  { name: "destino", required: true, label: "Destino", align: "center", field: "destino", sortable: true },
+  { name: "horarios", required: true, label: "Horario", align: "center", field: "horarios", sortable: true },
+  { name: "distancia", required: true, label: "Distancia", align: "center", field: "distancia", sortable: true },
+  { name: "duracion", required: true, label: "Duracion", align: "center", field: "duracion", sortable: true },
+  { name: "fecha", required: true, label: "Fecha", align: "center", field: "fecha", sortable: true },
+  { name: "status", label: "Status", align: "center", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
