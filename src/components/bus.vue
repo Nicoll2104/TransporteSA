@@ -1,5 +1,8 @@
 <template>
   <div class="q-pa-md">
+    <div class="carga">
+      <q-spinner v-if="loading" color="primary" size="50px" />
+    </div>
 
     <div class="title"><h3>Datos Buses</h3>
 
@@ -78,6 +81,7 @@
 
 import { onMounted, ref } from "vue";
 import { useBusStore } from '../stores/bus.js';
+import { QSpinner } from 'quasar';
 
 const busStore = useBusStore()
 
@@ -88,25 +92,29 @@ const modelo = ref("");
 const soat = ref("");
 const n_asiento = ref("");
 const empresa_asignada = ref("");
+const loading = ref(false);
 const busEditando = ref(null);
 
 const columns = [
   { name: "placa", required: true, label: "Placa", align: "left", field: "placa", format: (val) => val, },
   { name: "modelo", required: true, label: "Modelo", align: "left", field: "modelo", sortable: true },
   { name: "soat", required: true, label: "Soat", align: "left", field: "soat", sortable: true },
-  { name: "n_asiento", required: true, label: "N_asiento", align: "left", field: "n_asiento", sortable: true },
+  { name: "n_asiento", required: true, label: "Número_asiento", align: "left", field: "n_asiento", sortable: true },
   { name: "empresa_asignada", required: true, label: "Empresa_asignada", align: "left", field: "empresa_asignada", sortable: true },
-  { name: "status", label: "Status", align: "left", field: "status", sortable: true },
+  { name: "status", label: "Estado", align: "left", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
 async function obtenerBus() {
+  loading.value = true; 
   try {
     const buses = await busStore.obtener();
     console.log('Buses obtenidos:', buses);
     rows.value = busStore.datosData.buses;
   } catch (error) {
     console.error('Error al obtener los clientes:', error);
+  } finally {
+    loading.value = false; 
   }
 }
 
@@ -214,6 +222,12 @@ onMounted(() => {
 
 .color2 {
   color: red;
+}
+
+.carga {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .infoDatos {

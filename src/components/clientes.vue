@@ -80,7 +80,7 @@ const columns = [
   { name: "nombre", required: true, label: "Nombre", align: "left", field: "nombre", sortable: true },
   { name: "telefono", required: true, label: "Teléfono", align: "left", field: "telefono", sortable: true },
   { name: "email", required: true, label: "Email", align: "left", field: "email", sortable: true },
-  { name: "status", label: "Status", align: "left", field: "status", sortable: true },
+  { name: "status", label: "Estado", align: "left", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 

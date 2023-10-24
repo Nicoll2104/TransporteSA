@@ -140,60 +140,13 @@ const telefono = ref("");
 const conductorEditando = ref(null);
 
 const columns = [
-  {
-    name: "cedula",
-    required: true,
-    label: "Cédula",
-    align: "left",
-    field: "cedula",
-    sortable: true,
-  },
-  {
-    name: "nombre",
-    required: true,
-    label: "Nombre",
-    align: "left",
-    field: "nombre",
-    sortable: true,
-  },
-  {
-    name: "n_licencia",
-    required: true,
-    label: "N_licencia",
-    align: "left",
-    field: "n_licencia",
-    sortable: true,
-  },
-  {
-    name: "direccion",
-    required: true,
-    label: "Direccion",
-    align: "left",
-    field: "direccion",
-    sortable: true,
-  },
-  {
-    name: "telefono",
-    required: true,
-    label: "Teléfono",
-    align: "left",
-    field: "telefono",
-    sortable: true,
-  },
-  {
-    name: "status",
-    label: "Status",
-    align: "left",
-    field: "status",
-    sortable: true,
-  },
-  {
-    name: "acciones",
-    required: true,
-    label: "Acciones",
-    align: "center",
-    field: "acciones",
-  },
+  { name: "cedula", required: true, label: "Cédula", align: "left", field: "cedula", sortable: true },
+  { name: "nombre", required: true, label: "Nombre", align: "left", field: "nombre", sortable: true },
+  { name: "n_licencia", required: true, label: "N_licencia", align: "left", field: "n_licencia", sortable: true },
+  { name: "direccion", required: true, label: "Direccion", align: "left", field: "direccion", sortable: true },
+  { name: "telefono", required: true, label: "Teléfono", align: "left", field: "telefono", sortable: true },
+  { name: "status", label: "Status", align: "left", field: "status", sortable: true },
+  { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
 async function obtenerConductor() {

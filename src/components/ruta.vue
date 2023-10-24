@@ -96,7 +96,7 @@ const columns = [
   { name: "distancia", required: true, label: "Distancia", align: "left", field: "distancia", sortable: true },
   { name: "duracion", required: true, label: "Duracion", align: "left", field: "duracion", sortable: true },
   { name: "fecha", required: true, label: "Fecha", align: "left", field: "fecha", sortable: true },
-  { name: "status", label: "Status", align: "left", field: "status", sortable: true },
+  { name: "status", label: "Estado", align: "left", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
