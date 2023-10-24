@@ -1,5 +1,16 @@
 <template>
   <div class="q-pa-md">
+    <div class="carga">
+      <q-spinner v-if="loading" color="primary" size="50px" />
+    </div>
+
+    <div class="title"><h3>Datos Buses</h3>
+
+<div class="raya"></div>
+</div><br><br>
+
+<div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
+
     <q-table title="DATOS BUSES" :rows="rows" :columns="columns" row-key="cedula">
       <template v-slot:body-cell-status="props">
         <q-td key="status" :props="props">
