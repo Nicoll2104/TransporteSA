@@ -1,5 +1,13 @@
 <template>
   <div class="q-pa-md">
+
+    <div class="title"><h3>Datos Buses</h3>
+
+<div class="raya"></div>
+</div><br><br>
+
+<div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
+
     <q-table title="DATOS BUSES" :rows="rows" :columns="columns" row-key="cedula">
       <template v-slot:body-cell-status="props">
         <q-td key="status" :props="props">
@@ -61,7 +69,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-btn label="Agregar" color="primary" @click="modal = true" />
+   
 
   </div>
 </template>
@@ -239,6 +247,25 @@ onMounted(() => {
 
 label {
   margin-right: 20px;
+}
+
+.agre{
+  display: flex;
+  justify-content: flex-end;
+}
+.title{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h3{
+  font-weight: bold;
+}
+
+.raya{
+  background-color: rgba(50, 107, 253, 0.85);
+  width: 50%;
+  height: 5px;
 }
 </style>
   
