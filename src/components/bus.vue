@@ -1,6 +1,13 @@
 <template>
   <div class="q-pa-md">
-    <q-table title="DATOS BUSES" :rows="rows" :columns="columns" row-key="cedula">
+    <div class="title"><h3>Datos Buses</h3>
+
+<div class="raya"></div>
+</div><br>
+
+<div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
+
+<q-table title="DATOS BUSES" :rows="rows" :columns="columns" row-key="cedula" :loading="isLoading">
       <template v-slot:body-cell-status="props">
         <q-td key="status" :props="props">
           <span class="color1" v-if="props.row.status == 1">Activo</span>
@@ -61,7 +68,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-btn label="Agregar" color="primary" @click="modal = true" />
+    
 
   </div>
 </template>
@@ -81,6 +88,7 @@ const soat = ref("");
 const n_asiento = ref("");
 const empresa_asignada = ref("");
 const busEditando = ref(null);
+const isLoading = ref(false);
 
 const columns = [
   { name: "placa", required: true, label: "Placa", align: "left", field: "placa", format: (val) => val, },
@@ -93,12 +101,15 @@ const columns = [
 ];
 
 async function obtenerBus() {
+  isLoading.value = true; 
   try {
     const buses = await busStore.obtener();
     console.log('Buses obtenidos:', buses);
     rows.value = busStore.datosData.buses;
   } catch (error) {
-    console.error('Error al obtener los clientes:', error);
+    console.error('Error al obtener los buses:', error);
+  } finally {
+    isLoading.value = false;
   }
 }
 
@@ -195,11 +206,10 @@ onMounted(() => {
   obtenerBus()
 })
 
-
-
 </script>
   
 <style scoped>
+
 .color1 {
   color: rgb(136, 226, 0);
 }
@@ -237,8 +247,26 @@ onMounted(() => {
   margin: 5px;
 }
 
+
 label {
   margin-right: 20px;
 }
+.agre{
+  display: flex;
+  justify-content: flex-end;
+}
+.title{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h3{
+  font-weight: bold;
+}
+
+.raya{
+  background-color: rgba(50, 107, 253, 0.85);
+  width: 50%;
+  height: 5px;
+}
 </style>
-  

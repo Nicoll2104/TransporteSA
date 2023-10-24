@@ -1,17 +1,42 @@
 <template>
   <div class="q-pa-md">
-    <q-table title="DATOS CONDUCTORES" :rows="rows" :columns="columns" row-key="cedula">
+
+  <div class="title"><h3>Datos Conductores</h3>
+  <div class="raya"></div>
+</div><br><br>
+
+    <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
+
+    <q-table
+      title="DATOS CONDUCTORES"
+      :rows="rows"
+      :columns="columns"
+      row-key="cedula"
+    >
       <template v-slot:body-cell-status="props">
         <q-td key="status" :props="props">
           <span class="color1" v-if="props.row.status == 1">Activo</span>
           <span class="color2" v-else>Inactivo</span>
         </q-td>
       </template>
+
       <template v-slot:body-cell-acciones="props">
         <q-td key="acciones" :props="props">
-          <q-btn class="btnEditar" icon="edit" color="amber" @click="editarConductor(props.row)"></q-btn>
-          <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
-          <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
+          <q-btn
+            class="btnEditar"
+            icon="edit"
+            color="blue"
+            @click="editarConductor(props.row)"
+          ></q-btn>
+          <q-btn
+            class="btnActivar"
+            v-if="props.row.status == 1"
+            @click="desactivar(props.row._id)"
+            >❌</q-btn
+          >
+          <q-btn class="btnActivar" v-else @click="activar(props.row._id)"
+            >✅</q-btn
+          >
         </q-td>
       </template>
     </q-table>
@@ -27,43 +52,76 @@
           <div class="infoDatos">
             <div class="ilDatos">
               <label class="labelDatos" for="cedula">Cedula:</label>
-              <input class="inputDatos" type="text" id="cedula" v-model="cedula" />
+              <input
+                class="inputDatos"
+                type="text"
+                id="cedula"
+                v-model="cedula"
+              />
             </div>
 
             <div class="ilDatos">
               <label class="labelDatos" for="nombre">Nombre:</label>
-              <input class="inputDatos" type="text" id="nombre" v-model="nombre" />
+              <input
+                class="inputDatos"
+                type="text"
+                id="nombre"
+                v-model="nombre"
+              />
             </div>
 
             <div class="ilDatos">
               <label class="labelDatos" for="n_licencia">Num_licecia:</label>
-              <input class="inputDatos" type="text" id="n_licencia" v-model="n_licencia" />
+              <input
+                class="inputDatos"
+                type="text"
+                id="n_licencia"
+                v-model="n_licencia"
+              />
             </div>
 
             <div class="ilDatos">
               <label class="labelDatos" for="direccion">Direccion:</label>
-              <input class="inputDatos" type="text" id="direccion" v-model="direccion" />
+              <input
+                class="inputDatos"
+                type="text"
+                id="direccion"
+                v-model="direccion"
+              />
             </div>
 
             <div class="ilDatos">
               <label class="labelDatos" for="telefono">Telefono:</label>
-              <input class="inputDatos" type="text" id="telefono" v-model="telefono" />
+              <input
+                class="inputDatos"
+                type="text"
+                id="telefono"
+                v-model="telefono"
+              />
             </div>
-
-
           </div>
         </q-card-section>
 
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
-          <q-btn flat label="Aceptar" color="primary" @click="agregarEditarConductor" v-close-popup />
+          <q-btn
+            flat
+            label="Cerrar"
+            color="primary"
+            @click="limpiar"
+            v-close-popup
+          />
+          <q-btn
+            flat
+            label="Aceptar"
+            color="primary"
+            @click="agregarEditarConductor"
+            v-close-popup
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-btn label="Agregar" color="primary" @click="modal = true" />
-
   </div>
 </template>
     
@@ -71,9 +129,9 @@
 import { onMounted, ref } from "vue";
 import { useConductorStore } from "../stores/conductor.js";
 
-const conductorStore = useConductorStore()
+const conductorStore = useConductorStore();
 
-const modal = ref(false)
+const modal = ref(false);
 const rows = ref([]);
 const cedula = ref("");
 const nombre = ref("");
@@ -85,20 +143,20 @@ const conductorEditando = ref(null);
 const columns = [
   { name: "cedula", required: true, label: "Cédula", align: "left", field: "cedula", sortable: true },
   { name: "nombre", required: true, label: "Nombre", align: "left", field: "nombre", sortable: true },
-  { name: "n_licencia", required: true, label: "Número_licencia", align: "left", field: "n_licencia", sortable: true },
+  { name: "n_licencia", required: true, label: "N_licencia", align: "left", field: "n_licencia", sortable: true },
   { name: "direccion", required: true, label: "Direccion", align: "left", field: "direccion", sortable: true },
   { name: "telefono", required: true, label: "Teléfono", align: "left", field: "telefono", sortable: true },
-  { name: "status", label: "Estado", align: "left", field: "status", sortable: true },
+  { name: "status", label: "Status", align: "left", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
 async function obtenerConductor() {
   try {
     const conductores = await conductorStore.obtener();
-    console.log('conductores obtenidos:', conductores);
+    console.log("conductores obtenidos:", conductores);
     rows.value = conductorStore.datosData;
   } catch (error) {
-    console.error('Error al obtener los conductores:', error);
+    console.error("Error al obtener los conductores:", error);
   }
 }
 
@@ -110,7 +168,7 @@ const agregarEditarConductor = async () => {
       nombre: nombre.value,
       n_licencia: n_licencia.value,
       direccion: direccion.value,
-      telefono: telefono.value
+      telefono: telefono.value,
     };
     try {
       await conductorStore.editarConductor(conductorEditado);
@@ -123,7 +181,7 @@ const agregarEditarConductor = async () => {
       conductorEditando.value = null;
       obtenerConductor();
     } catch (error) {
-      console.error('Error al editar el conductor:', error);
+      console.error("Error al editar el conductor:", error);
     }
   } else {
     const nuevoConductor = {
@@ -131,7 +189,7 @@ const agregarEditarConductor = async () => {
       nombre: nombre.value,
       n_licencia: n_licencia.value,
       direccion: direccion.value,
-      telefono: telefono.value
+      telefono: telefono.value,
     };
     try {
       await conductorStore.agregarConductor(nuevoConductor);
@@ -144,10 +202,10 @@ const agregarEditarConductor = async () => {
       obtenerConductor();
       limpiar();
     } catch (error) {
-      console.error('Error al agregar el conductor:', error);
+      console.error("Error al agregar el conductor:", error);
     }
   }
-}
+};
 
 const editarConductor = (conductor) => {
   cedula.value = conductor.cedula;
@@ -157,7 +215,7 @@ const editarConductor = (conductor) => {
   telefono.value = conductor.telefono;
   conductorEditando.value = conductor;
   modal.value = true;
-}
+};
 
 const limpiar = () => {
   cedula.value = "";
@@ -170,28 +228,26 @@ const limpiar = () => {
 async function activar(id) {
   try {
     const conductor = await conductorStore.activarConductor(id);
-    console.log('conductor activado:', conductor);
+    console.log("conductor activado:", conductor);
     obtenerConductor();
   } catch (error) {
-    console.error('Error al activar conductor:', error);
+    console.error("Error al activar conductor:", error);
   }
 }
 
 async function desactivar(id) {
   try {
     const conductor = await conductorStore.desactivarConductor(id);
-    console.log('conductor desactivado:', conductor);
+    console.log("conductor desactivado:", conductor);
     obtenerConductor();
   } catch (error) {
-    console.error('Error al desactivar conductor:', error);
+    console.error("Error al desactivar conductor:", error);
   }
 }
 
 onMounted(() => {
-  obtenerConductor()
+  obtenerConductor();
 });
-
-
 </script>
 
     
@@ -214,14 +270,12 @@ onMounted(() => {
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 10px;
-
 }
 
 .labelDatos {
   display: flex;
   align-items: center;
   width: 60px;
-
 }
 
 .inputDatos {
@@ -231,11 +285,31 @@ onMounted(() => {
 
 .btnEditar {
   margin: 5px;
+  
 }
-
 
 label {
   margin-right: 20px;
 }
+
+.agre{
+  display: flex;
+  justify-content: flex-end;
+}
+.title{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h3{
+  font-weight: bold;
+}
+
+.raya{
+  background-color: rgba(50, 107, 253, 0.85);
+  width: 50%;
+  height: 5px;
+}
+
 </style>
     
