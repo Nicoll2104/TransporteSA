@@ -73,11 +73,11 @@
           >
         </button>
         <button class="btn">
-          <router-link to="/"
+          <router-link to="/boleto"
             ><img
               src="https://t3.ftcdn.net/jpg/06/41/84/02/240_F_641840207_Q30aIf0Aa8h9pIeTCRpFx1CN6kT6f9u3.jpg"
               style="height: 30px; width: 30px"
-            />Tiquetas</router-link
+            />Tiquetes</router-link
           >
         </button>
         <button class="btn">
