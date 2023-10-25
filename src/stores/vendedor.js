@@ -61,6 +61,16 @@ export const useVendedorStore = defineStore("vendedor", () => {
         }
     }; 
 
+    const login = async(data)=>{
+        try {
+            const response = await axios.login("vendedor/login",data)
+
+            return response
+        } catch (error) {
+            
+        }
+    }
+
     return {
         datosData,
         obtener,
@@ -68,6 +78,7 @@ export const useVendedorStore = defineStore("vendedor", () => {
         editarVendedor,
         activarVendedor,
         desactivarVendedor, 
+        login
     };
 
 });

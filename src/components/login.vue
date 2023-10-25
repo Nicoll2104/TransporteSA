@@ -12,6 +12,7 @@
           required=""
           class="input"
           placeholder="Email o nombre de usuario"
+          v-model="usuario"
         />
         <input
           type="password"
@@ -20,10 +21,11 @@
           required=""
           class="input"
           placeholder="Contraseña"
+          v-model="contrasena"
         />
 
-        <button class="btn" type="submit">
-          <router-link to="/home">Acceder</router-link>
+        <button class="btn" type="submit" @click="acceder()">
+          Acceder
         </button>
         <p class="forgotten">
           Olvidaste tus datos ?
@@ -36,6 +38,18 @@
 
 
 <script setup>
+import {useVendedorStore} from "../stores/vendedor.js"
+import {ref} from 'vue'
+
+const useVendedor = useVendedorStore()
+const usuario = ref("")
+const contrasena = ref("")
+
+const acceder = async()=>{
+  const res = await useVendedor.login({usuario, contrasena})
+  console.log(res);
+}
+
 </script>
 
 
