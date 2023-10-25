@@ -1,11 +1,16 @@
 <template>
   <div class="q-pa-md">
-    <div class="title"><h3>Datos Clientes</h3>
+      <div class="cargando">
+      <q-spinner-ios v-if="loading" color="primary" size="100px" />
+    </div>
+    <div class="cargar_contenedor" v-if="dataLoaded"> 
+    <div class="title">
+      <h3>Datos Clientes</h3>
 
-<div class="raya"></div>
-</div><br><br>
+      <div class="raya"></div>
+    </div><br><br>
 
-<div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
+    <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br>
 
     <q-table title="DATOS CLIENTES" :rows="rows" :columns="columns" row-key="cedula">
       <template v-slot:body-cell-status="props">
@@ -58,19 +63,20 @@
         <q-separator />
 
         <q-card-actions align="center">
-          <q-btn flat label="Cerrar" color="primary"  @click="limpiar" v-close-popup />
+          <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
           <q-btn flat label="Aceptar" color="primary" @click="agregarEditarCliente" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
-    
 
+    </div> 
   </div>
 </template>
     
 <script setup>
 import { onMounted, ref } from "vue";
 import { useClienteStore } from '../stores/clientes.js';
+
 
 const clienteStore = useClienteStore()
 
@@ -82,6 +88,9 @@ const telefono = ref("");
 const email = ref("");
 const clienteEditando = ref(null);
 
+const loading = ref(false);
+const dataLoaded = ref(false); 
+
 const columns = [
   { name: "cedula", required: true, label: "Cédula", align: "center", field: "cedula", sortable: true },
   { name: "nombre", required: true, label: "Nombre", align: "center", field: "nombre", sortable: true },
@@ -92,12 +101,16 @@ const columns = [
 ];
 
 async function obtenerClientes() {
+  loading.value = true; 
   try {
     const clientes = await clienteStore.obtener();
+    dataLoaded.value = true;  
     console.log('Clientes obtenidos:', clientes);
     rows.value = clienteStore.datosData;
   } catch (error) {
     console.error('Error al obtener los clientes:', error);
+    } finally {
+    loading.value = false; 
   }
 }
 
@@ -185,7 +198,6 @@ onMounted(() => {
   obtenerClientes()
 });
 
-
 </script>
 
 
@@ -195,8 +207,6 @@ onMounted(() => {
 
     
 <style scoped>
-
-
 .color1 {
   color: rgb(136, 226, 0);
 }
@@ -216,6 +226,17 @@ onMounted(() => {
   flex-wrap: wrap;
   margin-bottom: 10px;
 
+}
+
+.cargando {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .labelDatos {
@@ -238,20 +259,23 @@ onMounted(() => {
 label {
   margin-right: 20px;
 }
-.agre{
+
+.agre {
   display: flex;
   justify-content: flex-end;
 }
-.title{
+
+.title {
   display: flex;
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
 }
-h3{
+
+h3 {
   font-weight: bold;
 }
 
-.raya{
+.raya {
   background-color: rgba(50, 107, 253, 0.85);
   width: 50%;
   height: 5px;

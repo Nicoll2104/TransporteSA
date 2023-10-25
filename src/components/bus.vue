@@ -1,75 +1,82 @@
 <template>
   <div class="q-pa-md">
-    <div class="title"><h3>Datos Buses</h3>
+    <div class="cargando">
+      <q-spinner-ios v-if="loading" color="primary" size="100px" />
+    </div>
+    <div class="cargar_contenedor" v-if="dataLoaded">
+      <div class="title">
+        <h3>Datos Buses</h3>
+        <div class="raya"></div>
+      </div>
 
-<div class="raya"></div>
-</div><br>
+      <br>
 
-<div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
 
-<q-table title="DATOS BUSES" :rows="rows" :columns="columns" row-key="cedula" :loading="isLoading">
-      <template v-slot:body-cell-status="props">
-        <q-td key="status" :props="props">
-          <span class="color1" v-if="props.row.status == 1">Activo</span>
-          <span class="color2" v-else>Inactivo</span>
-        </q-td>
-      </template>
-      <template v-slot:body-cell-acciones="props">
-        <q-td key="acciones" :props="props">
-          <q-btn class="btnEditar" icon="edit" color="amber" @click="editarBus(props.row)"></q-btn>
-          <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
-          <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
-        </q-td>
-      </template>
-    </q-table>
-    <q-dialog v-model="modal">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">DATOS DE BUSES</div>
-        </q-card-section>
+      <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br>
 
-        <q-separator />
+      <q-table title="DATOS BUSES" :rows="rows" :columns="columns" row-key="cedula">
+        <template v-slot:body-cell-status="props">
+          <q-td key="status" :props="props">
+            <span class="color1" v-if="props.row.status == 1">Activo</span>
+            <span class="color2" v-else>Inactivo</span>
+          </q-td>
+        </template>
+        <template v-slot:body-cell-acciones="props">
+          <q-td key="acciones" :props="props">
+            <q-btn class="btnEditar" icon="edit" color="primary" @click="editarBus(props.row)"></q-btn>
+            <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
+            <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
+          </q-td>
+        </template>
+      </q-table>
+      <q-dialog v-model="modal">
+        <q-card>
+          <q-card-section>
+            <div class="text-h6">DATOS DE BUSES</div>
+          </q-card-section>
 
-        <q-card-section style="max-height: 50vh" class="scroll">
-          <div class="infoDatos">
-            <div class="ilDatos">
-              <label class="labelDatos" for="placa">Placa:</label>
-              <input class="inputDatos" type="text" id="placa" v-model="placa" />
+          <q-separator />
+
+          <q-card-section style="max-height: 50vh" class="scroll">
+            <div class="infoDatos">
+              <div class="ilDatos">
+                <label class="labelDatos" for="placa">Placa:</label>
+                <input class="inputDatos" type="text" id="placa" v-model="placa" />
+              </div>
+
+              <div class="ilDatos">
+                <label class="labelDatos" for="modelo">Modelo:</label>
+                <input class="inputDatos" type="text" id="modelo" v-model="modelo" />
+              </div>
+
+              <div class="ilDatos">
+                <label class="labelDatos" for="soat"> Soat:</label>
+                <input class="inputDatos" type="text" id="soat" v-model="soat" />
+              </div>
+
+              <div class="ilDatos">
+                <label class="labelDatos" for="n_asiento">Numero asientos:</label>
+                <input class="inputDatos" type="number" id="n_asiento" v-model="n_asiento" />
+              </div>
+
+              <div class="ilDatos">
+                <label class="labelDatos" for="empresa_asignada">Empresa:</label>
+                <input class="inputDatos" type="text" id="empresa_asignada" v-model="empresa_asignada" />
+              </div>
+
             </div>
+          </q-card-section>
 
-            <div class="ilDatos">
-              <label class="labelDatos" for="modelo">Modelo:</label>
-              <input class="inputDatos" type="text" id="modelo" v-model="modelo" />
-            </div>
+          <q-separator />
 
-            <div class="ilDatos">
-              <label class="labelDatos" for="soat"> Soat:</label>
-              <input class="inputDatos" type="text" id="soat" v-model="soat" />
-            </div>
+          <q-card-actions align="center">
+            <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
+            <q-btn flat label="Aceptar" color="primary" @click="agregarEditarBus" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
 
-            <div class="ilDatos">
-              <label class="labelDatos" for="n_asiento">Numero asientos:</label>
-              <input class="inputDatos" type="number" id="n_asiento" v-model="n_asiento" />
-            </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="empresa_asignada">Empresa:</label>
-              <input class="inputDatos" type="text" id="empresa_asignada" v-model="empresa_asignada" />
-            </div>
-
-          </div>
-        </q-card-section>
-
-        <q-separator />
-
-        <q-card-actions align="center">
-          <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
-          <q-btn flat label="Aceptar" color="primary" @click="agregarEditarBus" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-    
-
+    </div>
   </div>
 </template>
 
@@ -88,7 +95,10 @@ const soat = ref("");
 const n_asiento = ref("");
 const empresa_asignada = ref("");
 const busEditando = ref(null);
-const isLoading = ref(false);
+
+const loading = ref(false);
+const dataLoaded = ref(false);
+
 
 const columns = [
   { name: "placa", required: true, label: "Placa", align: "center", field: "placa", format: (val) => val, },
@@ -101,15 +111,16 @@ const columns = [
 ];
 
 async function obtenerBus() {
-  isLoading.value = true; 
+  loading.value = true;
   try {
     const buses = await busStore.obtener();
     console.log('Buses obtenidos:', buses);
     rows.value = busStore.datosData.buses;
+    dataLoaded.value = true; 
   } catch (error) {
-    console.error('Error al obtener los buses:', error);
+    console.error('Error al obtener los clientes:', error);
   } finally {
-    isLoading.value = false;
+    loading.value = false;
   }
 }
 
@@ -200,16 +211,15 @@ async function desactivar(id) {
   }
 }
 
-
-
 onMounted(() => {
   obtenerBus()
 })
 
 </script>
+
+
   
 <style scoped>
-
 .color1 {
   color: rgb(136, 226, 0);
 }
@@ -222,6 +232,17 @@ onMounted(() => {
   display: flex;
   margin: 0 auto;
   flex-direction: column;
+}
+
+.cargando {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .ilDatos {
@@ -251,24 +272,25 @@ onMounted(() => {
 label {
   margin-right: 20px;
 }
-.agre{
+
+.agre {
   display: flex;
   justify-content: flex-end;
 }
-.title{
+
+.title {
   display: flex;
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
 }
-h3{
+
+h3 {
   font-weight: bold;
 }
 
-.raya{
+.raya {
   background-color: rgba(50, 107, 253, 0.85);
   width: 50%;
   height: 5px;
 }
-
-
 </style>
