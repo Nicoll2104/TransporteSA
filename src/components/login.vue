@@ -6,12 +6,12 @@
         <div class="logo">Transporte</div>
 
         <input
-          type="email"
+          type="text"
           name="email"
           id="email"
           required=""
           class="input"
-          placeholder="Email o nombre de usuario"
+          placeholder="Nombre de usuario"
           v-model="usuario"
         />
         <input
@@ -46,7 +46,7 @@ const usuario = ref("")
 const contrasena = ref("")
 
 const acceder = async()=>{
-  const res = await useVendedor.login({usuario, contrasena})
+  const res = await useVendedor.login({usuario: usuario.value, contrasena: contrasena.value})
   console.log(res);
 }
 
