@@ -63,10 +63,8 @@ export const useVendedorStore = defineStore("vendedor", () => {
 
     const login = async(data)=>{
         try {
-            console.log(data);
             const response = await axios.post("vendedor/login",data)
-console.log(response);
-            return response
+            console.log(response);
         } catch (error) {
             
         }

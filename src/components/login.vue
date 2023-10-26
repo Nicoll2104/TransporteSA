@@ -47,7 +47,6 @@ const contrasena = ref("")
 
 const acceder = async()=>{
   const res = await useVendedor.login({usuario: usuario.value, contrasena: contrasena.value})
-  console.log(res);
 }
 
 </script>
