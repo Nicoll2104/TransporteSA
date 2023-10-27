@@ -1,82 +1,131 @@
 <template>
   <div class="q-pa-md">
-      <div class="cargando">
-      <q-spinner-ios v-if="loading" color="primary" size="100px" />
+    <div class="cargar_contenedor">
+      <div class="title">
+        <h3>Datos Clientes</h3>
+
+        <div class="raya"></div>
+      </div><br><br>
+
+      
+      <q-markup-table v-if="cargando">
+      <thead>
+        <tr>
+          <th class="text-left" style="width: 150px">
+            <q-skeleton animation="blink" type="text" />
+          </th>
+          <th class="text-right">
+            <q-skeleton animation="blink" type="text" />
+          </th>
+          <th class="text-right">
+            <q-skeleton animation="blink" type="text" />
+          </th>
+          <th class="text-right">
+            <q-skeleton animation="blink" type="text" />
+          </th>
+          <th class="text-right">
+            <q-skeleton animation="blink" type="text" />
+          </th>
+          <th class="text-right">
+            <q-skeleton animation="blink" type="text" />
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr v-for="n in 5" :key="n">
+          <td class="text-left">
+            <q-skeleton animation="blink" type="text" width="85px" />
+          </td>
+          <td class="text-right">
+            <q-skeleton animation="blink" type="text" width="50px" />
+          </td>
+          <td class="text-right">
+            <q-skeleton animation="blink" type="text" width="35px" />
+          </td>
+          <td class="text-right">
+            <q-skeleton animation="blink" type="text" width="65px" />
+          </td>
+          <td class="text-right">
+            <q-skeleton animation="blink" type="text" width="25px" />
+          </td>
+          <td class="text-right">
+            <q-skeleton animation="blink" type="text" width="85px" />
+          </td>
+        </tr>
+      </tbody>
+    </q-markup-table>
+
+<div v-else class="contenedor_TD">
+      <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br>
+
+      <q-table title="DATOS CLIENTES" :rows="rows" :columns="columns" row-key="cedula">
+        <template v-slot:body-cell-status="props">
+          <q-td key="status" :props="props">
+            <span class="color1" v-if="props.row.status == 1">Activo</span>
+            <span class="color2" v-else>Inactivo</span>
+          </q-td>
+        </template>
+        <template v-slot:body-cell-acciones="props">
+          <q-td key="acciones" :props="props">
+            <q-btn class="btnEditar" icon="edit" color="blue" @click="editarCliente(props.row)"></q-btn>
+            <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
+            <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
+          </q-td>
+        </template>
+      </q-table>
+      <q-dialog v-model="modal">
+        <q-card>
+          <q-card-section>
+            <div class="text-h6">DATOS DE CLIENTE</div>
+          </q-card-section>
+
+          <q-separator />
+
+          <q-card-section style="max-height: 50vh" class="scroll">
+            <div class="infoDatos">
+              <div class="ilDatos">
+                <label class="labelDatos" for="cedula">Cedula:</label>
+                <input class="inputDatos" type="text" id="cedula" v-model="cedula" />
+              </div>
+
+              <div class="ilDatos">
+                <label class="labelDatos" for="nombre">Nombre:</label>
+                <input class="inputDatos" type="text" id="nombre" v-model="nombre" />
+              </div>
+
+              <div class="ilDatos">
+                <label class="labelDatos" for="telefono">Telefono:</label>
+                <input class="inputDatos" type="number" id="telefono" v-model="telefono" />
+              </div>
+
+              <div class="ilDatos">
+                <label class="labelDatos" for="email">Email:</label>
+                <input class="inputDatos" type="text" id="email" v-model="email" />
+              </div>
+
+            </div>
+          </q-card-section>
+
+          <q-separator />
+
+          <q-card-actions align="center">
+            <q-btn flat label="Cerrar" class="btn_AC" color="primary" @click="limpiar" v-close-popup />
+            <q-btn flat label="Aceptar" class="btn_AC" color="primary" @click="agregarEditarCliente"
+            :loading="cargando" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
     </div>
-    <div class="cargar_contenedor" v-if="dataLoaded"> 
-    <div class="title">
-      <h3>Datos Clientes</h3>
-
-      <div class="raya"></div>
-    </div><br><br>
-
-    <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br>
-
-    <q-table title="DATOS CLIENTES" :rows="rows" :columns="columns" row-key="cedula">
-      <template v-slot:body-cell-status="props">
-        <q-td key="status" :props="props">
-          <span class="color1" v-if="props.row.status == 1">Activo</span>
-          <span class="color2" v-else>Inactivo</span>
-        </q-td>
-      </template>
-      <template v-slot:body-cell-acciones="props">
-        <q-td key="acciones" :props="props">
-          <q-btn class="btnEditar" icon="edit" color="blue" @click="editarCliente(props.row)"></q-btn>
-          <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
-          <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
-        </q-td>
-      </template>
-    </q-table>
-    <q-dialog v-model="modal">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">DATOS DE CLIENTE</div>
-        </q-card-section>
-
-        <q-separator />
-
-        <q-card-section style="max-height: 50vh" class="scroll">
-          <div class="infoDatos">
-            <div class="ilDatos">
-              <label class="labelDatos" for="cedula">Cedula:</label>
-              <input class="inputDatos" type="text" id="cedula" v-model="cedula" />
-            </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="nombre">Nombre:</label>
-              <input class="inputDatos" type="text" id="nombre" v-model="nombre" />
-            </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="telefono">Telefono:</label>
-              <input class="inputDatos" type="number" id="telefono" v-model="telefono" />
-            </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="email">Email:</label>
-              <input class="inputDatos" type="text" id="email" v-model="email" />
-            </div>
-
-          </div>
-        </q-card-section>
-
-        <q-separator />
-
-        <q-card-actions align="center">
-          <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
-          <q-btn flat label="Aceptar" color="primary" @click="agregarEditarCliente" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
-    </div> 
+    </div>
   </div>
 </template>
     
 <script setup>
 import { onMounted, ref } from "vue";
 import { useClienteStore } from '../stores/clientes.js';
-
+import { useQuasar } from 'quasar'
 
 const clienteStore = useClienteStore()
 
@@ -87,9 +136,12 @@ const nombre = ref("");
 const telefono = ref("");
 const email = ref("");
 const clienteEditando = ref(null);
+const $q = useQuasar()
 
-const loading = ref(false);
-const dataLoaded = ref(false); 
+const cargando = ref(false);  
+const modalAbierto = ref(false);
+
+
 
 const columns = [
   { name: "cedula", required: true, label: "Cédula", align: "center", field: "cedula", sortable: true },
@@ -101,21 +153,23 @@ const columns = [
 ];
 
 async function obtenerClientes() {
-  loading.value = true; 
   try {
+    cargando.value = true; 
     const clientes = await clienteStore.obtener();
-    dataLoaded.value = true;  
     console.log('Clientes obtenidos:', clientes);
     rows.value = clienteStore.datosData;
   } catch (error) {
     console.error('Error al obtener los clientes:', error);
-    } finally {
-    loading.value = false; 
+  } finally {
+    cargando.value = false; 
   }
 }
 
 
 const agregarEditarCliente = async () => {
+  cargando.value = true; 
+  modalAbierto.value = true;
+
   if (clienteEditando.value) {
     const clienteEditado = {
       _id: clienteEditando.value._id,
@@ -132,9 +186,16 @@ const agregarEditarCliente = async () => {
       email.value = "";
       modal.value = false;
       clienteEditando.value = null;
+      $q.notify({
+        message: 'Cliente editado correctamente',
+        textColor: 'white',
+        type: "positive",
+        color: 'green',
+      });
       obtenerClientes();
     } catch (error) {
       console.error('Error al editar el cliente:', error);
+      $q.notify({ type: 'negative', color: 'negative', message: 'Error al editar el cliente' });
     }
   } else {
     const nuevoCliente = {
@@ -150,12 +211,22 @@ const agregarEditarCliente = async () => {
       telefono.value = "";
       email.value = "";
       modal.value = false;
+      $q.notify({
+        message: 'Cliente agregado 👍',
+        textColor: 'white',
+        type: "positive",
+        color: 'green',
+      });
       obtenerClientes();
       limpiar();
     } catch (error) {
       console.error('Error al agregar cliente:', error);
+      $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar el cleiente' });
     }
+    
   }
+  cargando.value = false;
+  modalAbierto.value = false;
 }
 
 const editarCliente = (cliente) => {
@@ -174,6 +245,7 @@ async function activar(id) {
     obtenerClientes();
   } catch (error) {
     console.error('Error al activar cliente:', error);
+
   }
 }
 
@@ -183,6 +255,7 @@ async function desactivar(id) {
     obtenerClientes();
   } catch (error) {
     console.error('Error al desactivar cliente:', error);
+
   }
 }
 
@@ -202,10 +275,6 @@ onMounted(() => {
 
 
 
-
-
-
-    
 <style scoped>
 .color1 {
   color: rgb(136, 226, 0);
@@ -219,6 +288,10 @@ onMounted(() => {
   display: flex;
   margin: 0 auto;
   flex-direction: column;
+}
+
+.btn_AC {
+  border: 1px solid black;
 }
 
 .ilDatos {

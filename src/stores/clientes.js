@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { ref } from "vue";
+import { Notify } from 'quasar'
 
 export const useClienteStore = defineStore("cliente", () => {
     const datosData = ref([])
+    const loading = ref(false);
 
     const obtener = async () => {
         try {
@@ -19,8 +21,8 @@ export const useClienteStore = defineStore("cliente", () => {
     const agregarCliente = async (nuevoCliente) => {
         try {
             const response = await axios.post('cliente/agregar', nuevoCliente);
-            console.log("cliente Agregado",response.data);
-            obtener(); 
+            console.log("cliente Agregado", response.data);
+            obtener();
         } catch (error) {
             console.error('Error al agregar cliente:', error);
             throw error;
@@ -30,7 +32,7 @@ export const useClienteStore = defineStore("cliente", () => {
     const editarCliente = async (clienteEditado) => {
         try {
             const response = await axios.put(`cliente/modificar/${clienteEditado._id}`, clienteEditado);
-            console.log("cliente Editado",response.data);
+            console.log("cliente Editado", response.data);
             obtener();
         } catch (error) {
             console.error('Error al editar cliente:', error);
@@ -39,34 +41,61 @@ export const useClienteStore = defineStore("cliente", () => {
     };
 
     const activarCliente = async (clienteId) => {
+        loading.value = true
         try {
             const response = await axios.put(`cliente/activar/${clienteId}`);
-            console.log("cliente Activado",response.data);
+            Notify.create({
+                type: "positive",
+                color: "green",
+                message: "Cliente Activado",
+            });
+            console.log("cliente Activado", response.data);
             obtener();
         } catch (error) {
             console.error('Error al activar cliente:', error);
-            throw error;
+            Notify.create({
+                type: "negative",
+                message: error.response.data.errors[0].msg,
+            });
+        } finally {
+            loading.value = false
         }
+
     };
 
     const desactivarCliente = async (clienteId) => {
+        loading.value = true
         try {
             const response = await axios.put(`cliente/inactivar/${clienteId}`);
-            console.log("cliente Desactivado",response.data); 
+            Notify.create({
+                type: "positive",
+                color: "green", 
+                message: "Cliente Desactivado",
+            });
+            console.log("cliente Desactivado", response.data);
             obtener();
         } catch (error) {
             console.error('Error al desactivar cliente:', error);
-            throw error;
+            Notify.create({
+                type: "negative",
+                color: "primary",
+                message: error.response.data.errors[0].msg,
+            });
+        } finally {
+            loading.value = false
         }
+
     };
 
     return {
         datosData,
+        loading,
         obtener,
         agregarCliente,
         editarCliente,
         activarCliente,
         desactivarCliente
+        
     };
 });
 
