@@ -1,15 +1,10 @@
 <template>
   <div class="q-pa-md">
-    <div class="cargando">
-      <q-spinner-ios v-if="loading" color="primary" size="100px" />
-    </div>
-    <div class="cargar_contenedor" v-if="dataLoaded">
+    <div class="cargar_contenedor">
       <div class="title">
         <h3>Datos Buses</h3>
         <div class="raya"></div>
-      </div>
-
-      <br>
+      </div><br>
 
 
       <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br>
@@ -70,8 +65,9 @@
           <q-separator />
 
           <q-card-actions align="center">
-            <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
-            <q-btn flat label="Aceptar" color="primary" @click="agregarEditarBus" v-close-popup />
+            <q-btn flat label="Cerrar"  class="btn_AC"  @click="limpiar" v-close-popup />
+            <q-btn flat label="Aceptar" class="btn_AC"  @click="agregarEditarBus"
+            :loading="cargando" />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -84,6 +80,7 @@
 
 import { onMounted, ref } from "vue";
 import { useBusStore } from '../stores/bus.js';
+import { useQuasar } from 'quasar'
 
 const busStore = useBusStore()
 
@@ -95,9 +92,10 @@ const soat = ref("");
 const n_asiento = ref("");
 const empresa_asignada = ref("");
 const busEditando = ref(null);
+const $q = useQuasar()
 
-const loading = ref(false);
-const dataLoaded = ref(false);
+const cargando = ref(false);  
+const modalAbierto = ref(false);
 
 
 const columns = [
@@ -111,21 +109,20 @@ const columns = [
 ];
 
 async function obtenerBus() {
-  loading.value = true;
   try {
     const buses = await busStore.obtener();
     console.log('Buses obtenidos:', buses);
     rows.value = busStore.datosData.buses;
-    dataLoaded.value = true; 
   } catch (error) {
     console.error('Error al obtener los clientes:', error);
-  } finally {
-    loading.value = false;
   }
 }
 
 
 const agregarEditarBus = async () => {
+  cargando.value = true; 
+  modalAbierto.value = true;
+
   if (busEditando.value) {
     const busEditado = {
       _id: busEditando.value._id,
@@ -144,9 +141,16 @@ const agregarEditarBus = async () => {
       empresa_asignada.value = "";
       modal.value = false;
       busEditando.value = null;
+      $q.notify({
+        message: 'Bus editado correctamente',
+        textColor: 'white',
+        type: "positive",
+        color: 'green',
+      });
       obtenerBus();
     } catch (error) {
       console.error('Error al editar el bus:', error);
+      $q.notify({ type: 'negative', color: 'negative', message: 'Error al editar el Bus' });
     }
   } else {
     const nuevoBus = {
@@ -164,12 +168,21 @@ const agregarEditarBus = async () => {
       n_asiento.value = "";
       empresa_asignada.value = "";
       modal.value = false;
+      $q.notify({
+        message: 'Bus agregado correctamente',
+        textColor: 'white',
+        type: "positive",
+        color: 'green',
+      });
       obtenerBus();
       limpiar();
     } catch (error) {
       console.error('Error al agregar el bus:', error);
+      $q.notify({ type: 'negative', color: 'negative', message: 'Error al editar el Bus' });
     }
   }
+  cargando.value = false;
+  modalAbierto.value = false;
 }
 
 const editarBus = (bus) => {
@@ -234,16 +247,10 @@ onMounted(() => {
   flex-direction: column;
 }
 
-.cargando {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.btn_AC {
+  background: linear-gradient(0deg,rgb(0, 102, 255),rgb(163, 162, 162)) ;
 }
+
 
 .ilDatos {
   display: flex;

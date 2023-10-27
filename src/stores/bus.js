@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { ref } from "vue";
+import { Notify } from 'quasar'
 
 export const useBusStore = defineStore("bus", () => {
-    const datosData = ref([])
+    const datosData = ref([]);
+    const loading = ref(false);
 
     const obtener = async () => {
         try {
@@ -19,7 +21,7 @@ export const useBusStore = defineStore("bus", () => {
     const agregarBus = async (nuevoBus) => {
         try {
             const response = await axios.post("bus/agregar", nuevoBus);
-            console.log("bus Agregado",response.data);
+            console.log("bus Agregado", response.data);
         } catch (error) {
             console.error('Error al agregar el bus:', error);
             throw error;
@@ -29,7 +31,7 @@ export const useBusStore = defineStore("bus", () => {
     const editarBus = async (busEditado) => {
         try {
             const response = await axios.put(`bus/modificar/${busEditado._id}`, busEditado);
-            console.log("bus Editado",response.data);
+            console.log("bus Editado", response.data);
             obtener();
         } catch (error) {
             console.error('Error al editar bus:', error);
@@ -38,32 +40,55 @@ export const useBusStore = defineStore("bus", () => {
     };
 
     const activarBus = async (busId) => {
+        loading.value = true
         try {
             const response = await axios.put(`bus/activar/${busId}`);
-            /* console.log(response.data); */ 
+            Notify.create({
+                type: "positive",
+                color: "green",
+                message: "Bus Activado",
+            });
             obtener();
             return response.data.bus;
         } catch (error) {
             console.error('Error al activar bus:', error);
-            throw error;
+            Notify.create({
+                type: "negative",
+                color: "primary",
+                message: error.response.data.errors[0].msg,
+            });
+        } finally {
+            loading.value = false
         }
     };
 
     const desactivarBus = async (busId) => {
+        loading.value = true
         try {
             const response = await axios.put(`bus/inactivar/${busId}`);
-            /* console.log(response.data); */
+            Notify.create({
+                type: "positive",
+                color: "green",
+                message: "Bus Desactivado",
+            });
             obtener();
             return response.data.bus;
         } catch (error) {
             console.error('Error al desactivar bus:', error);
-            throw error;
+            Notify.create({
+                type: "negative",
+                color: "primary",
+                message: error.response.data.errors[0].msg,
+            });
+        } finally {
+            loading.value = false
         }
     };
 
 
     return {
         datosData,
+        loading,
         obtener,
         agregarBus,
         editarBus,

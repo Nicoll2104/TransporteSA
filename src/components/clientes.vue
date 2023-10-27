@@ -7,117 +7,130 @@
         <div class="raya"></div>
       </div><br><br>
 
-      
-      <q-markup-table v-if="cargando">
-      <thead>
-        <tr>
-          <th class="text-left" style="width: 150px">
-            <q-skeleton animation="blink" type="text" />
-          </th>
-          <th class="text-right">
-            <q-skeleton animation="blink" type="text" />
-          </th>
-          <th class="text-right">
-            <q-skeleton animation="blink" type="text" />
-          </th>
-          <th class="text-right">
-            <q-skeleton animation="blink" type="text" />
-          </th>
-          <th class="text-right">
-            <q-skeleton animation="blink" type="text" />
-          </th>
-          <th class="text-right">
+      <div class="table" v-if="cargando">
+
+        <div class="btn_mover">
+        <button class="agre2" >
+          <tr>
+          <th  style="width: 90px">
             <q-skeleton animation="blink" type="text" />
           </th>
         </tr>
-      </thead>
+        </button>
+      </div>
 
-      <tbody>
-        <tr v-for="n in 5" :key="n">
-          <td class="text-left">
-            <q-skeleton animation="blink" type="text" width="85px" />
-          </td>
-          <td class="text-right">
-            <q-skeleton animation="blink" type="text" width="50px" />
-          </td>
-          <td class="text-right">
-            <q-skeleton animation="blink" type="text" width="35px" />
-          </td>
-          <td class="text-right">
-            <q-skeleton animation="blink" type="text" width="65px" />
-          </td>
-          <td class="text-right">
-            <q-skeleton animation="blink" type="text" width="25px" />
-          </td>
-          <td class="text-right">
-            <q-skeleton animation="blink" type="text" width="85px" />
-          </td>
-        </tr>
-      </tbody>
-    </q-markup-table>
+        <br>
 
-<div v-else class="contenedor_TD">
-      <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br>
+        <q-markup-table>
+          <thead>
+            <tr>
+              <th class="text-left" style="width: 150px">
+                <q-skeleton animation="blink" type="text" />
+              </th>
+              <th class="text-right">
+                <q-skeleton animation="blink" type="text" />
+              </th>
+              <th class="text-right">
+                <q-skeleton animation="blink" type="text" />
+              </th>
+              <th class="text-right">
+                <q-skeleton animation="blink" type="text" />
+              </th>
+              <th class="text-right">
+                <q-skeleton animation="blink" type="text" />
+              </th>
+              <th class="text-right">
+                <q-skeleton animation="blink" type="text" />
+              </th>
+            </tr>
+          </thead>
 
-      <q-table title="DATOS CLIENTES" :rows="rows" :columns="columns" row-key="cedula">
-        <template v-slot:body-cell-status="props">
-          <q-td key="status" :props="props">
-            <span class="color1" v-if="props.row.status == 1">Activo</span>
-            <span class="color2" v-else>Inactivo</span>
-          </q-td>
-        </template>
-        <template v-slot:body-cell-acciones="props">
-          <q-td key="acciones" :props="props">
-            <q-btn class="btnEditar" icon="edit" color="blue" @click="editarCliente(props.row)"></q-btn>
-            <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
-            <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
-          </q-td>
-        </template>
-      </q-table>
-      <q-dialog v-model="modal">
-        <q-card>
-          <q-card-section>
-            <div class="text-h6">DATOS DE CLIENTE</div>
-          </q-card-section>
+          <tbody>
+            <tr v-for="n in 5" :key="n">
+              <td class="text-left">
+                <q-skeleton animation="blink" type="text" width="85px" />
+              </td>
+              <td class="text-right">
+                <q-skeleton animation="blink" type="text" width="50px" />
+              </td>
+              <td class="text-right">
+                <q-skeleton animation="blink" type="text" width="35px" />
+              </td>
+              <td class="text-right">
+                <q-skeleton animation="blink" type="text" width="65px" />
+              </td>
+              <td class="text-right">
+                <q-skeleton animation="blink" type="text" width="25px" />
+              </td>
+              <td class="text-right">
+                <q-skeleton animation="blink" type="text" width="85px" />
+              </td>
+            </tr>
+          </tbody>
+        </q-markup-table>
+      </div>
 
-          <q-separator />
+      <div v-else class="contenedor_TD">
+        <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br>
 
-          <q-card-section style="max-height: 50vh" class="scroll">
-            <div class="infoDatos">
-              <div class="ilDatos">
-                <label class="labelDatos" for="cedula">Cedula:</label>
-                <input class="inputDatos" type="text" id="cedula" v-model="cedula" />
+        <q-table title="DATOS CLIENTES" :rows="rows" :columns="columns" row-key="cedula">
+          <template v-slot:body-cell-status="props">
+            <q-td key="status" :props="props">
+              <span class="color1" v-if="props.row.status == 1">Activo</span>
+              <span class="color2" v-else>Inactivo</span>
+            </q-td>
+          </template>
+          <template v-slot:body-cell-acciones="props">
+            <q-td key="acciones" :props="props">
+              <q-btn class="btnEditar" icon="edit" color="blue" @click="editarCliente(props.row)"></q-btn>
+              <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
+              <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
+            </q-td>
+          </template>
+        </q-table>
+        <q-dialog v-model="modal">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">DATOS DE CLIENTE</div>
+            </q-card-section>
+
+            <q-separator />
+
+            <q-card-section style="max-height: 50vh" class="scroll">
+              <div class="infoDatos">
+                <div class="ilDatos">
+                  <label class="labelDatos" for="cedula">Cedula:</label>
+                  <input class="inputDatos" type="text" id="cedula" v-model="cedula" />
+                </div>
+
+                <div class="ilDatos">
+                  <label class="labelDatos" for="nombre">Nombre:</label>
+                  <input class="inputDatos" type="text" id="nombre" v-model="nombre" />
+                </div>
+
+                <div class="ilDatos">
+                  <label class="labelDatos" for="telefono">Telefono:</label>
+                  <input class="inputDatos" type="number" id="telefono" v-model="telefono" />
+                </div>
+
+                <div class="ilDatos">
+                  <label class="labelDatos" for="email">Email:</label>
+                  <input class="inputDatos" type="text" id="email" v-model="email" />
+                </div>
+
               </div>
+            </q-card-section>
 
-              <div class="ilDatos">
-                <label class="labelDatos" for="nombre">Nombre:</label>
-                <input class="inputDatos" type="text" id="nombre" v-model="nombre" />
-              </div>
+            <q-separator />
 
-              <div class="ilDatos">
-                <label class="labelDatos" for="telefono">Telefono:</label>
-                <input class="inputDatos" type="number" id="telefono" v-model="telefono" />
-              </div>
+            <q-card-actions align="center">
+              <q-btn flat label="Cerrar" class="btn_AC" @click="limpiar" v-close-popup />
+              <q-btn flat label="Aceptar" class="btn_AC" @click="agregarEditarCliente" :loading="cargando" />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
 
-              <div class="ilDatos">
-                <label class="labelDatos" for="email">Email:</label>
-                <input class="inputDatos" type="text" id="email" v-model="email" />
-              </div>
-
-            </div>
-          </q-card-section>
-
-          <q-separator />
-
-          <q-card-actions align="center">
-            <q-btn flat label="Cerrar" class="btn_AC" color="primary" @click="limpiar" v-close-popup />
-            <q-btn flat label="Aceptar" class="btn_AC" color="primary" @click="agregarEditarCliente"
-            :loading="cargando" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
-
-    </div>
+      </div>
     </div>
   </div>
 </template>
@@ -138,7 +151,7 @@ const email = ref("");
 const clienteEditando = ref(null);
 const $q = useQuasar()
 
-const cargando = ref(false);  
+const cargando = ref(false);
 const modalAbierto = ref(false);
 
 
@@ -154,20 +167,20 @@ const columns = [
 
 async function obtenerClientes() {
   try {
-    cargando.value = true; 
+    cargando.value = true;
     const clientes = await clienteStore.obtener();
     console.log('Clientes obtenidos:', clientes);
     rows.value = clienteStore.datosData;
   } catch (error) {
     console.error('Error al obtener los clientes:', error);
   } finally {
-    cargando.value = false; 
+    cargando.value = false;
   }
 }
 
 
 const agregarEditarCliente = async () => {
-  cargando.value = true; 
+  cargando.value = true;
   modalAbierto.value = true;
 
   if (clienteEditando.value) {
@@ -223,7 +236,7 @@ const agregarEditarCliente = async () => {
       console.error('Error al agregar cliente:', error);
       $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar el cleiente' });
     }
-    
+
   }
   cargando.value = false;
   modalAbierto.value = false;
@@ -236,6 +249,12 @@ const editarCliente = (cliente) => {
   email.value = cliente.email;
   clienteEditando.value = cliente;
   modal.value = true;
+  $q.notify({
+        message: 'Editando Cliente',
+        textColor: 'white',
+        icon: "edit",
+        color: 'info',
+      });
 }
 
 
@@ -291,7 +310,8 @@ onMounted(() => {
 }
 
 .btn_AC {
-  border: 1px solid black;
+  background: linear-gradient(0deg, rgb(12, 94, 218), rgb(228, 226, 226));
+  color: white;
 }
 
 .ilDatos {
@@ -299,17 +319,6 @@ onMounted(() => {
   flex-wrap: wrap;
   margin-bottom: 10px;
 
-}
-
-.cargando {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .labelDatos {
@@ -328,12 +337,19 @@ onMounted(() => {
   margin: 5px;
 }
 
-
 label {
   margin-right: 20px;
 }
 
 .agre {
+  display: flex;
+  justify-content: flex-end;
+}
+.agre2{
+  height: 38px;
+}
+
+.btn_mover{
   display: flex;
   justify-content: flex-end;
 }
