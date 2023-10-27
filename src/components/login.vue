@@ -43,15 +43,14 @@ import {ref} from 'vue'
 import { useRouter } from "vue-router";
 
 const router = useRouter()
+
 const useVendedor = useVendedorStore()
 const usuario = ref("")
 const contrasena = ref("")
 
 const acceder = async()=>{
   const res = await useVendedor.login({usuario: usuario.value, contrasena: contrasena.value})
-
-  console.log(res);
-
+  
   if(res.status==200){
     router.push("/home")
   }
