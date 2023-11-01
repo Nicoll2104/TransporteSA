@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { ref } from "vue";
+import { Notify } from 'quasar';
 
 export const useConductorStore = defineStore("conductor", () => {
-    const datosData = ref([])
+    const datosData = ref([]);
+    const loading = ref(false);
 
     const obtener = async () => {
         try {
@@ -34,35 +36,58 @@ export const useConductorStore = defineStore("conductor", () => {
         } catch (error) {
             console.error('Error al editar conductor:', error);
             throw error;
-        }
+        } 
     };
 
     const activarConductor = async (conductorId) => {
+        loading.value = true
         try {
             const response = await axios.put(`conductor/activar/${conductorId}`);
-           /*  console.log(response.data);  */
+            Notify.create({
+                type: "positive",
+                color: "green", 
+                message: "Conductor Activado",
+            });
             obtener();
             return response.data.conductores;
         } catch (error) {
             console.error('Error al activar el conductor:', error);
-            throw error;
+            Notify.create({
+                type: "negative",
+                color: "primary",
+                message: error.response.data.errors[0].msg,
+            });
+        } finally {
+            loading.value = false
         }
     };
 
     const desactivarConductor = async (conductorId) => {
+        loading.value = true
         try {
             const response = await axios.put(`conductor/inactivar/${conductorId}`);
-           /*  console.log(response.data);  */
+            Notify.create({
+                type: "positive",
+                color: "green", 
+                message: "Conductor Desactivado",
+            });
             obtener();
             return response.data.conductores;
         } catch (error) {
             console.error('Error al desactivar el conductor:', error);
-            throw error;
+            Notify.create({
+                type: "negative",
+                color: "primary",
+                message: error.response.data.errors[0].msg,
+            });
+        } finally {
+            loading.value = false
         }
     };
 
     return {
         datosData,
+        loading,
         obtener,
         agregarConductor,
         editarConductor,

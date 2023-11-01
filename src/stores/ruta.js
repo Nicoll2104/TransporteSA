@@ -3,11 +3,12 @@ import axios from "axios";
 import { ref } from "vue";
 
 export const useRutaStore = defineStore("ruta", () => {
-    const datosData = ref([])
+    const datosData = ref([]);
 
     const obtener = async () => {
         try {
             const response = await axios.get("ruta/ver");
+            console.log(response);
             datosData.value = response.data;
             return response.data; 
         } catch (error) {

@@ -53,8 +53,7 @@
             ><img
               src="https://cdn-icons-png.flaticon.com/128/0/308.png"
               style="height: 30px; width: 30px"
-            />Buses</router-link
-          >
+            />Buses</router-link>
         </button>
         <button class="btn">
           <router-link to="/clientes"

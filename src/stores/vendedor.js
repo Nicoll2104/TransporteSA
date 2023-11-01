@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { ref } from "vue";
+import { Notify } from 'quasar';
 
 export const useVendedorStore = defineStore("vendedor", () => {
-    const datosData = ref([])
+    const datosData = ref([]);
+    const loading = ref(false);
 
     const obtener = async () => {
         try {
@@ -38,26 +40,48 @@ export const useVendedorStore = defineStore("vendedor", () => {
     };
 
     const activarVendedor = async (vendedorId) => {
+        loading.value = true
         try {
             const response = await axios.put(`vendedor/activar/${vendedorId}`);
-            /* console.log(response.data);  */
+            Notify.create({
+                type: "positive",
+                color: "green", 
+                message: "Vendedor Activado",
+            });
             obtener();
             return response.data.vendedores;
         } catch (error) {
             console.error('Error al activar al vendedor:', error);
-            throw error;
+            Notify.create({
+                type: "negative",
+                color: "primary",
+                message: error.response.data.errors[0].msg,
+            });
+        } finally {
+            loading.value = false
         }
     };
 
     const desactivarVendedor = async (vendedorId) => {
+        loading.value = true
         try {
             const response = await axios.put(`vendedor/inactivar/${vendedorId}`);
-            /* console.log(response.data);   */
+            Notify.create({
+                type: "positive",
+                color: "green", 
+                message: "Vendedor Desactivado",
+            });
             obtener();
             return response.data.vendedores;
         } catch (error) {
             console.error('Error al desactivar al vendedor:', error);
-            throw error;
+            Notify.create({
+                type: "negative",
+                color: "primary",
+                message: error.response.data.errors[0].msg,
+            });
+        } finally {
+            loading.value = false
         }
     }; 
 
@@ -73,6 +97,7 @@ export const useVendedorStore = defineStore("vendedor", () => {
 
     return {
         datosData,
+        loading,
         obtener,
         agregarVendedor,
         editarVendedor,

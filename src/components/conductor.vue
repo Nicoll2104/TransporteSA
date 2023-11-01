@@ -108,6 +108,7 @@
         <q-card-actions align="right">
           <q-btn
             flat
+            class="btn_AC"
             label="Cerrar"
             color="primary"
             @click="limpiar"
@@ -115,10 +116,11 @@
           />
           <q-btn
             flat
+            class="btn_AC"
             label="Aceptar"
             color="primary"
             @click="agregarEditarConductor"
-            v-close-popup
+            :loading="cargando"
           />
         </q-card-actions>
       </q-card>
@@ -129,6 +131,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useConductorStore } from "../stores/conductor.js";
+import { useQuasar } from 'quasar'
 
 const conductorStore = useConductorStore();
 
@@ -140,6 +143,10 @@ const n_licencia = ref("");
 const direccion = ref("");
 const telefono = ref("");
 const conductorEditando = ref(null);
+const $q = useQuasar()
+
+const cargando = ref(false);
+const modalAbierto = ref(false);
 
 const columns = [
   { name: "cedula", required: true, label: "Cédula", align: "center", field: "cedula", sortable: true },
@@ -162,6 +169,9 @@ async function obtenerConductor() {
 }
 
 const agregarEditarConductor = async () => {
+  cargando.value = true;
+  modalAbierto.value = true;
+
   if (conductorEditando.value) {
     const conductorEditado = {
       _id: conductorEditando.value._id,
@@ -180,9 +190,16 @@ const agregarEditarConductor = async () => {
       telefono.value = "";
       modal.value = false;
       conductorEditando.value = null;
+      $q.notify({
+        message: 'Conductor editado correctamente',
+        textColor: 'white',
+        type: "positive",
+        color: 'green',
+      });
       obtenerConductor();
     } catch (error) {
       console.error("Error al editar el conductor:", error);
+      $q.notify({ type: 'negative', color: 'negative', message: 'Error al editar el conductor' });
     }
   } else {
     const nuevoConductor = {
@@ -200,12 +217,21 @@ const agregarEditarConductor = async () => {
       direccion.value = "";
       telefono.value = "";
       modal.value = false;
+      $q.notify({
+        message: 'Conductor agregado correctamente',
+        textColor: 'white',
+        type: "positive",
+        color: 'green',
+      });
       obtenerConductor();
       limpiar();
     } catch (error) {
       console.error("Error al agregar el conductor:", error);
+      $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar el conductor' });
     }
   }
+  cargando.value = false;
+  modalAbierto.value = false;
 };
 
 const editarConductor = (conductor) => {
@@ -263,7 +289,10 @@ onMounted(() => {
     justify-content: space-around;
 }
 
-
+.btn_AC {
+  background: linear-gradient(0deg, rgb(23, 106, 231), rgb(228, 226, 226));
+  color: rgb(255, 255, 255);
+}
 
 .color1 {
   color: rgb(136, 226, 0);
