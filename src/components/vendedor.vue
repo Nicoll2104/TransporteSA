@@ -112,7 +112,6 @@ const columns = [
     { name: "apellido", required: true, label: "Apellido", align: "center", field: "apellido", sortable: true },
     { name: "telefono", required: true, label: "Telefono", align: "center", field: "telefono", sortable: true },
     { name: "usuario", required: true, label: "Usuario", align: "center", field: "usuario", sortable: true },
-    { name: "contrasena", required: true, label: "Contraseña", align: "center", field: "contrasena", sortable: true },
     { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
     { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
