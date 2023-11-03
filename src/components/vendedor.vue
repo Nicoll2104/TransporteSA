@@ -25,13 +25,14 @@
         </q-table>
         <q-dialog v-model="modal">
             <q-card>
-                <q-card-section>
-                    <div class="text-h6">DATOS DE VENDEDOR</div>
-                </q-card-section>
+
+                <q-card-section class="arri">
+          <div class="text-h6">DATOS DE VENDEDORES</div>
+        </q-card-section>
 
                 <q-separator />
 
-                <q-card-section style="max-height: 50vh" class="scroll">
+                <q-card-section>
                     <div class="infoDatos">
                         <div class="ilDatos">
                             <label class="labelDatos" for="cedula"> Cedula:</label>
@@ -69,8 +70,16 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
-                    <q-btn flat label="Aceptar" color="primary" @click="agregarEditarVendedor" v-close-popup />
+
+                    <q-btn flat label="Cerrar" 
+                    color="white" @click="limpiar" 
+                    class="btnc"
+                    v-close-popup />
+
+                    <q-btn flat label="Aceptar" 
+                    color="white" @click="agregarEditarVendedor" 
+                    class="btna"
+                    v-close-popup />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -230,63 +239,63 @@ obtenerVendedor()
 </script>
     
 <style scoped>
-.color1 {
-    color: rgb(136, 226, 0);
+.q-card {
+  display: flex;
+  width: 100%;
+  height: 60%;
+  flex-direction: column;
+  align-items: center;
 }
 
-.color2 {
-    color: red;
+.btna{
+  background-color: #1976d2;
 }
-
-.infoDatos {
-    display: flex;
-    margin: 0 auto;
-    flex-direction: column;
+.btnc {
+  background-color: rgb(210, 25, 25);
 }
-
-.ilDatos {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-}
-
-
-.labelDatos {
-    display: flex;
-    align-items: center;
-    width: 60px;
-
-}
-
 .inputDatos {
-    width: 200px;
-    padding: 5px;
+  width: 340px;
+  height: 3vh;
+  border: none;
+  background-color: rgba(241, 233, 233, 0.589);
+  border-radius: 10px;
+  margin: 8px;
 }
 
 .btnEditar {
-    margin: 5px;
+  margin: 5px;
 }
 
 label {
-    margin-right: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
-.agre{
+.agre {
   display: flex;
   justify-content: flex-end;
 }
-.title{
+.title {
   display: flex;
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
 }
-h3{
+h3 {
   font-weight: bold;
 }
 
-.raya{
+.raya {
   background-color: rgba(50, 107, 253, 0.85);
   width: 50%;
   height: 5px;
+}
+
+.arri {
+  display: flex;
+  justify-content: center;
+  background-color: #1976d2;
+  color: #ffffff;
+  width: 100%;
 }
 </style>

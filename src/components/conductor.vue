@@ -46,12 +46,14 @@
     </q-table>
     <q-dialog v-model="modal">
       <q-card>
+        
         <q-card-section class="arri">
           <div class="text-h6">DATOS DE CONDUCTORES</div>
         </q-card-section>
+
         <q-separator />
 
-        <q-card-section style="max-height: 50vh" class="scroll">
+        <q-card-section>
           <div class="infoDatos">
             <div class="ilDatos">
               <label class="labelDatos" for="cedula">Cedula:</label>
@@ -62,7 +64,6 @@
                 v-model="cedula"
               />
             </div>
-            <br />
 
             <div class="ilDatos">
               <label class="labelDatos" for="nombre">Nombre:</label>
@@ -73,7 +74,6 @@
                 v-model="nombre"
               />
             </div>
-            <br />
 
             <div class="ilDatos">
               <label class="labelDatos" for="n_licencia"
@@ -86,7 +86,6 @@
                 v-model="n_licencia"
               />
             </div>
-            <br />
 
             <div class="ilDatos">
               <label class="labelDatos" for="direccion">Direccion:</label>
@@ -97,7 +96,6 @@
                 v-model="direccion"
               />
             </div>
-            <br />
 
             <div class="ilDatos">
               <label class="labelDatos" for="telefono">Telefono:</label>
@@ -108,7 +106,6 @@
                 v-model="telefono"
               />
             </div>
-            <br />
           </div>
         </q-card-section>
 
@@ -359,10 +356,11 @@ onMounted(() => {
 }
 .inputDatos {
   width: 340px;
-  height: 30px;
+  height: 3vh;
   border: none;
   background-color: rgba(241, 233, 233, 0.589);
   border-radius: 10px;
+  margin: 8px;
 }
 
 .btnEditar {
@@ -400,7 +398,6 @@ h3 {
   background-color: #1976d2;
   color: #ffffff;
   width: 100%;
-  
 }
 </style>
     

@@ -26,9 +26,12 @@
     </q-table>
     <q-dialog v-model="modal">
       <q-card>
-        <q-card-section>
+
+        <q-card-section class="arri">
           <div class="text-h6">DATOS DE RUTAS</div>
         </q-card-section>
+
+
 
         <q-separator />
 
@@ -68,8 +71,17 @@
         </q-card-section>
         <q-separator />
         <q-card-actions align="right">
-          <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
-          <q-btn flat label="Aceptar" color="primary" @click="agregarEditarRuta" v-close-popup />
+
+          <q-btn flat label="Cerrar" 
+          color="white" @click="limpiar" 
+          class="btnc"
+          v-close-popup />
+
+          <q-btn flat label="Aceptar" 
+          color="white" 
+          class="btna"
+          @click="agregarEditarRuta" v-close-popup />
+
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -229,37 +241,27 @@ onMounted(() => {
 </script>
     
 <style scoped>
-.color1 {
-  color: rgb(136, 226, 0);
-}
-
-.color2 {
-  color: red;
-}
-
-.infoDatos {
+.q-card {
   display: flex;
-  margin: 0 auto;
+  width: 100%;
+  height: 60%;
   flex-direction: column;
-}
-
-.ilDatos {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-}
-
-
-.labelDatos {
-  display: flex;
   align-items: center;
-  width: 60px;
-
 }
 
+.btna {
+  background-color: #1976d2;
+}
+.btnc {
+  background-color: rgb(210, 25, 25);
+}
 .inputDatos {
-  width: 200px;
-  padding: 5px;
+  width: 340px;
+  height: 3vh;
+  border: none;
+  background-color: rgba(241, 233, 233, 0.589);
+  border-radius: 10px;
+  margin: 8px;
 }
 
 .btnEditar {
@@ -267,26 +269,36 @@ onMounted(() => {
 }
 
 label {
-  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
-.agre{
+.agre {
   display: flex;
   justify-content: flex-end;
 }
-.title{
+.title {
   display: flex;
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
 }
-h3{
+h3 {
   font-weight: bold;
 }
 
-.raya{
+.raya {
   background-color: rgba(50, 107, 253, 0.85);
   width: 50%;
   height: 5px;
+}
+
+.arri {
+  display: flex;
+  justify-content: center;
+  background-color: #1976d2;
+  color: #ffffff;
+  width: 100%;
 }
 </style>
     
