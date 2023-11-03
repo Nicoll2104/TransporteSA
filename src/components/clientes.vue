@@ -234,7 +234,7 @@ const agregarEditarCliente = async () => {
       limpiar();
     } catch (error) {
       console.error('Error al agregar cliente:', error);
-      $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar el cleiente' });
+      $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar el cliente' });
     }
 
   }

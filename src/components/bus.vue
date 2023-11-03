@@ -178,7 +178,7 @@ const agregarEditarBus = async () => {
       limpiar();
     } catch (error) {
       console.error('Error al agregar el bus:', error);
-      $q.notify({ type: 'negative', color: 'negative', message: 'Error al editar el Bus' });
+      $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar el Bus' });
     }
   }
   cargando.value = false;

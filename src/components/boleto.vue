@@ -128,10 +128,6 @@ async function obtenerRuta() {
   }
 }
 
-
-
-
-
 onMounted(() => {
   obtenerBoleto();
   obtenerRuta();
