@@ -1,11 +1,15 @@
 <template>
   <div class="q-pa-md">
+    <div class="title">
+      <h3>Datos Conductores</h3>
+      <div class="raya"></div>
+    </div>
+    <br /><br />
 
-  <div class="title"><h3>Datos Conductores</h3>
-  <div class="raya"></div>
-</div><br><br>
-
-    <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
+    <div class="agre">
+      <q-btn label="Agregar" color="blue" @click="modal = true" />
+    </div>
+    <br /><br />
 
     <q-table
       title="DATOS CONDUCTORES"
@@ -42,11 +46,9 @@
     </q-table>
     <q-dialog v-model="modal">
       <q-card>
-
         <q-card-section class="arri">
           <div class="text-h6">DATOS DE CONDUCTORES</div>
         </q-card-section>
-
         <q-separator />
 
         <q-card-section style="max-height: 50vh" class="scroll">
@@ -59,7 +61,8 @@
                 id="cedula"
                 v-model="cedula"
               />
-            </div><br>
+            </div>
+            <br />
 
             <div class="ilDatos">
               <label class="labelDatos" for="nombre">Nombre:</label>
@@ -69,17 +72,21 @@
                 id="nombre"
                 v-model="nombre"
               />
-            </div><br>
+            </div>
+            <br />
 
             <div class="ilDatos">
-              <label class="labelDatos" for="n_licencia">Numero de licencia:</label>
+              <label class="labelDatos" for="n_licencia"
+                >Numero de licencia:</label
+              >
               <input
                 class="inputDatos"
                 type="text"
                 id="n_licencia"
                 v-model="n_licencia"
               />
-            </div><br>
+            </div>
+            <br />
 
             <div class="ilDatos">
               <label class="labelDatos" for="direccion">Direccion:</label>
@@ -89,7 +96,8 @@
                 id="direccion"
                 v-model="direccion"
               />
-            </div><br>
+            </div>
+            <br />
 
             <div class="ilDatos">
               <label class="labelDatos" for="telefono">Telefono:</label>
@@ -99,7 +107,8 @@
                 id="telefono"
                 v-model="telefono"
               />
-            </div><br>
+            </div>
+            <br />
           </div>
         </q-card-section>
 
@@ -108,9 +117,9 @@
         <q-card-actions align="right">
           <q-btn
             flat
-            class="btn_AC"
+            class="btn_A"
             label="Cerrar"
-            color="primary"
+            color="white"
             @click="limpiar"
             v-close-popup
           />
@@ -118,7 +127,7 @@
             flat
             class="btn_AC"
             label="Aceptar"
-            color="primary"
+            color="white"
             @click="agregarEditarConductor"
             :loading="cargando"
           />
@@ -131,7 +140,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useConductorStore } from "../stores/conductor.js";
-import { useQuasar } from 'quasar'
+import { useQuasar } from "quasar";
 
 const conductorStore = useConductorStore();
 
@@ -143,19 +152,66 @@ const n_licencia = ref("");
 const direccion = ref("");
 const telefono = ref("");
 const conductorEditando = ref(null);
-const $q = useQuasar()
+const $q = useQuasar();
 
 const cargando = ref(false);
 const modalAbierto = ref(false);
 
 const columns = [
-  { name: "cedula", required: true, label: "Cédula", align: "center", field: "cedula", sortable: true },
-  { name: "nombre", required: true, label: "Nombre", align: "center", field: "nombre", sortable: true },
-  { name: "n_licencia", required: true, label: "N_licencia", align: "center", field: "n_licencia", sortable: true },
-  { name: "direccion", required: true, label: "Direccion", align: "center", field: "direccion", sortable: true },
-  { name: "telefono", required: true, label: "Teléfono", align: "center", field: "telefono", sortable: true },
-  { name: "status", label: "Status", align: "center", field: "status", sortable: true },
-  { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
+  {
+    name: "cedula",
+    required: true,
+    label: "Cédula",
+    align: "center",
+    field: "cedula",
+    sortable: true,
+  },
+  {
+    name: "nombre",
+    required: true,
+    label: "Nombre",
+    align: "center",
+    field: "nombre",
+    sortable: true,
+  },
+  {
+    name: "n_licencia",
+    required: true,
+    label: "N_licencia",
+    align: "center",
+    field: "n_licencia",
+    sortable: true,
+  },
+  {
+    name: "direccion",
+    required: true,
+    label: "Direccion",
+    align: "center",
+    field: "direccion",
+    sortable: true,
+  },
+  {
+    name: "telefono",
+    required: true,
+    label: "Teléfono",
+    align: "center",
+    field: "telefono",
+    sortable: true,
+  },
+  {
+    name: "status",
+    label: "Status",
+    align: "center",
+    field: "status",
+    sortable: true,
+  },
+  {
+    name: "acciones",
+    required: true,
+    label: "Acciones",
+    align: "center",
+    field: "acciones",
+  },
 ];
 
 async function obtenerConductor() {
@@ -191,15 +247,19 @@ const agregarEditarConductor = async () => {
       modal.value = false;
       conductorEditando.value = null;
       $q.notify({
-        message: 'Conductor editado correctamente',
-        textColor: 'white',
+        message: "Conductor editado correctamente",
+        textColor: "white",
         type: "positive",
-        color: 'green',
+        color: "green",
       });
       obtenerConductor();
     } catch (error) {
       console.error("Error al editar el conductor:", error);
-      $q.notify({ type: 'negative', color: 'negative', message: 'Error al editar el conductor' });
+      $q.notify({
+        type: "negative",
+        color: "negative",
+        message: "Error al editar el conductor",
+      });
     }
   } else {
     const nuevoConductor = {
@@ -218,16 +278,20 @@ const agregarEditarConductor = async () => {
       telefono.value = "";
       modal.value = false;
       $q.notify({
-        message: 'Conductor agregado correctamente',
-        textColor: 'white',
+        message: "Conductor agregado correctamente",
+        textColor: "white",
         type: "positive",
-        color: 'green',
+        color: "green",
       });
       obtenerConductor();
       limpiar();
     } catch (error) {
       console.error("Error al agregar el conductor:", error);
-      $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar el conductor' });
+      $q.notify({
+        type: "negative",
+        color: "negative",
+        message: "Error al agregar el conductor",
+      });
     }
   }
   cargando.value = false;
@@ -279,79 +343,64 @@ onMounted(() => {
 
     
 <style scoped>
-
-.q-card{
-    display: flex;
-    width: 50%;
-    height: 60%;
-    align-items: center;
-    flex-direction: column;
-    justify-content: space-around;
+.q-card {
+  display: flex;
+  width: 100%;
+  height: 60%;
+  flex-direction: column;
+  align-items: center;
 }
 
 .btn_AC {
-  background: linear-gradient(0deg, rgb(23, 106, 231), rgb(228, 226, 226));
-  color: rgb(255, 255, 255);
+  background-color: #1976d2;
 }
-
-.color1 {
-  color: rgb(136, 226, 0);
+.btn_A {
+  background-color: rgb(210, 25, 25);
 }
-
-.color2 {
-  color: red;
-}
-
-.infoDatos{
-    display: flex;
-    align-items: flex-end;
-    flex-direction: column;
-}
-
-.ilDatos {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-}
-
-.labelDatos {
-  display: flex;
-  align-items: center;
-
-}
-
 .inputDatos {
-  width: 200px;
-
+  width: 340px;
+  height: 30px;
+  border: none;
+  background-color: rgba(241, 233, 233, 0.589);
+  border-radius: 10px;
 }
 
 .btnEditar {
   margin: 5px;
-  
 }
 
 label {
-  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
-.agre{
+.agre {
   display: flex;
   justify-content: flex-end;
 }
-.title{
+.title {
   display: flex;
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
 }
-h3{
+h3 {
   font-weight: bold;
 }
 
-.raya{
+.raya {
   background-color: rgba(50, 107, 253, 0.85);
   width: 50%;
   height: 5px;
 }
 
+.arri {
+  display: flex;
+  justify-content: center;
+  background-color: #1976d2;
+  color: #ffffff;
+  width: 100%;
+  
+}
 </style>
     
