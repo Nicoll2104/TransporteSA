@@ -73,6 +73,7 @@
       <div v-else class="contenedor_TD">
         <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br>
 
+
         <q-table title="DATOS CLIENTES" :rows="rows" :columns="columns" row-key="cedula">
           <template v-slot:body-cell-status="props">
             <q-td key="status" :props="props">
@@ -90,13 +91,15 @@
         </q-table>
         <q-dialog v-model="modal">
           <q-card>
-            <q-card-section>
-              <div class="text-h6">DATOS DE CLIENTE</div>
-            </q-card-section>
+
+            <q-card-section class="arri">
+          <div class="text-h6">DATOS DE CLIENTE</div>
+        </q-card-section>
+
 
             <q-separator />
 
-            <q-card-section style="max-height: 50vh" class="scroll">
+            <q-card-section>
               <div class="infoDatos">
                 <div class="ilDatos">
                   <label class="labelDatos" for="cedula">Cedula:</label>
@@ -124,8 +127,17 @@
             <q-separator />
 
             <q-card-actions align="center">
-              <q-btn flat label="Cerrar" class="btn_AC" @click="limpiar" v-close-popup />
-              <q-btn flat label="Aceptar" class="btn_AC" @click="agregarEditarCliente" :loading="cargando" />
+
+              <q-btn flat label="Cerrar" 
+              class="btnc" @click="limpiar" 
+              color="white"
+              v-close-popup />
+
+              <q-btn flat label="Aceptar" 
+              class="btna" 
+              color="white"
+              @click="agregarEditarCliente" :loading="cargando" />
+
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -295,42 +307,27 @@ onMounted(() => {
 
 
 <style scoped>
-.color1 {
-  color: rgb(136, 226, 0);
-}
-
-.color2 {
-  color: red;
-}
-
-.infoDatos {
+.q-card {
   display: flex;
-  margin: 0 auto;
+  width: 100%;
+  height: 50%;
   flex-direction: column;
-}
-
-.btn_AC {
-  background: linear-gradient(0deg, rgb(12, 94, 218), rgb(228, 226, 226));
-  color: white;
-}
-
-.ilDatos {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-
-}
-
-.labelDatos {
-  display: flex;
   align-items: center;
-  width: 60px;
-
 }
 
+.btna {
+  background-color: #1976d2;
+}
+.btnc {
+  background-color: rgb(210, 25, 25);
+}
 .inputDatos {
-  width: 200px;
-  padding: 5px;
+  width: 340px;
+  height: 3vh;
+  border: none;
+  background-color: rgba(241, 233, 233, 0.589);
+  border-radius: 10px;
+  margin: 8px;
 }
 
 .btnEditar {
@@ -338,28 +335,20 @@ onMounted(() => {
 }
 
 label {
-  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .agre {
   display: flex;
   justify-content: flex-end;
 }
-.agre2{
-  height: 38px;
-}
-
-.btn_mover{
-  display: flex;
-  justify-content: flex-end;
-}
-
 .title {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 h3 {
   font-weight: bold;
 }
@@ -368,6 +357,14 @@ h3 {
   background-color: rgba(50, 107, 253, 0.85);
   width: 50%;
   height: 5px;
+}
+
+.arri {
+  display: flex;
+  justify-content: center;
+  background-color: #1976d2;
+  color: #ffffff;
+  width: 100%;
 }
 </style>
     
