@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { ref } from "vue";
+import { Notify } from 'quasar'
 
 export const useRutaStore = defineStore("ruta", () => {
     const datosData = ref([]);
+    const loading = ref(false);
 
     const obtener = async () => {
         try {
@@ -39,26 +41,48 @@ export const useRutaStore = defineStore("ruta", () => {
     };
 
     const activarRuta = async (rutaId) => {
+        loading.value = true
         try {
             const response = await axios.put(`ruta/activar/${rutaId}`);
-           /*  console.log(response.data);  */
+            Notify.create({
+                type: "positive",
+                color: "green",
+                message: "Ruta Activada",
+            });
             obtener();
             return response.data.rutas;
         } catch (error) {
             console.error('Error al activar la ruta:', error);
-            throw error;
+            Notify.create({
+                type: "negative",
+                color: "primary",
+                message: error.response.data.errors[0].msg,
+            });
+        } finally {
+            loading.value = false
         }
     };
 
     const desactivarRuta = async (rutaId) => {
+        loading.value = true
         try {
             const response = await axios.put(`ruta/inactivar/${rutaId}`);
-            /* console.log(response.data);  */
+            Notify.create({
+                type: "positive",
+                color: "red",
+                message: "Ruta Desactivada",
+            });
             obtener();
             return response.data.rutas;
         } catch (error) {
             console.error('Error al desactivar la ruta:', error);
-            throw error;
+            Notify.create({
+                type: "negative",
+                color: "primary",
+                message: error.response.data.errors[0].msg,
+            });
+        } finally {
+            loading.value = false
         }
     };
 

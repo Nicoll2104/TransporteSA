@@ -66,24 +66,21 @@
 
           </div>
         </q-card-section>
-
         <q-separator />
-
         <q-card-actions align="right">
           <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
           <q-btn flat label="Aceptar" color="primary" @click="agregarEditarRuta" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
- 
-
   </div>
 </template>
   
 <script setup>
+
 import { onMounted, ref } from "vue";
 import { useRutaStore } from "../stores/ruta.js";
-
+import { useQuasar } from 'quasar'
 
 const rutaStore = useRutaStore()
 
@@ -96,6 +93,7 @@ const distancia = ref("");
 const duracion = ref("");
 const fecha = ref("");
 const rutaEditando = ref(null);
+const $q = useQuasar()
 
 const columns = [
   { name: "origen", required: true, label: "Origen", align: "center", field: "origen", sortable: true },
@@ -139,9 +137,16 @@ const agregarEditarRuta = async () => {
       fecha.value = "";
       modal.value = false;
       rutaEditando.value = null;
+      $q.notify({
+        message: 'Ruta editado correctamente',
+        textColor: 'white',
+        type: "positive",
+        color: 'green',
+      });
       obtenerRuta();
     } catch (error) {
-      console.error('Error al editar la ruta:', error);
+      console.error('Error al editar la Ruta:', error);
+      $q.notify({ type: 'negative', color: 'negative', message: 'Error al editar la Ruta' });
     }
   } else {
     const nuevoRuta = {
@@ -161,10 +166,17 @@ const agregarEditarRuta = async () => {
       duracion.value = "";
       fecha.value = "";
       modal.value = false;
+      $q.notify({
+        message: 'Ruta agregado correctamente',
+        textColor: 'white',
+        type: "positive",
+        color: 'green',
+      });
       obtenerRuta();
       limpiar();
     } catch (error) {
       console.error('Error al agregar la ruta:', error);
+      $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar la ruta' });
     }
   }
 }

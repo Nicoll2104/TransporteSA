@@ -82,6 +82,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useVendedorStore } from "../stores/vendedor.js";
+import { useQuasar } from 'quasar'
 
 const vendedorStore = useVendedorStore()
 
@@ -94,6 +95,18 @@ const telefono = ref("");
 const usuario = ref("");
 const contrasena = ref("");
 const vendedorEditando = ref(null);
+const $q = useQuasar()
+
+const columns = [
+    { name: "cedula", required: true, label: "Cedula", align: "center", field: "cedula", sortable: true },
+    { name: "nombre", required: true, label: "Nombre", align: "center", field: "nombre", sortable: true },
+    { name: "apellido", required: true, label: "Apellido", align: "center", field: "apellido", sortable: true },
+    { name: "telefono", required: true, label: "Telefono", align: "center", field: "telefono", sortable: true },
+    { name: "usuario", required: true, label: "Usuario", align: "center", field: "usuario", sortable: true },
+    { name: "contrasena", required: true, label: "Contraseña", align: "center", field: "contrasena", sortable: true },
+    { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
+    { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
+];
 
 async function obtenerVendedor() {
     try {
@@ -124,12 +137,18 @@ const agregarEditarVendedor = async () => {
             telefono.value = "";
             usuario.value = "";
             contrasena.value = "";
-
             modal.value = false;
             vendedorEditando.value = null;
+            $q.notify({
+            message: 'Vendedor editado correctamente',
+            textColor: 'white',
+            type: "positive",
+            color: 'green',
+            });
             obtenerVendedor();
         } catch (error) {
             console.error('Error al editar el vendedor:', error);
+            $q.notify({ type: 'negative', color: 'negative', message: 'Error al editar el vendedor' });
         }
     } else {
         const nuevoVendedor = {
@@ -149,10 +168,17 @@ const agregarEditarVendedor = async () => {
             usuario.value = "";
             contrasena.value = "";
             modal.value = false;
+            $q.notify({
+            message: 'Vendedor agregado correctamente',
+            textColor: 'white',
+            type: "positive",
+            color: 'green',
+            });
             obtenerVendedor();
             limpiar();
         } catch (error) {
             console.error('Error al agregar el vendedor:', error);
+            $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar el vendedor' });
         }
     }
 }
@@ -177,35 +203,6 @@ const limpiar = () => {
     contrasena.value = "";
 };
 
-/* async function AgregarVendedor() {
-    const nuevoVendedor = {
-        nombre: nombre.value,
-        apellido: apellido.value,
-        cedula: cedula.value,
-        telefono: telefono.value,
-        usuario: usuario.value,
-        contrasena: contrasena.value,
-    };
-    console.log("Vendedor agregado:", nuevoVendedor);
-
-    try {
-        await vendedorStore.agregarVendedor(nuevoVendedor);
-
-        nombre.value = "";
-        apellido.value = "";
-        cedula.value = "";
-        telefono.value = "";
-        usuario.value = "";
-        contrasena.value = "";
-
-        modal.value = false;
-
-        obtenerVendedor();
-    } catch (error) {
-        console.error('Error al agregar un vendedor:', error);
-    }
-} */
-
 async function activar(id) {
     try {
         const vendedor = await vendedorStore.activarVendedor(id);
@@ -226,22 +223,9 @@ async function desactivar(id) {
     }
 }
 
-
 onMounted(() => {
-    obtenerVendedor()
+obtenerVendedor()
 });
-
-
-const columns = [
-    { name: "cedula", required: true, label: "Cedula", align: "center", field: "cedula", sortable: true },
-    { name: "nombre", required: true, label: "Nombre", align: "center", field: "nombre", sortable: true },
-    { name: "apellido", required: true, label: "Apellido", align: "center", field: "apellido", sortable: true },
-    { name: "telefono", required: true, label: "Telefono", align: "center", field: "telefono", sortable: true },
-    { name: "usuario", required: true, label: "Usuario", align: "center", field: "usuario", sortable: true },
-    { name: "contrasena", required: true, label: "Contraseña", align: "center", field: "contrasena", sortable: true },
-    { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
-    { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
-];
 
 </script>
     

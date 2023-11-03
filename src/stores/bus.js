@@ -69,7 +69,7 @@ export const useBusStore = defineStore("bus", () => {
             const response = await axios.put(`bus/inactivar/${busId}`);
             Notify.create({
                 type: "positive",
-                color: "green",
+                color: "red",
                 message: "Bus Desactivado",
             });
             obtener();

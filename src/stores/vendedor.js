@@ -68,7 +68,7 @@ export const useVendedorStore = defineStore("vendedor", () => {
             const response = await axios.put(`vendedor/inactivar/${vendedorId}`);
             Notify.create({
                 type: "positive",
-                color: "green", 
+                color: "red", 
                 message: "Vendedor Desactivado",
             });
             obtener();
@@ -85,15 +85,29 @@ export const useVendedorStore = defineStore("vendedor", () => {
         }
     }; 
 
-    const login = async(data)=>{
+    const login = async (data) => {
+        loading.value = true;
         try {
-            const response = await axios.post("vendedor/login",data)
-            console.log(data);
-            return response
+          const response = await axios.post("vendedor/login", data);
+          console.log(data);
+          Notify.create({
+            type: "positive",
+            color: "green",
+            message: "Inicio sesión exitosamente.",
+          });
+          return response;
         } catch (error) {
-            console.log("hay un error",error);
+          console.error("Error al iniciar sesión:", error);
+          Notify.create({
+            type: "negative",
+            color: "red",
+            message: "Error al iniciar sesión. Por favor, verifica su usuario y contraseña",
+          });
+        } finally {
+          loading.value = false;
         }
-    }
+      };
+      
 
     return {
         datosData,
