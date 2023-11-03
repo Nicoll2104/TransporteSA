@@ -118,7 +118,6 @@ async function obtenerBus() {
   }
 }
 
-
 const agregarEditarBus = async () => {
   cargando.value = true; 
   modalAbierto.value = true;
