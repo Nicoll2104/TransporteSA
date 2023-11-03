@@ -69,7 +69,7 @@ export const useClienteStore = defineStore("cliente", () => {
             const response = await axios.put(`cliente/inactivar/${clienteId}`);
             Notify.create({
                 type: "positive",
-                color: "green", 
+                color: "red", 
                 message: "Cliente Desactivado",
             });
             console.log("cliente Desactivado", response.data);
