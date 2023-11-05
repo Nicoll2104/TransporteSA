@@ -3,77 +3,17 @@
     <div class="cargar_contenedor">
       <div class="title">
         <h3>Datos Clientes</h3>
+      </div>
 
+      <div class="spinner-container" v-if="cargando">
+        <q-spinner size="100px" color="primary" />
+        <p>Cargando...</p>
+      </div>
+
+      <div class="contenedor_TD" v-else>
         <div class="raya"></div>
-      </div><br><br>
-
-      <div class="table" v-if="cargando">
-
-        <div class="btn_mover">
-        <button class="agre2" >
-          <tr>
-          <th  style="width: 90px">
-            <q-skeleton animation="blink" type="text" />
-          </th>
-        </tr>
-        </button>
-      </div>
-
         <br>
-
-        <q-markup-table>
-          <thead>
-            <tr>
-              <th class="text-left" style="width: 150px">
-                <q-skeleton animation="blink" type="text" />
-              </th>
-              <th class="text-right">
-                <q-skeleton animation="blink" type="text" />
-              </th>
-              <th class="text-right">
-                <q-skeleton animation="blink" type="text" />
-              </th>
-              <th class="text-right">
-                <q-skeleton animation="blink" type="text" />
-              </th>
-              <th class="text-right">
-                <q-skeleton animation="blink" type="text" />
-              </th>
-              <th class="text-right">
-                <q-skeleton animation="blink" type="text" />
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr v-for="n in 5" :key="n">
-              <td class="text-left">
-                <q-skeleton animation="blink" type="text" width="85px" />
-              </td>
-              <td class="text-right">
-                <q-skeleton animation="blink" type="text" width="50px" />
-              </td>
-              <td class="text-right">
-                <q-skeleton animation="blink" type="text" width="35px" />
-              </td>
-              <td class="text-right">
-                <q-skeleton animation="blink" type="text" width="65px" />
-              </td>
-              <td class="text-right">
-                <q-skeleton animation="blink" type="text" width="25px" />
-              </td>
-              <td class="text-right">
-                <q-skeleton animation="blink" type="text" width="85px" />
-              </td>
-            </tr>
-          </tbody>
-        </q-markup-table>
-      </div>
-
-      <div v-else class="contenedor_TD">
         <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br>
-
-
         <q-table title="DATOS CLIENTES" :rows="rows" :columns="columns" row-key="cedula">
           <template v-slot:body-cell-status="props">
             <q-td key="status" :props="props">
@@ -90,54 +30,48 @@
           </template>
         </q-table>
         <q-dialog v-model="modal">
-          <q-card>
-
+          <q-card class="conten_modal">
             <q-card-section class="arri">
-          <div class="text-h6">DATOS DE CLIENTE</div>
-        </q-card-section>
-
-
+              <div class="text-h6">DATOS DE CLIENTE</div>
+            </q-card-section>
             <q-separator />
-
             <q-card-section>
               <div class="infoDatos">
-                <div class="ilDatos">
-                  <label class="labelDatos" for="cedula">Cedula:</label>
-                  <input class="inputDatos" type="text" id="cedula" v-model="cedula" />
+                <div class="conten_input">
+                  <label for="">Cedula</label>
+                  <div class="containerInput">
+                    <input placeholder="Cedula" type="text" v-model="cedula">
+                  </div>
                 </div>
-
-                <div class="ilDatos">
-                  <label class="labelDatos" for="nombre">Nombre:</label>
-                  <input class="inputDatos" type="text" id="nombre" v-model="nombre" />
+                <br>
+                <div class="conten_input">
+                  <label for="">Cedula</label>
+                  <div class="containerInput">
+                    <input placeholder="Nombre" type="text" v-model="nombre">
+                  </div>
                 </div>
-
-                <div class="ilDatos">
-                  <label class="labelDatos" for="telefono">Telefono:</label>
-                  <input class="inputDatos" type="number" id="telefono" v-model="telefono" />
+                <br>
+                <div class="conten_input">
+                  <label for="">Cedula</label>
+                  <div class="containerInput">
+                    <input placeholder="Telefono" type="text" v-model="telefono">
+                  </div>
                 </div>
-
-                <div class="ilDatos">
-                  <label class="labelDatos" for="email">Email:</label>
-                  <input class="inputDatos" type="text" id="email" v-model="email" />
+                <br>
+                <div class="conten_input">
+                  <label for="">Cedula</label>
+                  <div class="containerInput">
+                    <input placeholder="Gmail" type="text" v-model="email">
+                  </div>
                 </div>
-
               </div>
             </q-card-section>
 
             <q-separator />
 
             <q-card-actions align="center">
-
-              <q-btn flat label="Cerrar" 
-              class="btnc" @click="limpiar" 
-              color="white"
-              v-close-popup />
-
-              <q-btn flat label="Aceptar" 
-              class="btna" 
-              color="white"
-              @click="agregarEditarCliente" :loading="cargando" />
-
+              <q-btn flat label="Cerrar" class="btnc" @click="limpiar" color="white" v-close-popup />
+              <q-btn flat label="Aceptar" class="btna" color="white" @click="agregarEditarCliente" :loading="cargando" />
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -180,6 +114,12 @@ const columns = [
 async function obtenerClientes() {
   try {
     cargando.value = true;
+    $q.notify({
+      message: 'Cargando datos, por favor espere...',
+      textColor: 'blue',
+      type: 'negative',
+      color: 'white',
+    });
     const clientes = await clienteStore.obtener();
     console.log('Clientes obtenidos:', clientes);
     rows.value = clienteStore.datosData;
@@ -187,6 +127,12 @@ async function obtenerClientes() {
     console.error('Error al obtener los clientes:', error);
   } finally {
     cargando.value = false;
+    $q.notify({
+      message: 'Datos cargados con exito.',
+      textColor: 'white',
+      type: "positive",
+      color: 'green',
+    });
   }
 }
 
@@ -211,16 +157,11 @@ const agregarEditarCliente = async () => {
       email.value = "";
       modal.value = false;
       clienteEditando.value = null;
-      $q.notify({
-        message: 'Cliente editado correctamente',
-        textColor: 'white',
-        type: "positive",
-        color: 'green',
-      });
+      $q.notify({ message: 'Cliente actualizado correctamente', textColor: 'white', type: "positive", color: 'green' });
       obtenerClientes();
     } catch (error) {
       console.error('Error al editar el cliente:', error);
-      $q.notify({ type: 'negative', color: 'negative', message: 'Error al editar el cliente' });
+      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
     }
   } else {
     const nuevoCliente = {
@@ -246,7 +187,7 @@ const agregarEditarCliente = async () => {
       limpiar();
     } catch (error) {
       console.error('Error al agregar cliente:', error);
-      $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar el cliente' });
+      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
     }
 
   }
@@ -262,32 +203,30 @@ const editarCliente = (cliente) => {
   clienteEditando.value = cliente;
   modal.value = true;
   $q.notify({
-        message: 'Editando Cliente',
-        textColor: 'white',
-        icon: "edit",
-        color: 'info',
-      });
+    message: `Editando al cliente ${cliente.nombre}`,
+    textColor: 'white',
+    icon: "edit",
+    color: 'info',
+  });
 }
 
 
 async function activar(id) {
   try {
     const cliente = await clienteStore.activarCliente(id);
-    obtenerClientes();
   } catch (error) {
     console.error('Error al activar cliente:', error);
-
   }
+  obtenerClientes();
 }
 
 async function desactivar(id) {
   try {
     const cliente = await clienteStore.desactivarCliente(id);
-    obtenerClientes();
   } catch (error) {
     console.error('Error al desactivar cliente:', error);
-
   }
+  obtenerClientes();
 }
 
 const limpiar = () => {
@@ -306,57 +245,119 @@ onMounted(() => {
 
 
 
-<style scoped>
-.q-card {
-  display: flex;
-  width: 100%;
-  height: 50%;
-  flex-direction: column;
-  align-items: center;
-}
 
+<style scoped>
 .btna {
   background-color: #1976d2;
 }
+
 .btnc {
   background-color: rgb(210, 25, 25);
 }
-.inputDatos {
-  width: 340px;
-  height: 3vh;
-  border: none;
-  background-color: rgba(241, 233, 233, 0.589);
-  border-radius: 10px;
-  margin: 8px;
+
+.conten_modal {
+  width: 100%;
+  background-image: url("../assets/logo.PNG");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.spinner-container {
+  display: grid;
+  margin: 0%;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
 }
 
 .btnEditar {
   margin: 5px;
 }
 
-label {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
 .agre {
   display: flex;
   justify-content: flex-end;
 }
+
+.infoDatos {
+  width: 50%;
+}
+
 .title {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 h3 {
   font-weight: bold;
 }
 
 .raya {
-  background-color: rgba(50, 107, 253, 0.85);
-  width: 50%;
+  width: 70%;
   height: 5px;
+  margin: auto;
+  background-color: rgba(82, 131, 253, 0.85);
+}
+
+.containerInput {
+  background-color: #000000;
+  border: 1px solid black;
+  position: relative;
+  border-radius:5px 5px 5px 5px;
+  overflow: hidden;
+  margin: 0;
+  padding: 0 0 4px 0;
+  z-index: 1;
+  font-size: 15px;
+}
+
+.containerInput::before {
+  content: '';
+  width: 110%;
+  aspect-ratio: 1;
+  position: absolute;
+  inset: 0 0 0 0;
+  margin: auto;
+  animation: rotate6234 2.5s ease-in-out infinite;
+  z-index: -1;
+  background-image: conic-gradient(from 0deg at 50% 50%, #073AFF00 0%, rgb(28, 49, 235) 25%, #073AFF00 25%);
+}
+
+.containerInput>input {
+  width: 100%;
+  height: 35px;
+  font-size: inherit;
+  border: none;
+  padding: 12px;
+  background-color: #ffffff;
+  outline: 5px solid #0a0a0a;
+}
+
+.containerInput>input:focus {
+  outline: none;
+}
+
+.containerInput>input:not(:placeholder-shown) {
+  outline: none;
+}
+
+.containerInput>input:not(:placeholder-shown):valid {
+  outline: 4px solid rgb(0, 81, 255);
+  border-radius: 0;
+}
+
+@keyframes rotate6234 {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .arri {

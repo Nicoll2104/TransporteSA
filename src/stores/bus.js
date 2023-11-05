@@ -11,7 +11,6 @@ export const useBusStore = defineStore("bus", () => {
         try {
             const response = await axios.get("bus/ver");
             datosData.value = response.data;
-            console.log(response);
             return response.data;
         } catch (error) {
             console.error('Error al obtener los buses:', error);
@@ -22,7 +21,7 @@ export const useBusStore = defineStore("bus", () => {
     const agregarBus = async (nuevoBus) => {
         try {
             const response = await axios.post("bus/agregar", nuevoBus);
-            console.log("bus Agregado", response.data);
+            obtener();
         } catch (error) {
             console.error('Error al agregar el bus:', error);
             throw error;
@@ -32,7 +31,6 @@ export const useBusStore = defineStore("bus", () => {
     const editarBus = async (busEditado) => {
         try {
             const response = await axios.put(`bus/modificar/${busEditado._id}`, busEditado);
-            console.log("bus Editado", response.data);
             obtener();
         } catch (error) {
             console.error('Error al editar bus:', error);
@@ -50,7 +48,6 @@ export const useBusStore = defineStore("bus", () => {
                 message: "Bus Activado",
             });
             obtener();
-            return response.data.bus;
         } catch (error) {
             console.error('Error al activar bus:', error);
             Notify.create({
@@ -73,7 +70,6 @@ export const useBusStore = defineStore("bus", () => {
                 message: "Bus Desactivado",
             });
             obtener();
-            return response.data.bus;
         } catch (error) {
             console.error('Error al desactivar bus:', error);
             Notify.create({

@@ -49,7 +49,6 @@ export const useConductorStore = defineStore("conductor", () => {
                 message: "Conductor Activado",
             });
             obtener();
-            return response.data.conductores;
         } catch (error) {
             console.error('Error al activar el conductor:', error);
             Notify.create({
@@ -68,11 +67,10 @@ export const useConductorStore = defineStore("conductor", () => {
             const response = await axios.put(`conductor/inactivar/${conductorId}`);
             Notify.create({
                 type: "positive",
-                color: "green", 
+                color: "red", 
                 message: "Conductor Desactivado",
             });
             obtener();
-            return response.data.conductores;
         } catch (error) {
             console.error('Error al desactivar el conductor:', error);
             Notify.create({

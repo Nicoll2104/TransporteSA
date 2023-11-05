@@ -21,7 +21,6 @@ export const useClienteStore = defineStore("cliente", () => {
     const agregarCliente = async (nuevoCliente) => {
         try {
             const response = await axios.post('cliente/agregar', nuevoCliente);
-            console.log("cliente Agregado", response.data);
             obtener();
         } catch (error) {
             console.error('Error al agregar cliente:', error);
@@ -32,7 +31,6 @@ export const useClienteStore = defineStore("cliente", () => {
     const editarCliente = async (clienteEditado) => {
         try {
             const response = await axios.put(`cliente/modificar/${clienteEditado._id}`, clienteEditado);
-            console.log("cliente Editado", response.data);
             obtener();
         } catch (error) {
             console.error('Error al editar cliente:', error);
@@ -49,8 +47,6 @@ export const useClienteStore = defineStore("cliente", () => {
                 color: "green",
                 message: "Cliente Activado",
             });
-            console.log("cliente Activado", response.data);
-            obtener();
         } catch (error) {
             console.error('Error al activar cliente:', error);
             Notify.create({
@@ -60,7 +56,6 @@ export const useClienteStore = defineStore("cliente", () => {
         } finally {
             loading.value = false
         }
-
     };
 
     const desactivarCliente = async (clienteId) => {
@@ -72,19 +67,16 @@ export const useClienteStore = defineStore("cliente", () => {
                 color: "red", 
                 message: "Cliente Desactivado",
             });
-            console.log("cliente Desactivado", response.data);
-            obtener();
         } catch (error) {
             console.error('Error al desactivar cliente:', error);
             Notify.create({
                 type: "negative",
                 color: "primary",
-                message: error.response.data.errors[0].msg,
+                message: error.response.data.error.errors[0].msg,
             });
         } finally {
             loading.value = false
         }
-
     };
 
     return {

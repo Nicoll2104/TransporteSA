@@ -244,7 +244,7 @@ const agregarEditarConductor = async () => {
       modal.value = false;
       conductorEditando.value = null;
       $q.notify({
-        message: "Conductor editado correctamente",
+        message: "Conductor actualizado correctamente",
         textColor: "white",
         type: "positive",
         color: "green",
@@ -252,11 +252,7 @@ const agregarEditarConductor = async () => {
       obtenerConductor();
     } catch (error) {
       console.error("Error al editar el conductor:", error);
-      $q.notify({
-        type: "negative",
-        color: "negative",
-        message: "Error al editar el conductor",
-      });
+      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
     }
   } else {
     const nuevoConductor = {
@@ -284,11 +280,7 @@ const agregarEditarConductor = async () => {
       limpiar();
     } catch (error) {
       console.error("Error al agregar el conductor:", error);
-      $q.notify({
-        type: "negative",
-        color: "negative",
-        message: "Error al agregar el conductor",
-      });
+      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
     }
   }
   cargando.value = false;
@@ -303,6 +295,12 @@ const editarConductor = (conductor) => {
   telefono.value = conductor.telefono;
   conductorEditando.value = conductor;
   modal.value = true;
+  $q.notify({
+    message: `Editando al conductor ${conductor.nombre}`,
+    textColor: 'white',
+    icon: "edit",
+    color: 'info',
+  });
 };
 
 const limpiar = () => {
@@ -316,7 +314,6 @@ const limpiar = () => {
 async function activar(id) {
   try {
     const conductor = await conductorStore.activarConductor(id);
-    console.log("conductor activado:", conductor);
     obtenerConductor();
   } catch (error) {
     console.error("Error al activar conductor:", error);
@@ -326,7 +323,6 @@ async function activar(id) {
 async function desactivar(id) {
   try {
     const conductor = await conductorStore.desactivarConductor(id);
-    console.log("conductor desactivado:", conductor);
     obtenerConductor();
   } catch (error) {
     console.error("Error al desactivar conductor:", error);

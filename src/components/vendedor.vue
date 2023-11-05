@@ -1,11 +1,12 @@
 <template>
     <div class="q-pa-md">
-        <div class="title"><h3>Datos Vendedores</h3>
+        <div class="title">
+            <h3>Datos Vendedores</h3>
 
-<div class="raya"></div>
-</div><br><br>
+            <div class="raya"></div>
+        </div><br><br>
 
-<div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
+        <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
 
         <q-table title="DATOS VENDEDORES" :rows="rows" :columns="columns" row-key="cedula" class="tableRT">
             <template v-slot:body-cell-status="props">
@@ -27,8 +28,8 @@
             <q-card>
 
                 <q-card-section class="arri">
-          <div class="text-h6">DATOS DE VENDEDORES</div>
-        </q-card-section>
+                    <div class="text-h6">DATOS DE VENDEDORES</div>
+                </q-card-section>
 
                 <q-separator />
 
@@ -71,19 +72,14 @@
 
                 <q-card-actions align="right">
 
-                    <q-btn flat label="Cerrar" 
-                    color="white" @click="limpiar" 
-                    class="btnc"
-                    v-close-popup />
+                    <q-btn flat label="Cerrar" color="white" @click="limpiar" class="btnc" v-close-popup />
 
-                    <q-btn flat label="Aceptar" 
-                    color="white" @click="agregarEditarVendedor" 
-                    class="btna"
-                    v-close-popup />
+                    <q-btn flat label="Aceptar" color="white" @click="agregarEditarVendedor" class="btna"
+                        :loading="cargando" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
-        
+
 
     </div>
 </template>
@@ -106,6 +102,9 @@ const contrasena = ref("");
 const vendedorEditando = ref(null);
 const $q = useQuasar()
 
+const cargando = ref(false);
+const modalAbierto = ref(false);
+
 const columns = [
     { name: "cedula", required: true, label: "Cedula", align: "center", field: "cedula", sortable: true },
     { name: "nombre", required: true, label: "Nombre", align: "center", field: "nombre", sortable: true },
@@ -127,6 +126,9 @@ async function obtenerVendedor() {
 }
 
 const agregarEditarVendedor = async () => {
+    cargando.value = true;
+    modalAbierto.value = true;
+
     if (vendedorEditando.value) {
         const vendedorEditado = {
             _id: vendedorEditando.value._id,
@@ -148,15 +150,15 @@ const agregarEditarVendedor = async () => {
             modal.value = false;
             vendedorEditando.value = null;
             $q.notify({
-            message: 'Vendedor editado correctamente',
-            textColor: 'white',
-            type: "positive",
-            color: 'green',
+                message: 'Vendedor editado correctamente',
+                textColor: 'white',
+                type: "positive",
+                color: 'green',
             });
             obtenerVendedor();
         } catch (error) {
             console.error('Error al editar el vendedor:', error);
-            $q.notify({ type: 'negative', color: 'negative', message: 'Error al editar el vendedor' });
+            $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error});
         }
     } else {
         const nuevoVendedor = {
@@ -177,19 +179,21 @@ const agregarEditarVendedor = async () => {
             contrasena.value = "";
             modal.value = false;
             $q.notify({
-            message: 'Vendedor agregado correctamente',
-            textColor: 'white',
-            type: "positive",
-            color: 'green',
+                message: 'Vendedor agregado correctamente',
+                textColor: 'white',
+                type: "positive",
+                color: 'green',
             });
             obtenerVendedor();
             limpiar();
         } catch (error) {
             console.error('Error al agregar el vendedor:', error);
-            $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar el vendedor' });
+            $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
         }
     }
-}
+    cargando.value = false;
+    modalAbierto.value = false;
+};
 
 const editarVendedor = (vendedor) => {
     cedula.value = vendedor.cedula;
@@ -200,6 +204,12 @@ const editarVendedor = (vendedor) => {
     contrasena.value = vendedor.contrasena;
     vendedorEditando.value = vendedor;
     modal.value = true;
+    $q.notify({
+        message: `Editando al vendedor ${vendedor.nombre}`,
+        textColor: 'white',
+        icon: "edit",
+        color: 'info',
+    });
 }
 
 const limpiar = () => {
@@ -232,69 +242,73 @@ async function desactivar(id) {
 }
 
 onMounted(() => {
-obtenerVendedor()
+    obtenerVendedor()
 });
 
 </script>
     
 <style scoped>
 .q-card {
-  display: flex;
-  width: 100%;
-  height: 60%;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    width: 100%;
+    height: 60%;
+    flex-direction: column;
+    align-items: center;
 }
 
-.btna{
-  background-color: #1976d2;
+.btna {
+    background-color: #1976d2;
 }
+
 .btnc {
-  background-color: rgb(210, 25, 25);
+    background-color: rgb(210, 25, 25);
 }
+
 .inputDatos {
-  width: 340px;
-  height: 3vh;
-  border: none;
-  background-color: rgba(241, 233, 233, 0.589);
-  border-radius: 10px;
-  margin: 8px;
+    width: 340px;
+    height: 3vh;
+    border: none;
+    background-color: rgba(241, 233, 233, 0.589);
+    border-radius: 10px;
+    margin: 8px;
 }
 
 .btnEditar {
-  margin: 5px;
+    margin: 5px;
 }
 
 label {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .agre {
-  display: flex;
-  justify-content: flex-end;
+    display: flex;
+    justify-content: flex-end;
 }
+
 .title {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
 h3 {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .raya {
-  background-color: rgba(50, 107, 253, 0.85);
-  width: 50%;
-  height: 5px;
+    background-color: rgba(50, 107, 253, 0.85);
+    width: 50%;
+    height: 5px;
 }
 
 .arri {
-  display: flex;
-  justify-content: center;
-  background-color: #1976d2;
-  color: #ffffff;
-  width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: #1976d2;
+    color: #ffffff;
+    width: 100%;
 }
 </style>

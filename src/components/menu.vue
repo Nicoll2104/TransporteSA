@@ -3,6 +3,7 @@
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <p class="nombreLogo" >TrasporteEDG</p>
 
         <q-toolbar-title>
           <q-avatar>
@@ -126,6 +127,13 @@ export default {
   display: flex;
   justify-content: center;
 }
+.nombreLogo{
+  position: relative;
+  top: 9px;
+  color: transparent;
+  font-size: 20px;
+}
+
 .botoneslate {
   display: flex;
   flex-direction: column;

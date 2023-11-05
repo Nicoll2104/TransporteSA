@@ -1,138 +1,118 @@
 <template>
   <div class="container">
-    <div class="hero">
-      <form action="" class="form">
-        <div class="imagenLogo"></div>
-        <div class="logo">Transporte</div>
-
-        <input
-          type="text"
-          name="email"
-          id="email"
-          required=""
-          class="input"
-          placeholder="Nombre de usuario"
-          v-model="usuario"
-        />
-        <input
-          type="password"
-          name="password"
-          id="password"
-          required=""
-          class="input"
-          placeholder="Contraseña"
-          v-model="contrasena"
-        />
-
-        <button class="btn" type="submit" @click="acceder()">
-          Acceder
-        </button>
-        <p class="forgotten">
-          Olvidaste tus datos ?
-          <a href="#">ayuda para iniciar sesión.</a>
-        </p>
-      </form>
+    <div class="container2">
+      <div class="logo"><img src="https://static.vecteezy.com/system/resources/thumbnails/007/794/726/small/travel-bus-illustration-logo-on-light-background-free-vector.jpg" alt=""> </div>
+      <p   class="titulo"> Transporte</p>
+      <div class="contenedor_input">
+        <input type="text"     name="email"    id="email"     class="input" placeholder="Nombre de usuario"
+          v-model="usuario" />
+        <br>
+        <input type="password" name="password" id="password"  class="input" placeholder="Contraseña"
+          v-model="contrasena" />
+        <br>
+        <q-btn flat class="btn" label="Acceder" type="submit" color="white" @click="acceder()" :loading="loading" />
+        <p class="forgotten"> Olvidaste tus datos ? <a href="#">ayuda para iniciar sesión.</a> </p>
+      </div>
     </div>
   </div>
 </template>
 
 
 <script setup>
-import {useVendedorStore} from "../stores/vendedor.js"
-import {ref} from 'vue'
+import { useVendedorStore } from "../stores/vendedor.js";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
+const useVendedor = useVendedorStore();
+const usuario = ref("");
+const contrasena = ref("");
+const loading = ref(false);
 
-const useVendedor = useVendedorStore()
-const usuario = ref("")
-const contrasena = ref("")
-
-const acceder = async()=>{
-  const res = await useVendedor.login({usuario: usuario.value, contrasena: contrasena.value})
-  
-  if(res.status==200){
-    router.push("/home")
+const acceder = async () => {
+  try {
+    loading.value = true;
+    const res = await useVendedor.login({
+      usuario: usuario.value,
+      contrasena: contrasena.value,
+    });
+    console.log("Respuesta del servidor:", res);
+    if (res.status == 200) {
+      router.push("/home");
+    }
+  } catch (error) {
+    console.error("Error al iniciar sesión:", error);
+  } finally {
+    loading.value = false;
   }
-}
+};
+
 
 </script>
 
 
 <style scoped>
 .container {
-  height: 100%;
-  width: 100%;
-}
-
-.hero {
-  padding: 60px 20px;
-  width: 100%;
-  height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background-image: url("../assets/4931029.jpg");
-  background-size: cover;
+  align-items: center;
+  min-height: 100vh;
 }
 
-.form {
-  display: flex;
-  width: 500px;
-  height: 65%;
-  background-color: #1976d28c;
-  flex-direction: column;
-  box-shadow: 20px 17px 50px rgb(90, 88, 88);
-  border-radius: 15px;
-  font-size: 1rem;
-  align-items: center;
+.container2 {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  border-radius: 10px;
+  background-color: rgba(5, 64, 124, 0.377);
+  border: 1px solid #ccc; 
+  box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.568);
+  padding: 20px; 
+}
+
+.logo img {
+  border-radius: 50%;
+  width: 40%;
+}
+
+.titulo {
+  display: grid;
+  font-size: 60px; 
+  text-align: center;
+  color: #fff; 
+  justify-content: center;
+}
+
+.contenedor_input {
+  display: grid;
+  gap: 10px; 
 }
 
 .input {
-  margin-bottom: 20px;
-  border-radius: 10px;
-  display: block;
-  width: 70%;
-  height: 10%;
-  border: none;
-  outline: none;
-  color: rgb(161, 161, 161);
-  font-size: inherit;
+  background-color: #ffffff;
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  /* text-align: center; */
+  border: 2px solid white;
+  border-radius: 5px;
+  box-shadow: 3px 3px 2px rgba(70, 70, 69, 0.726);
 }
 
-.logo {
-  font-size: 40px;
-  color: rgb(255, 255, 255);
-  font-weight: 600;
-  margin: 10px;
-}
-
-.imagenLogo {
-  margin: 10px;
-  border-radius: 20%;
-  background-image: url(https://static.vecteezy.com/system/resources/thumbnails/007/794/726/small/travel-bus-illustration-logo-on-light-background-free-vector.jpg);
-  background-size: cover;
-  width: 32%;
-  height: 22%;
-}
-
-::placeholder {
-  color: rgb(161, 161, 161);
-  padding: 0% 5%;
+.input:focus {
+  color: rgba(202, 199, 199, 0.849);
+  background-color: #212121;
+  outline-color: rgb(191, 194, 194);
+  box-shadow: -3px -3px 15px rgb(196, 197, 197);
+  transition: .1s;
+  transition-property: box-shadow;
 }
 
 .forgotten {
   text-align: center;
   font-size: 0.8rem;
-  width: 80%;
   color: rgb(255, 255, 255);
   margin: 15px 0;
-}
-
-a {
-  color: inherit;
-  font-weight: bold;
-  text-decoration: none;
 }
 
 .btn {
@@ -140,7 +120,7 @@ a {
   --border-width: 0.125em;
   --curve-size: 0.5em;
   --blur: 30px;
-  --bg: #ffffff;
+  --bg: #292525;
   --color: #000000;
   color: var(--color);
   position: relative;
@@ -233,10 +213,24 @@ a {
   color: #fff;
 }
 
-@media (max-width: 400px) {
-  .form {
-    height: 100%;
-    width: 100%;
+
+
+
+/* Responsividad */
+@media (max-width: 300px) {
+  .titulo {
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  .logo img {
+  border-radius: 50%;
+  width: 65%;
+}
+
+  .input {
+    padding: 8px;
   }
 }
 </style>
+

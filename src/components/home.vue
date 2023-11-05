@@ -1,5 +1,4 @@
 <template>
-
     <div class="padre">
       <div class="card"><router-link to="/"><img src="https://cdn-icons-png.flaticon.com/128/1176/1176434.png" style="height: 150px; width: 150px;"> <br> Cerrar sesión</router-link></div>     
       <div class="card"><router-link to="/conductor"><img src="https://cdn-icons-png.flaticon.com/128/2684/2684218.png" style="height: 150px; width: 150px;"> <br>Conductores</router-link></div>
@@ -10,14 +9,10 @@
       <div class="card"><router-link to="/boleto"><img src="https://cdn-icons-png.flaticon.com/128/6030/6030250.png" style="height: 150px; width: 150px;"> <br>Tiquetes</router-link></div>
       <div class="card"><router-link to="/"><img src="https://cdn-icons-png.flaticon.com/128/1019/1019607.png" style="height: 150px; width: 150px;"> <br>Ventas</router-link></div>
     </div>
-
-  
-
   </template>
     
     <script>
   </script>
-  
   
   
   <style scoped>

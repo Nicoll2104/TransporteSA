@@ -11,7 +11,7 @@ export const useVendedorStore = defineStore("vendedor", () => {
         try {
             const response = await axios.get("vendedor/vendedores");
             datosData.value = response.data;
-            return response.data; 
+            return response.data;
         } catch (error) {
             console.error('Error al obtener los vendedores:', error);
             throw error;
@@ -21,7 +21,7 @@ export const useVendedorStore = defineStore("vendedor", () => {
     const agregarVendedor = async (nuevoVendedor) => {
         try {
             const response = await axios.post("vendedor/agregar", nuevoVendedor);
-            return response.data;
+            obtener();
         } catch (error) {
             console.error('Error al agregar al vendedor:', error);
             throw error;
@@ -31,7 +31,7 @@ export const useVendedorStore = defineStore("vendedor", () => {
     const editarVendedor = async (vendedorEditado) => {
         try {
             const response = await axios.put(`vendedor/modificar/${vendedorEditado._id}`, vendedorEditado);
-            console.log(response.data);
+            console.log(response);
             obtener();
         } catch (error) {
             console.error('Error al editar el vendedor:', error);
@@ -45,7 +45,7 @@ export const useVendedorStore = defineStore("vendedor", () => {
             const response = await axios.put(`vendedor/activar/${vendedorId}`);
             Notify.create({
                 type: "positive",
-                color: "green", 
+                color: "green",
                 message: "Vendedor Activado",
             });
             obtener();
@@ -68,7 +68,7 @@ export const useVendedorStore = defineStore("vendedor", () => {
             const response = await axios.put(`vendedor/inactivar/${vendedorId}`);
             Notify.create({
                 type: "positive",
-                color: "red", 
+                color: "red",
                 message: "Vendedor Desactivado",
             });
             obtener();
@@ -83,31 +83,31 @@ export const useVendedorStore = defineStore("vendedor", () => {
         } finally {
             loading.value = false
         }
-    }; 
+    };
 
     const login = async (data) => {
         loading.value = true;
         try {
-          const response = await axios.post("vendedor/login", data);
-          console.log(data);
-          Notify.create({
-            type: "positive",
-            color: "green",
-            message: "Inicio sesión exitosamente.",
-          });
-          return response;
+            const response = await axios.post("vendedor/login", data);
+            console.log(data);
+            Notify.create({
+                type: "positive",
+                color: "green",
+                message: "Inicio sesión exitosamente.",
+            });
+            return response;
         } catch (error) {
-          console.error("Error al iniciar sesión:", error);
-          Notify.create({
-            type: "negative",
-            color: "red",
-            message: "Error al iniciar sesión. Por favor, verifica su usuario y contraseña",
-          });
+            console.error("Error al iniciar sesión:", error);
+            Notify.create({
+                type: "negative",
+                color: "red",
+                message: error.response.data.msg,
+            });
         } finally {
-          loading.value = false;
+            loading.value = false;
         }
-      };
-      
+    };
+
 
     return {
         datosData,
@@ -116,7 +116,7 @@ export const useVendedorStore = defineStore("vendedor", () => {
         agregarVendedor,
         editarVendedor,
         activarVendedor,
-        desactivarVendedor, 
+        desactivarVendedor,
         login
     };
 

@@ -49,7 +49,7 @@
 
               <div class="ilDatos">
                 <label class="labelDatos" for="soat"> Soat:</label>
-                <input class="inputDatos" type="text" id="soat" v-model="soat" />
+                <input class="inputDatos" type="date" id="soat" v-model="soat" />
               </div>
 
               <div class="ilDatos">
@@ -90,10 +90,10 @@
 </template>
 
 <script setup>
-
 import { onMounted, ref } from "vue";
 import { useBusStore } from '../stores/bus.js';
 import { useQuasar } from 'quasar'
+import { format } from 'date-fns';
 
 const busStore = useBusStore()
 
@@ -114,7 +114,17 @@ const modalAbierto = ref(false);
 const columns = [
   { name: "placa", required: true, label: "Placa", align: "center", field: "placa", format: (val) => val, },
   { name: "modelo", required: true, label: "Modelo", align: "center", field: "modelo", sortable: true },
-  { name: "soat", required: true, label: "Soat", align: "center", field: "soat", sortable: true },
+  {
+  name: "soat",
+  required: true,
+  label: "Soat",
+  align: "center",
+  field: "soat",
+  sortable: true,
+  format: (val) => {
+    return format(new Date(val), "yyyy-MM-dd");
+  },
+},
   { name: "n_asiento", required: true, label: "Número de asientos", align: "center", field: "n_asiento", sortable: true },
   { name: "empresa_asignada", required: true, label: "Empresa_asignada", align: "center", field: "empresa_asignada", sortable: true },
   { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
@@ -162,7 +172,7 @@ const agregarEditarBus = async () => {
       obtenerBus();
     } catch (error) {
       console.error('Error al editar el bus:', error);
-      $q.notify({ type: 'negative', color: 'negative', message: 'Error al editar el Bus' });
+      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
     }
   } else {
     const nuevoBus = {
@@ -190,7 +200,7 @@ const agregarEditarBus = async () => {
       limpiar();
     } catch (error) {
       console.error('Error al agregar el bus:', error);
-      $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar el Bus' });
+      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
     }
   }
   cargando.value = false;
@@ -205,6 +215,12 @@ const editarBus = (bus) => {
   empresa_asignada.value = bus.empresa_asignada;
   busEditando.value = bus;
   modal.value = true;
+  $q.notify({
+        message: `Editando al conductor ${bus.empresa_asignada}`,
+        textColor: 'white',
+        icon: "edit",
+        color: 'info',
+      });
 }
 
 const limpiar = () => {
@@ -219,7 +235,6 @@ const limpiar = () => {
 async function activar(id) {
   try {
     const bus = await busStore.activarBus(id);
-    console.log('Bus activado:', bus);
     obtenerBus();
   } catch (error) {
     console.error('Error al activar Bus:', error);
@@ -229,7 +244,7 @@ async function activar(id) {
 async function desactivar(id) {
   try {
     const bus = await busStore.desactivarBus(id);
-    console.log('Bus desactivado:', bus);
+
     obtenerBus();
   } catch (error) {
     console.error('Error al desactivar Bus:', error);

@@ -80,7 +80,7 @@
           <q-btn flat label="Aceptar" 
           color="white" 
           class="btna"
-          @click="agregarEditarRuta" v-close-popup />
+          @click="agregarEditarRuta"  :loading="cargando" />
 
         </q-card-actions>
       </q-card>
@@ -89,7 +89,6 @@
 </template>
   
 <script setup>
-
 import { onMounted, ref } from "vue";
 import { useRutaStore } from "../stores/ruta.js";
 import { useQuasar } from 'quasar'
@@ -106,6 +105,9 @@ const duracion = ref("");
 const fecha = ref("");
 const rutaEditando = ref(null);
 const $q = useQuasar()
+
+const cargando = ref(false);
+const modalAbierto = ref(false);
 
 const columns = [
   { name: "origen", required: true, label: "Origen", align: "center", field: "origen", sortable: true },
@@ -129,6 +131,9 @@ async function obtenerRuta() {
 }
 
 const agregarEditarRuta = async () => {
+  cargando.value = true;
+  modalAbierto.value = true;
+
   if (rutaEditando.value) {
     const rutaEditado = {
       _id: rutaEditando.value._id,
@@ -158,7 +163,7 @@ const agregarEditarRuta = async () => {
       obtenerRuta();
     } catch (error) {
       console.error('Error al editar la Ruta:', error);
-      $q.notify({ type: 'negative', color: 'negative', message: 'Error al editar la Ruta' });
+      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
     }
   } else {
     const nuevoRuta = {
@@ -188,9 +193,11 @@ const agregarEditarRuta = async () => {
       limpiar();
     } catch (error) {
       console.error('Error al agregar la ruta:', error);
-      $q.notify({ type: 'negative', color: 'negative', message: 'Error al agregar la ruta' });
+      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
     }
   }
+  cargando.value = false;
+  modalAbierto.value = false;
 }
 
 const editarRuta = (ruta) => {
@@ -202,6 +209,12 @@ const editarRuta = (ruta) => {
   fecha.value = ruta.fecha;
   rutaEditando.value = ruta;
   modal.value = true;
+  $q.notify({
+        message: "Editando una ruta",
+        textColor: 'white',
+        icon: "edit",
+        color: 'info',
+      });
 }
 
 const limpiar = () => {
