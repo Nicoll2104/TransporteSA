@@ -45,21 +45,21 @@
                 </div>
                 <br>
                 <div class="conten_input">
-                  <label for="">Cedula</label>
+                  <label for="">Nombre</label>
                   <div class="containerInput">
                     <input placeholder="Nombre" type="text" v-model="nombre">
                   </div>
                 </div>
                 <br>
                 <div class="conten_input">
-                  <label for="">Cedula</label>
+                  <label for="">Telefono</label>
                   <div class="containerInput">
                     <input placeholder="Telefono" type="text" v-model="telefono">
                   </div>
                 </div>
                 <br>
                 <div class="conten_input">
-                  <label for="">Cedula</label>
+                  <label for="">Gmail</label>
                   <div class="containerInput">
                     <input placeholder="Gmail" type="text" v-model="email">
                   </div>
