@@ -138,11 +138,10 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useboletoStore } from "../stores/boleto.js";
-import { useClienteStore } from "../stores/clientes";
+import { useBusStore } from '../stores/bus.js';
 
+const busStore = useBusStore()
 const boletoStore = useboletoStore()
-const ClienteStore = useClienteStore()
-
 
 const empresa = ref("");
 const model = ref(null);
@@ -166,18 +165,21 @@ const boletoEditando = ref(null);
 const loading = ref(false);
 const dataLoaded = ref(false);
 
-
 const columns = [
+{ name: "vendedor", required: true, label: "Cedula vendedor", align: "left", field:(row)=> row.vendedor.cedula, sortable: true },
+  { name: "vendedor", required: true, label: "Nombre vendedor", align: "left", field:(row)=> row.vendedor.nombre, sortable: true },
   { name: "fecha_venta", required: true, label: "Fecha_Venta", align: "left", field: (row) => row.fechas[0].fecha_salida, sortable: true },
   { name: "hora_venta", required: true, label: "Hora_Venta", align: "left", field: (row) => row.fechas[0].hora_venta, sortable: true },
   { name: "fecha_salida", required: true, label: "Fecha_Salida", align: "left", field: (row) => row.fechas[0].fecha_salida, sortable: true },
   { name: "hora_salida", required: true, label: "Hora_salida", align: "left", field: (row) => row.fechas[0].hora_salida, sortable: true },
+  { name: "cliente", required: true, label: "Cedula cliente", align: "left", field: (row)=> row.cliente.cedula, sortable: true },
+  { name: "cliente", required: true, label: "Nombre Cliente", align: "left", field: (row)=> row.cliente.nombre, sortable: true },
+  { name: "conductor", required: true, label: "Conductor", align: "left", field: (row)=> row.conductor.nombre, sortable: true },
+  { name: "bus", required: true, label: "Bus", align: "left", field: (row)=> row.bus.placa, sortable: true },
+  { name: "ruta", required: true, label: "Origen", align: "left", field: (row)=> row.ruta.origen, sortable: true },
+  { name: "ruta", required: true, label: "Destino", align: "left", field: (row)=> row.ruta.destino, sortable: true },
+  { name: "bus", required: true, label: "Bus", align: "left", field: (row)=> row.bus.n_asiento, sortable: true },
   { name: "Precio", required: true, label: "Precio", align: "left", field: "Precio", sortable: true },
-  { name: "cliente", required: true, label: "Cliente", align: "left", field: "cliente", sortable: true },
-  { name: "bus", required: true, label: "Bus", align: "left", field: "bus", sortable: true },
-  { name: "ruta", required: true, label: "Ruta", align: "left", field: "ruta", sortable: true },
-  { name: "conductor", required: true, label: "Conductor", align: "left", field: "conductor", sortable: true },
-  { name: "vendedor", required: true, label: "Vendedor", align: "left", field: "vendedor", sortable: true },
   /* { name: "status", label: "Status", align: "left", field: "status", sortable: true }, */
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
@@ -197,8 +199,6 @@ const obtenerBoleto = async () => {
     loading.value = false;
   }
 };
-
-
 
 
 const agregarEditarBoleto = async () => {
@@ -323,7 +323,6 @@ async function desactivar(id) {
 
 onMounted(() => {
   obtenerBoleto();
-  obtenerBus();
 });
 
 </script>
