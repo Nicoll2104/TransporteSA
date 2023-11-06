@@ -204,9 +204,9 @@ const editarCliente = (cliente) => {
   modal.value = true;
   $q.notify({
     message: `Editando al cliente ${cliente.nombre}`,
-    textColor: 'white',
+    textColor: 'blue',
     icon: "edit",
-    color: 'info',
+    color: 'white',
   });
 }
 
@@ -260,7 +260,7 @@ onMounted(() => {
   background-image: url("../assets/logo.PNG");
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position:center ;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -364,6 +364,7 @@ h3 {
   display: flex;
   justify-content: center;
   background-color: #1976d2;
+  background: linear-gradient(90deg,#1976d2,#1976d2,#1976d2,#1976d2,#50a3f7);
   color: #ffffff;
   width: 100%;
 }
