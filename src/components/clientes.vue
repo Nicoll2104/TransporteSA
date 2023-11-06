@@ -7,7 +7,7 @@
 
       <div class="spinner-container" v-if="cargando">
         <q-spinner size="100px" color="primary" />
-        <p>Cargando...</p>
+        <p class="p-carga" >Cargando...</p>
       </div>
 
       <div class="contenedor_TD" v-else>
@@ -38,30 +38,30 @@
             <q-card-section>
               <div class="infoDatos">
                 <div class="conten_input">
-                  <label for="">Cedula</label>
+                  <label for="CEDULA">Cedula</label>
                   <div class="containerInput">
-                    <input placeholder="Cedula" type="text" v-model="cedula">
+                    <input placeholder="Cedula" type="text" id="CEDULA"  v-model="cedula" autocomplete="on">
                   </div>
                 </div>
                 <br>
                 <div class="conten_input">
-                  <label for="">Nombre</label>
+                  <label for="NOMBRE">Nombre</label>
                   <div class="containerInput">
-                    <input placeholder="Nombre" type="text" v-model="nombre">
+                    <input placeholder="Nombre" type="text" id="NOMBRE"  v-model="nombre"  autocomplete="on">
                   </div>
                 </div>
                 <br>
                 <div class="conten_input">
-                  <label for="">Telefono</label>
+                  <label for="TELEFONO">Telefono</label>
                   <div class="containerInput">
-                    <input placeholder="Telefono" type="text" v-model="telefono">
+                    <input placeholder="Telefono" type="number" id="TELEFONO"  v-model="telefono" autocomplete="on">
                   </div>
                 </div>
                 <br>
                 <div class="conten_input">
-                  <label for="">Gmail</label>
+                  <label for="EMAIL">Gmail</label>
                   <div class="containerInput">
-                    <input placeholder="Gmail" type="text" v-model="email">
+                    <input placeholder="Gmail" type="email" id="EMAIL"  v-model="email"  autocomplete="on">
                   </div>
                 </div>
               </div>
@@ -69,7 +69,7 @@
 
             <q-separator />
 
-            <q-card-actions align="center">
+            <q-card-actions align="right">
               <q-btn flat label="Cerrar" class="btnc" @click="limpiar" color="white" v-close-popup />
               <q-btn flat label="Aceptar" class="btna" color="white" @click="agregarEditarCliente" :loading="cargando" />
             </q-card-actions>
@@ -255,13 +255,19 @@ onMounted(() => {
   background-color: rgb(210, 25, 25);
 }
 
+.p-carga{
+  position: relative;
+  bottom: 85px;
+  left: 10px;
+}
+
 .conten_modal {
   width: 100%;
   background-image: url("../assets/logo.PNG");
   background-size: contain;
   background-repeat: no-repeat;
   background-position:center ;
-  max-width: 600px;
+  max-width: 630px;
   margin: 0 auto;
 }
 

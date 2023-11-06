@@ -20,7 +20,6 @@
   background-size: cover;
   padding: 0%;
 }
-
 </style>
 
 

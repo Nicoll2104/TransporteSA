@@ -44,73 +44,56 @@
         </q-td>
       </template>
     </q-table>
+
+
+    
     <q-dialog v-model="modal">
-      <q-card>
-        
+      <q-card class="conten_modal">
         <q-card-section class="arri">
           <div class="text-h6">DATOS DE CONDUCTORES</div>
         </q-card-section>
-
         <q-separator />
-
         <q-card-section>
+          <div class="imagen_formulario">
           <div class="infoDatos">
-            <div class="ilDatos">
-              <label class="labelDatos" for="cedula">Cedula:</label>
-              <input
-                class="inputDatos"
-                type="text"
-                id="cedula"
-                v-model="cedula"
-              />
-            </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="nombre">Nombre:</label>
-              <input
-                class="inputDatos"
-                type="text"
-                id="nombre"
-                v-model="nombre"
-              />
-            </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="n_licencia"
-                >Numero de licencia:</label
-              >
-              <input
-                class="inputDatos"
-                type="text"
-                id="n_licencia"
-                v-model="n_licencia"
-              />
-            </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="direccion">Direccion:</label>
-              <input
-                class="inputDatos"
-                type="text"
-                id="direccion"
-                v-model="direccion"
-              />
-            </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="telefono">Telefono:</label>
-              <input
-                class="inputDatos"
-                type="text"
-                id="telefono"
-                v-model="telefono"
-              />
+            <div class="conten_input">
+                <label for="CEDULA">Cedula</label>
+                <div class="containerInput">
+                  <input placeholder="Cedula" type="text" id="CEDULA" v-model="cedula" autocomplete="on">
+                </div>
+              </div>
+              <br>
+              <div class="conten_input">
+                <label for="NOMBRE">Nombre</label>
+                <div class="containerInput">
+                  <input placeholder="Nombre" type="text" id="NOMBRE" v-model="nombre" autocomplete="on">
+                </div>
+              </div>
+              <br>
+              <div class="conten_input">
+                <label for="N_LICENCIA">Numero de licencia</label>
+                <div class="containerInput">
+                  <input placeholder="Numero de licencia" type="text" id="N_LICENCIA" v-model="n_licencia" autocomplete="on">
+                </div>
+              </div>
+              <br>
+              <div class="conten_input">
+                <label for="DIRECCION">Direccion</label>
+                <div class="containerInput">
+                  <input placeholder="Direccion" type="text" id="DIRECCION" v-model="direccion" autocomplete="on">
+                </div>
+              </div>
+              <br>
+              <div class="conten_input">
+                <label for="TELEFONO">Telefono</label>
+                <div class="containerInput">
+                  <input placeholder="Telefono" type="number" id="TELEFONO" v-model="telefono" autocomplete="on">
+                </div>
+              </div>
             </div>
           </div>
         </q-card-section>
-
         <q-separator />
-
         <q-card-actions align="right">
           <q-btn
             flat
@@ -213,12 +196,24 @@ const columns = [
 
 async function obtenerConductor() {
   try {
+    $q.notify({
+      message: 'Cargando datos, por favor espere...',
+      textColor: 'blue',
+      type: 'negative',
+      color: 'white',
+    });
     const conductores = await conductorStore.obtener();
     console.log("conductores obtenidos:", conductores);
     rows.value = conductorStore.datosData;
   } catch (error) {
     console.error("Error al obtener los conductores:", error);
   }
+  $q.notify({
+      message: 'Datos cargados con exito.',
+      textColor: 'white',
+      type: "positive",
+      color: 'green',
+    });
 }
 
 const agregarEditarConductor = async () => {
@@ -336,37 +331,15 @@ onMounted(() => {
 
     
 <style scoped>
-.q-card {
-  display: flex;
-  width: 100%;
-  height: 60%;
-  flex-direction: column;
-  align-items: center;
-}
-
 .btn_AC {
   background-color: #1976d2;
 }
 .btn_A {
   background-color: rgb(210, 25, 25);
 }
-.inputDatos {
-  width: 340px;
-  height: 3vh;
-  border: none;
-  background-color: rgba(241, 233, 233, 0.589);
-  border-radius: 10px;
-  margin: 8px;
-}
 
 .btnEditar {
   margin: 5px;
-}
-
-label {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
 }
 
 .agre {
@@ -384,16 +357,116 @@ h3 {
 
 .raya {
   background-color: rgba(50, 107, 253, 0.85);
-  width: 50%;
+  width: 70%;
   height: 5px;
+  border-radius: 20px;
+}
+
+.infoDatos {
+  width: 55%;
+}
+
+.q-card__section--vert {
+    padding: 0px;
+}
+
+
+.imagen_formulario{
+  background-image: url("../assets/logo.PNG");
+  background-size: cover; /* Esto ajustará la imagen para que quepa en el contenedor */
+  background-position: center;
+  padding: 15px;
+}
+
+.conten_modal {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+
+.containerInput {
+  background-color: #000000;
+  border: 1px solid black;
+  position: relative;
+  border-radius: 5px 5px 5px 5px;
+  overflow: hidden;
+  margin: 0;
+  padding: 0 0 4px 0;
+  z-index: 1;
+  font-size: 15px;
+}
+
+.containerInput::before {
+  content: '';
+  width: 110%;
+  aspect-ratio: 1;
+  position: absolute;
+  inset: 0 0 0 0;
+  margin: auto;
+  animation: rotate6234 2.5s ease-in-out infinite;
+  z-index: -1;
+  background-image: conic-gradient(from 0deg at 50% 50%, #073AFF00 0%, rgb(28, 49, 235) 25%, #073AFF00 25%);
+}
+
+.containerInput>input {
+  width: 100%;
+  height: 35px;
+  font-size: inherit;
+  border: none;
+  padding: 12px;
+  background-color: #ffffff;
+  outline: 5px solid #0a0a0a;
+}
+
+.containerInput>input:focus {
+  outline: none;
+}
+
+.containerInput>input:not(:placeholder-shown) {
+  outline: none;
+}
+
+.containerInput>input:not(:placeholder-shown):valid {
+  outline: 4px solid rgb(0, 81, 255);
+  border-radius: 0;
+}
+
+@keyframes rotate6234 {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .arri {
   display: flex;
   justify-content: center;
+  align-items: center;
   background-color: #1976d2;
+  height: 50px;
+  background: linear-gradient(90deg, #1976d2, #1976d2, #1976d2, #1976d2, #50a3f7);
   color: #ffffff;
   width: 100%;
 }
+
+@media (max-width: 500px){
+  
+  .infoDatos {
+    width: 95%;
+}
+
+.imagen_formulario{
+  background-repeat: no-repeat;
+  background-size: contain; 
+  background-position: center;
+  padding: 15px;
+}
+
+}
+
 </style>
     

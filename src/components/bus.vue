@@ -24,62 +24,62 @@
           </q-td>
         </template>
       </q-table>
+
+
       <q-dialog v-model="modal">
-        <q-card>
-
+        <q-card class="conten_modal">
           <q-card-section class="arri">
-          <div class="text-h6">DATOS DE BUSES</div>
-        </q-card-section>
-
-          
-
+            <div class="text-h6">DATOS DE BUSES</div>
+          </q-card-section>
           <q-separator />
-
           <q-card-section>
+            <div class="imagen_formulario">
             <div class="infoDatos">
-              <div class="ilDatos">
-                <label class="labelDatos" for="placa">Placa:</label>
-                <input class="inputDatos" type="text" id="placa" v-model="placa" />
+              <div class="conten_input">
+                <label for="PLACA">Placa</label>
+                <div class="containerInput">
+                  <input placeholder="Placa" type="text" id="PLACA" v-model="placa" autocomplete="on">
+                </div>
               </div>
-
-              <div class="ilDatos">
-                <label class="labelDatos" for="modelo">Modelo:</label>
-                <input class="inputDatos" type="text" id="modelo" v-model="modelo" />
+              <br>
+              <div class="conten_input">
+                <label for="MODELO">Modelo</label>
+                <div class="containerInput">
+                  <input placeholder="Modelo" type="text" id="MODELO" v-model="modelo" autocomplete="on">
+                </div>
               </div>
-
-              <div class="ilDatos">
-                <label class="labelDatos" for="soat"> Soat:</label>
-                <input class="inputDatos" type="date" id="soat" v-model="soat" />
+              <br>
+              <div class="conten_input">
+                <label for="SOAT">Soat</label>
+                <div class="containerInput">
+                  <input placeholder="Soat" type="text" id="SOAT" v-model="soat" autocomplete="on">
+                </div>
               </div>
-
-              <div class="ilDatos">
-                <label class="labelDatos" for="n_asiento">Numero asientos:</label>
-                <input class="inputDatos" type="number" id="n_asiento" v-model="n_asiento" />
+              <br>
+              <div class="conten_input">
+                <label for="N_ASIENTO">Numero de asientos</label>
+                <div class="containerInput">
+                  <input placeholder="Numero de asientos" type="number" id="N_ASIENTO" v-model="n_asiento"
+                    autocomplete="on">
+                </div>
               </div>
-
-              <div class="ilDatos">
-                <label class="labelDatos" for="empresa_asignada">Empresa:</label>
-                <input class="inputDatos" type="text" id="empresa_asignada" v-model="empresa_asignada" />
+              <br>
+              <div class="conten_input">
+                <label for="EMPRESA_ASIGNADA">Empresa asignada </label>
+                <div class="containerInput">
+                  <input placeholder="Empresa asignada" type="text" id="EMPRESA_ASIGNADA" v-model="empresa_asignada"
+                    autocomplete="on">
+                </div>
               </div>
-
             </div>
+          </div>
           </q-card-section>
 
           <q-separator />
 
-          <q-card-actions align="center">
-
-            <q-btn flat label="Cerrar"  
-            class="btnc"  
-            @click="limpiar" 
-            color="white"
-            v-close-popup />
-
-            <q-btn flat label="Aceptar" 
-            class="btna"  
-            @click="agregarEditarBus"
-            color="white"
-            :loading="cargando" />
+          <q-card-actions align="right">
+            <q-btn flat label="Cerrar" class="btnc" @click="limpiar" color="white" v-close-popup />
+            <q-btn flat label="Aceptar" class="btna" @click="agregarEditarBus" color="white" :loading="cargando" />
           </q-card-actions>
 
         </q-card>
@@ -107,7 +107,7 @@ const empresa_asignada = ref("");
 const busEditando = ref(null);
 const $q = useQuasar()
 
-const cargando = ref(false);  
+const cargando = ref(false);
 const modalAbierto = ref(false);
 
 
@@ -115,16 +115,16 @@ const columns = [
   { name: "placa", required: true, label: "Placa", align: "center", field: "placa", format: (val) => val, },
   { name: "modelo", required: true, label: "Modelo", align: "center", field: "modelo", sortable: true },
   {
-  name: "soat",
-  required: true,
-  label: "Soat",
-  align: "center",
-  field: "soat",
-  sortable: true,
-  format: (val) => {
-    return format(new Date(val), "yyyy-MM-dd");
+    name: "soat",
+    required: true,
+    label: "Soat",
+    align: "center",
+    field: "soat",
+    sortable: true,
+    format: (val) => {
+      return format(new Date(val), "yyyy-MM-dd");
+    },
   },
-},
   { name: "n_asiento", required: true, label: "Número de asientos", align: "center", field: "n_asiento", sortable: true },
   { name: "empresa_asignada", required: true, label: "Empresa_asignada", align: "center", field: "empresa_asignada", sortable: true },
   { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
@@ -133,16 +133,28 @@ const columns = [
 
 async function obtenerBus() {
   try {
+    $q.notify({
+      message: 'Cargando datos, por favor espere...',
+      textColor: 'blue',
+      type: 'negative',
+      color: 'white',
+    });
     const buses = await busStore.obtener();
     console.log('Buses obtenidos:', buses);
     rows.value = busStore.datosData.buses;
   } catch (error) {
     console.error('Error al obtener los clientes:', error);
   }
+  $q.notify({
+      message: 'Datos cargados con exito.',
+      textColor: 'white',
+      type: "positive",
+      color: 'green',
+    });
 }
 
 const agregarEditarBus = async () => {
-  cargando.value = true; 
+  cargando.value = true;
   modalAbierto.value = true;
 
   if (busEditando.value) {
@@ -216,11 +228,11 @@ const editarBus = (bus) => {
   busEditando.value = bus;
   modal.value = true;
   $q.notify({
-        message: `Editando al conductor ${bus.empresa_asignada}`,
-        textColor: 'white',
-        icon: "edit",
-        color: 'info',
-      });
+    message: `Editando al conductor ${bus.empresa_asignada}`,
+    textColor: 'white',
+    icon: "edit",
+    color: 'info',
+  });
 }
 
 const limpiar = () => {
@@ -260,63 +272,145 @@ onMounted(() => {
 
   
 <style scoped>
-.q-card {
-  display: flex;
-  width: 100%;
-  height: 55%;
-  flex-direction: column;
-  align-items: center;
-}
-
 .btna {
   background-color: #1976d2;
 }
+
 .btnc {
   background-color: rgb(210, 25, 25);
 }
-.inputDatos {
-  width: 340px;
-  height: 3vh;
-  border: none;
-  background-color: rgba(241, 233, 233, 0.589);
-  border-radius: 10px;
-  margin: 8px;
-}
+
 
 .btnEditar {
   margin: 5px;
-}
-
-label {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
 }
 
 .agre {
   display: flex;
   justify-content: flex-end;
 }
+
 .title {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 h3 {
   font-weight: bold;
 }
 
 .raya {
   background-color: rgba(50, 107, 253, 0.85);
-  width: 50%;
+  width: 70%;
   height: 5px;
+  border-radius: 20px;
+}
+
+.infoDatos {
+  width: 55%;
+}
+
+.q-card__section--vert {
+    padding: 0px;
+}
+
+
+.imagen_formulario{
+  background-image: url("../assets/logo.PNG");
+  background-size: cover; /* Esto ajustará la imagen para que quepa en el contenedor */
+  background-position: center;
+  padding: 15px;
+}
+
+.conten_modal {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+
+.containerInput {
+  background-color: #000000;
+  border: 1px solid black;
+  position: relative;
+  border-radius: 5px 5px 5px 5px;
+  overflow: hidden;
+  margin: 0;
+  padding: 0 0 4px 0;
+  z-index: 1;
+  font-size: 15px;
+}
+
+.containerInput::before {
+  content: '';
+  width: 110%;
+  aspect-ratio: 1;
+  position: absolute;
+  inset: 0 0 0 0;
+  margin: auto;
+  animation: rotate6234 2.5s ease-in-out infinite;
+  z-index: -1;
+  background-image: conic-gradient(from 0deg at 50% 50%, #073AFF00 0%, rgb(28, 49, 235) 25%, #073AFF00 25%);
+}
+
+.containerInput>input {
+  width: 100%;
+  height: 35px;
+  font-size: inherit;
+  border: none;
+  padding: 12px;
+  background-color: #ffffff;
+  outline: 5px solid #0a0a0a;
+}
+
+.containerInput>input:focus {
+  outline: none;
+}
+
+.containerInput>input:not(:placeholder-shown) {
+  outline: none;
+}
+
+.containerInput>input:not(:placeholder-shown):valid {
+  outline: 4px solid rgb(0, 81, 255);
+  border-radius: 0;
+}
+
+@keyframes rotate6234 {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .arri {
   display: flex;
   justify-content: center;
+  align-items: center;
   background-color: #1976d2;
+  height: 50px;
+  background: linear-gradient(90deg, #1976d2, #1976d2, #1976d2, #1976d2, #50a3f7);
   color: #ffffff;
   width: 100%;
 }
+
+@media (max-width: 500px){
+  
+  .infoDatos {
+    width: 95%;
+}
+
+.imagen_formulario{
+  background-repeat: no-repeat;
+  background-size: contain; 
+  background-position: center;
+  padding: 15px;
+}
+
+}
+
 </style>

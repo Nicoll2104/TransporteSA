@@ -5,10 +5,10 @@
       <p   class="titulo"> Transporte</p>
       <div class="contenedor_input">
         <input type="text"     name="email"    id="email"     class="input" placeholder="Nombre de usuario"
-          v-model="usuario" />
+          v-model="usuario"  autocomplete="on" />
         <br>
         <input type="password" name="password" id="password"  class="input" placeholder="Contraseña"
-          v-model="contrasena" />
+          v-model="contrasena" autocomplete="on" />
         <br>
         <q-btn flat class="btn" label="Acceder" type="submit" color="white" @click="acceder()" :loading="loading" />
         <p class="forgotten"> Olvidaste tus datos ? <a href="#">ayuda para iniciar sesión.</a> </p>
@@ -216,7 +216,6 @@ const acceder = async () => {
 
 
 
-/* Responsividad */
 @media (max-width: 300px) {
   .titulo {
     font-size: 30px;
