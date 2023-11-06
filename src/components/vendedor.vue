@@ -158,7 +158,7 @@ const agregarEditarVendedor = async () => {
             obtenerVendedor();
         } catch (error) {
             console.error('Error al editar el vendedor:', error);
-            $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error});
+            $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg});
         }
     } else {
         const nuevoVendedor = {
