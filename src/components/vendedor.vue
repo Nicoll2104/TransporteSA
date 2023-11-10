@@ -131,24 +131,12 @@ const columns = [
 
 async function obtenerVendedor() {
     try {
-        $q.notify({
-            message: 'Cargando datos, por favor espere...',
-            textColor: 'blue',
-            type: 'negative',
-            color: 'white',
-        });
         const Vendedores = await vendedorStore.obtener();
         console.log('Vendedores obtenidos:', Vendedores);
         rows.value = vendedorStore.datosData;
     } catch (error) {
         console.error('Error al obtener los Vendedores:', error);
     }
-    $q.notify({
-        message: 'Datos cargados con exito.',
-        textColor: 'white',
-        type: "positive",
-        color: 'green',
-    });
 }
 
 const agregarEditarVendedor = async () => {

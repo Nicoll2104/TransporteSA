@@ -1,12 +1,13 @@
 <template>
   <div class="q-pa-md">
 
-    <div class="title"><h3>Datos Rutas</h3>
+    <div class="title">
+      <h3>Datos Rutas</h3>
 
-<div class="raya"></div>
-</div><br><br>
+      <div class="raya"></div>
+    </div><br><br>
 
-<div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
+    <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
 
     <q-table title="DATOS RUTAS" :rows="rows" :columns="columns" row-key="origen" class="tableRT">
       <template v-slot:body-cell-status="props">
@@ -22,66 +23,66 @@
           <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
         </q-td>
       </template>
-
     </q-table>
-    <q-dialog v-model="modal">
-      <q-card>
 
+
+    <q-dialog v-model="modal">
+      <q-card class="conten_modal">
         <q-card-section class="arri">
           <div class="text-h6">DATOS DE RUTAS</div>
         </q-card-section>
-
-
-
         <q-separator />
-
-        <q-card-section style="max-height: 50vh" class="scroll">
-          <div class="infoDatos">
-            <div class="ilDatos">
-              <label class="labelDatos" for="origen">Origen:</label>
-              <input class="inputDatos" type="text" id="origen" v-model="origen" />
+        <q-card-section>
+          <div class="imagen_formulario">
+            <div class="infoDatos">
+              <div class="conten_input">
+                <label for="ORIGEN">Origen</label>
+                <div class="containerInput">
+                  <input placeholder="Origen" type="text" id="ORIGEN" v-model="origen" autocomplete="on">
+                </div>
+              </div>
+              <br>
+              <div class="conten_input">
+                <label for="DESTINO">Destino</label>
+                <div class="containerInput">
+                  <input placeholder="Destino" type="text" id="DESTINO" v-model="destino" autocomplete="on">
+                </div>
+              </div>
+              <br>
+              <div class="conten_input">
+                <label for="HORARIOS">Horario</label>
+                <div class="containerInput">
+                  <input placeholder="Horario" type="text" id="HORARIOS" v-model="horarios" autocomplete="on">
+                </div>
+              </div>
+              <br>
+              <div class="conten_input">
+                <label for="DISTANCIA">Distancia</label>
+                <div class="containerInput">
+                  <input placeholder="Distancia" type="text" id="DISTANCIA" v-model="distancia" autocomplete="on">
+                </div>
+              </div>
+              <br>
+              <div class="conten_input">
+                <label for="DURACION">Duracion</label>
+                <div class="containerInput">
+                  <input placeholder="Duracion" type="text" id="DURACION" v-model="duracion" autocomplete="on">
+                </div>
+              </div>
+              <br>
+              <div class="conten_input">
+                <label for="FECHA">Fecha</label>
+                <div class="containerInput">
+                  <input placeholder="Fecha" type="text" id="FECHA" v-model="fecha" autocomplete="on">
+                </div>
+              </div>
             </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="destino">Destino:</label>
-              <input class="inputDatos" type="text" id="destino" v-model="destino" />
-            </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="horarios"> Horario:</label>
-              <input class="inputDatos" type="text" id="horarios" v-model="horarios" />
-            </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="distancia">Distancia:</label>
-              <input class="inputDatos" type="text" id="distancia" v-model="distancia" />
-            </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="duracion">Duracion:</label>
-              <input class="inputDatos" type="text" id="duracion" v-model="duracion" />
-            </div>
-
-            <div class="ilDatos">
-              <label class="labelDatos" for="fecha">Fecha:</label>
-              <input class="inputDatos" type="date" id="fecha" v-model="fecha" />
-            </div>
-
           </div>
         </q-card-section>
         <q-separator />
         <q-card-actions align="right">
-
-          <q-btn flat label="Cerrar" 
-          color="white" @click="limpiar" 
-          class="btnc"
-          v-close-popup />
-
-          <q-btn flat label="Aceptar" 
-          color="white" 
-          class="btna"
-          @click="agregarEditarRuta"  :loading="cargando" />
-
+          <q-btn flat label="Cerrar" color="white" @click="limpiar" class="btnc" v-close-popup />
+          <q-btn flat label="Aceptar" color="white" class="btna" @click="agregarEditarRuta" :loading="cargando" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -210,11 +211,11 @@ const editarRuta = (ruta) => {
   rutaEditando.value = ruta;
   modal.value = true;
   $q.notify({
-        message: "Editando una ruta",
-        textColor: 'white',
-        icon: "edit",
-        color: 'info',
-      });
+    message: "Editando una ruta",
+    textColor: 'white',
+    icon: "edit",
+    color: 'info',
+  });
 }
 
 const limpiar = () => {
@@ -254,64 +255,146 @@ onMounted(() => {
 </script>
     
 <style scoped>
-.q-card {
-  display: flex;
-  width: 100%;
-  height: 60%;
-  flex-direction: column;
-  align-items: center;
-}
 
 .btna {
   background-color: #1976d2;
 }
+
 .btnc {
   background-color: rgb(210, 25, 25);
-}
-.inputDatos {
-  width: 340px;
-  height: 3vh;
-  border: none;
-  background-color: rgba(241, 233, 233, 0.589);
-  border-radius: 10px;
-  margin: 8px;
 }
 
 .btnEditar {
   margin: 5px;
 }
 
-label {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
 .agre {
   display: flex;
   justify-content: flex-end;
 }
+
 .title {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 h3 {
   font-weight: bold;
 }
 
 .raya {
-  background-color: rgba(50, 107, 253, 0.85);
-  width: 50%;
-  height: 5px;
+    background-color: rgba(50, 107, 253, 0.85);
+    width: 70%;
+    height: 5px;
+    border-radius: 20px;
+}
+
+.infoDatos {
+    width: 55%;
+}
+
+.q-card__section--vert {
+    padding: 0px;
+}
+
+
+.imagen_formulario {
+    background-image: url("../assets/logo.PNG");
+    background-size: cover;
+    /* Esto ajustará la imagen para que quepa en el contenedor */
+    background-position: center;
+    padding: 15px;
+}
+
+.conten_modal {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+
+.containerInput {
+    background-color: #000000;
+    border: 1px solid black;
+    position: relative;
+    border-radius: 5px 5px 5px 5px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0 0 4px 0;
+    z-index: 1;
+    font-size: 15px;
+}
+
+.containerInput::before {
+    content: '';
+    width: 110%;
+    aspect-ratio: 1;
+    position: absolute;
+    inset: 0 0 0 0;
+    margin: auto;
+    animation: rotate6234 2.5s ease-in-out infinite;
+    z-index: -1;
+    background-image: conic-gradient(from 0deg at 50% 50%, #073AFF00 0%, rgb(28, 49, 235) 25%, #073AFF00 25%);
+}
+
+.containerInput>input {
+    width: 100%;
+    height: 35px;
+    font-size: inherit;
+    border: none;
+    padding: 12px;
+    background-color: #ffffff;
+    outline: 5px solid #0a0a0a;
+}
+
+.containerInput>input:focus {
+    outline: none;
+}
+
+.containerInput>input:not(:placeholder-shown) {
+    outline: none;
+}
+
+.containerInput>input:not(:placeholder-shown):valid {
+    outline: 4px solid rgb(0, 81, 255);
+    border-radius: 0;
+}
+
+@keyframes rotate6234 {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .arri {
-  display: flex;
-  justify-content: center;
-  background-color: #1976d2;
-  color: #ffffff;
-  width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1976d2;
+    height: 50px;
+    background: linear-gradient(90deg, #1976d2, #1976d2, #1976d2, #1976d2, #50a3f7);
+    color: #ffffff;
+    width: 100%;
+}
+
+@media (max-width: 500px) {
+
+    .infoDatos {
+        width: 95%;
+    }
+
+    .imagen_formulario {
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        padding: 15px;
+    }
+
 }
 </style>
     

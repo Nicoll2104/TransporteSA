@@ -133,24 +133,12 @@ const columns = [
 
 async function obtenerBus() {
   try {
-    $q.notify({
-      message: 'Cargando datos, por favor espere...',
-      textColor: 'blue',
-      type: 'negative',
-      color: 'white',
-    });
     const buses = await busStore.obtener();
     console.log('Buses obtenidos:', buses);
     rows.value = busStore.datosData.buses;
   } catch (error) {
     console.error('Error al obtener los clientes:', error);
   }
-  $q.notify({
-      message: 'Datos cargados con exito.',
-      textColor: 'white',
-      type: "positive",
-      color: 'green',
-    });
 }
 
 const agregarEditarBus = async () => {

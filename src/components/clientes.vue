@@ -114,12 +114,6 @@ const columns = [
 async function obtenerClientes() {
   try {
     cargando.value = true;
-    $q.notify({
-      message: 'Cargando datos, por favor espere...',
-      textColor: 'blue',
-      type: 'negative',
-      color: 'white',
-    });
     const clientes = await clienteStore.obtener();
     console.log('Clientes obtenidos:', clientes);
     rows.value = clienteStore.datosData;
@@ -127,12 +121,6 @@ async function obtenerClientes() {
     console.error('Error al obtener los clientes:', error);
   } finally {
     cargando.value = false;
-    $q.notify({
-      message: 'Datos cargados con exito.',
-      textColor: 'white',
-      type: "positive",
-      color: 'green',
-    });
   }
 }
 
@@ -369,7 +357,7 @@ h3 {
 .arri {
   display: flex;
   justify-content: center;
-  background-color: #1976d2;
+  background-color: #f50a0a;
   background: linear-gradient(90deg,#1976d2,#1976d2,#1976d2,#1976d2,#50a3f7);
   color: #ffffff;
   width: 100%;
