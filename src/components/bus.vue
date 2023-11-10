@@ -52,7 +52,7 @@
               <div class="conten_input">
                 <label for="SOAT">Soat</label>
                 <div class="containerInput">
-                  <input placeholder="Soat" type="text" id="SOAT" v-model="soat" autocomplete="on">
+                  <input placeholder="Soat" type="date" id="SOAT" v-model="soat" autocomplete="on">
                 </div>
               </div>
               <br>
