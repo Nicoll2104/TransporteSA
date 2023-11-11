@@ -281,11 +281,9 @@ onMounted(() => {
 .btnc {
     background-color: rgb(210, 25, 25);
 }
-
 .btnEditar {
     margin: 5px;
 }
-
 
 .agre {
     display: flex;
@@ -331,8 +329,6 @@ h3 {
     max-width: 600px;
     margin: 0 auto;
 }
-
-
 .containerInput {
     background-color: #000000;
     border: 1px solid black;
