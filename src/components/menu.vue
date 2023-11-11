@@ -81,7 +81,7 @@
           >
         </button>
         <button class="btn">
-          <router-link to="/"
+          <router-link to="/ventas"
             ><img
               src="https://cdn-icons-png.flaticon.com/128/7160/7160625.png"
               style="height: 30px; width: 30px"

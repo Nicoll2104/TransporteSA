@@ -4,23 +4,48 @@
       <div class="logo"><img src="https://static.vecteezy.com/system/resources/thumbnails/007/794/726/small/travel-bus-illustration-logo-on-light-background-free-vector.jpg" alt=""> </div>
       <p   class="titulo"> Transporte</p>
       <div class="contenedor_input">
-        <input type="text"     name="email"    id="email"     class="input" placeholder="Nombre de usuario"
-          v-model="usuario"  autocomplete="on" />
-        <br>
-        <input type="password" name="password" id="password"  class="input" placeholder="Contraseña"
-          v-model="contrasena" autocomplete="on" />
-        <br>
-        <q-btn flat class="btn" label="Acceder" type="submit" color="white" @click="acceder()" :loading="loading" />
-        <p class="forgotten"> Olvidaste tus datos ? <a href="#">ayuda para iniciar sesión.</a> </p>
-      </div>
+  <input
+    type="text"
+    name="email"
+    id="email"
+    class="input"
+    placeholder="Nombre de usuario"
+    v-model="usuario"
+    autocomplete="on"
+  />
+  <p class="error-message">{{ errorUsuario }}</p>
+  <input
+    type="password"
+    name="password"
+    id="password"
+    class="input"
+    placeholder="Contraseña"
+    v-model="contrasena"
+    autocomplete="on"
+  />
+  <p class="error-message">{{ errorContrasena }}</p>
+  <br />
+  <q-btn
+    flat
+    class="btn"
+    label="Acceder"
+    type="submit"
+    color="white"
+    @click="acceder"
+    :loading="loading"
+  />
+  <p class="forgotten">
+    Olvidaste tus datos ? <a href="#">ayuda para iniciar sesión.</a>
+  </p>
+</div>
     </div>
   </div>
 </template>
 
 
 <script setup>
-import { useVendedorStore } from "../stores/vendedor.js";
 import { ref } from "vue";
+import { useVendedorStore } from "../stores/vendedor.js";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -28,15 +53,35 @@ const useVendedor = useVendedorStore();
 const usuario = ref("");
 const contrasena = ref("");
 const loading = ref(false);
+const errorUsuario = ref("");
+const errorContrasena = ref("");
+
 
 const acceder = async () => {
   try {
+    errorUsuario.value = "";
+    errorContrasena.value = "";
+
+    if (!usuario.value) {
+      errorUsuario.value = "Por favor, ingresa tu nombre de usuario.";
+      clearErrors();
+      return;
+    }
+
+    if (!contrasena.value) {
+      errorContrasena.value = "Por favor, ingresa tu contraseña.";
+      clearErrors();
+      return;
+    }
+
     loading.value = true;
     const res = await useVendedor.login({
       usuario: usuario.value,
       contrasena: contrasena.value,
     });
+
     console.log("Respuesta del servidor:", res);
+
     if (res.status == 200) {
       router.push("/home");
     }
@@ -45,6 +90,13 @@ const acceder = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const clearErrors = () => {
+  setTimeout(() => {
+    errorUsuario.value = "";
+    errorContrasena.value = "";
+  }, 4000); 
 };
 
 
@@ -73,6 +125,10 @@ const acceder = async () => {
 .logo img {
   border-radius: 50%;
   width: 40%;
+}
+
+.error-message{
+  color: red;
 }
 
 .titulo {

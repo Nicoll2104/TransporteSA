@@ -27,8 +27,8 @@
         <q-separator />
 
         <q-card-actions align="center">
-          <q-btn flat label="Cerrar" color="primary" @click="" v-close-popup />
-          <q-btn flat label="Aceptar" color="primary" @click="" v-close-popup />
+          <q-btn flat label="Cerrar"  color="primary"   v-close-popup />
+          <q-btn flat label="Aceptar" color="primary"   v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
