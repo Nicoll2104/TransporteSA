@@ -110,11 +110,6 @@
               </div>
 
               <div class="ilDatos">
-                <label class="labelDatos" for="conductor">Conductor:</label>
-                <input class="inputDatos" type="text" id="conductor" v-model="conductor" />
-              </div>
-
-              <div class="ilDatos">
                 <label class="labelDatos" for="vendedor">Vendedor:</label>
                 <input class="inputDatos" type="text" id="vendedor" v-model="vendedor" />
               </div>
@@ -140,7 +135,6 @@ import { onMounted, ref } from "vue";
 import { useboletoStore } from "../stores/boleto.js";
 import { useBusStore } from '../stores/bus.js';
 
-const busStore = useBusStore()
 const boletoStore = useboletoStore()
 
 const empresa = ref("");
@@ -156,9 +150,7 @@ const hora_salida = ref("");
 const Precio = ref("");
 const cliente = ref("");
 const bus = ref("");
-
 const ruta = ref("");
-const conductor = ref("");
 const vendedor = ref("");
 const boletoEditando = ref(null);
 
@@ -174,7 +166,6 @@ const columns = [
   { name: "hora_salida", required: true, label: "Hora_salida", align: "left", field: (row) => row.fechas[0].hora_salida, sortable: true },
   { name: "cliente", required: true, label: "Cedula cliente", align: "left", field: (row)=> row.cliente.cedula, sortable: true },
   { name: "cliente", required: true, label: "Nombre Cliente", align: "left", field: (row)=> row.cliente.nombre, sortable: true },
-  { name: "conductor", required: true, label: "Conductor", align: "left", field: (row)=> row.conductor.nombre, sortable: true },
   { name: "bus", required: true, label: "Bus", align: "left", field: (row)=> row.bus.placa, sortable: true },
   { name: "ruta", required: true, label: "Origen", align: "left", field: (row)=> row.ruta.origen, sortable: true },
   { name: "ruta", required: true, label: "Destino", align: "left", field: (row)=> row.ruta.destino, sortable: true },
@@ -213,7 +204,6 @@ const agregarEditarBoleto = async () => {
       cliente: cliente.value,
       bus: bus.value,
       ruta: ruta.value,
-      conductor: conductor.value,
       vendedor: vendedor.value,
       fecha: fecha.value.split('T')[0],
     };
@@ -227,7 +217,6 @@ const agregarEditarBoleto = async () => {
       cliente.value = "";
       bus.value = "";
       ruta.value = "";
-      conductor.value = "";
       vendedor.value = "";
       modal.value = false;
       rutaEditando.value = null;
@@ -245,7 +234,6 @@ const agregarEditarBoleto = async () => {
       cliente: cliente.value,
       bus: bus.value,
       ruta: ruta.value,
-      conductor: conductor.value,
       vendedor: vendedor.value,
       fecha: fecha.value.split('T')[0],
     };
@@ -259,7 +247,6 @@ const agregarEditarBoleto = async () => {
       cliente.value = "";
       bus.value = "";
       ruta.value = "";
-      conductor.value = "";
       vendedor.value = "";
       modal.value = false;
       obtenerBoleto();
@@ -279,7 +266,6 @@ const editarBoleto = (boleto) => {
   cliente.value = boleto.cliente;
   bus.value = boleto.bus;
   ruta.value = boleto.ruta;
-  conductor.value = boleto.conductor;
   vendedor.value = boleto.vendedor;
   fecha.value = boleto.fecha;
   boletoEditando.value = boleto;
@@ -295,31 +281,10 @@ const limpiar = () => {
   cliente.value = "";
   bus.value = "";
   ruta.value = "";
-  conductor.value = "";
   vendedor.value = "";
   fecha.value = "";
 };
 
-/* async function activar(id) {
-  try {
-    const ruta = await rutaStore.activarRuta(id);
-    console.log('ruta activada:', ruta);
-    obtenerRuta();
-  } catch (error) {
-    console.error('Error al activar ruta:', error);
-  }
-}
-
-async function desactivar(id) {
-  try {
-    const ruta = await rutaStore.desactivarRuta(id);
-    console.log('ruta desactivada:', ruta);
-    obtenerRuta();
-  } catch (error) {
-    console.error('Error al desactivar ruta:', error);
-  }
-}
- */
 
 onMounted(() => {
   obtenerBoleto();
