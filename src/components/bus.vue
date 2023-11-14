@@ -49,6 +49,12 @@
                 </div>
               </div>
               <br>
+              <q-select color="teal" filled v-model="modeloBus" :options="opcionesConductor" label="Label">
+              <template v-slot:prepend>
+                <q-icon name="event" />
+              </template>
+              </q-select>
+              <br>
               <div class="conten_input">
                 <label for="SOAT">Soat</label>
                 <div class="containerInput">
@@ -94,13 +100,17 @@ import { onMounted, ref } from "vue";
 import { useBusStore } from '../stores/bus.js';
 import { useQuasar } from 'quasar'
 import { format } from 'date-fns';
+import { useConductorStore } from "../stores/conductor";
 
 const busStore = useBusStore()
+const conductorStore = useConductorStore();
 
 const rows = ref([])
 const modal = ref(false);
 const placa = ref("");
 const modelo = ref("");
+const modeloBus = ref("");
+const conductor = ref("");
 const soat = ref("");
 const n_asiento = ref("");
 const empresa_asignada = ref("");
@@ -114,6 +124,7 @@ const modalAbierto = ref(false);
 const columns = [
   { name: "placa", required: true, label: "Placa", align: "center", field: "placa", format: (val) => val, },
   { name: "modelo", required: true, label: "Modelo", align: "center", field: "modelo", sortable: true },
+  { name: "conductor", required: true, label: "Conductor", align: "center", field: "conductor", sortable: true },
   {
     name: "soat",
     required: true,
@@ -135,9 +146,22 @@ async function obtenerBus() {
   try {
     const buses = await busStore.obtener();
     console.log('Buses obtenidos:', buses);
-    rows.value = busStore.datosData.buses;
+    rows.value = buses.busesPopulate
   } catch (error) {
     console.error('Error al obtener los clientes:', error);
+  }
+}
+
+const opcionesConductor = ref([]);
+
+async function obtenerConductor() {
+  try {
+    const response = await conductorStore.obtener();
+      opcionesConductor.value = response.map((conductor) => (
+        conductor.nombre
+      ));
+  } catch (error) {
+    console.error('Error al obtener los conductores', error);
   }
 }
 
@@ -150,6 +174,7 @@ const agregarEditarBus = async () => {
       _id: busEditando.value._id,
       placa: placa.value,
       modelo: modelo.value,
+      conductor: modelo.value,
       soat: soat.value,
       n_asiento: n_asiento.value,
       empresa_asignada: empresa_asignada.value,
@@ -158,6 +183,7 @@ const agregarEditarBus = async () => {
       await busStore.editarBus(busEditado);
       placa.value = "";
       modelo.value = "";
+      conductor.value = "";
       soat.value = "";
       n_asiento.value = "";
       empresa_asignada.value = "";
@@ -178,6 +204,7 @@ const agregarEditarBus = async () => {
     const nuevoBus = {
       placa: placa.value,
       modelo: modelo.value,
+      conductor: modelo.value,
       soat: soat.value,
       n_asiento: n_asiento.value,
       empresa_asignada: empresa_asignada.value,
@@ -186,6 +213,7 @@ const agregarEditarBus = async () => {
       await busStore.agregarBus(nuevoBus);
       placa.value = "";
       modelo.value = "";
+      conductor.value = "";
       soat.value = "";
       n_asiento.value = "";
       empresa_asignada.value = "";
@@ -210,6 +238,7 @@ const agregarEditarBus = async () => {
 const editarBus = (bus) => {
   placa.value = bus.placa;
   modelo.value = bus.modelo;
+  conductor.value = bus.conductor
   soat.value = bus.soat;
   n_asiento.value = bus.n_asiento;
   empresa_asignada.value = bus.empresa_asignada;
@@ -226,6 +255,7 @@ const editarBus = (bus) => {
 const limpiar = () => {
   placa.value = "";
   modelo.value = "";
+  conductor.value = "";
   soat.value = "";
   n_asiento.value = "";
   empresa_asignada.value = "";
@@ -252,7 +282,8 @@ async function desactivar(id) {
 }
 
 onMounted(() => {
-  obtenerBus()
+  obtenerBus();
+  obtenerConductor();
 })
 
 </script>
