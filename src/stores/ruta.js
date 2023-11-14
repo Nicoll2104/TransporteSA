@@ -10,7 +10,6 @@ export const useRutaStore = defineStore("ruta", () => {
     const obtener = async () => {
         try {
             const response = await axios.get("ruta/ver");
-            console.log(response);
             datosData.value = response.data;
             return response.data; 
         } catch (error) {
