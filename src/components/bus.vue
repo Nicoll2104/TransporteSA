@@ -6,7 +6,6 @@
         <div class="raya"></div>
       </div><br>
 
-
       <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br>
 
       <q-table title="DATOS BUSES" :rows="rows" :columns="columns" row-key="cedula">
@@ -49,9 +48,9 @@
                 </div>
               </div>
               <br>
-              <q-select color="teal" filled v-model="modeloBus" :options="opcionesConductor" label="Label">
+              <q-select color="teal" filled v-model="modeloBus" :options="opcionesConductor" label="conductor">
               <template v-slot:prepend>
-                <q-icon name="event" />
+                <q-icon name="conductor" />
               </template>
               </q-select>
               <br>
@@ -124,7 +123,8 @@ const modalAbierto = ref(false);
 const columns = [
   { name: "placa", required: true, label: "Placa", align: "center", field: "placa", format: (val) => val, },
   { name: "modelo", required: true, label: "Modelo", align: "center", field: "modelo", sortable: true },
-  { name: "conductor", required: true, label: "Conductor", align: "center", field: "conductor", sortable: true },
+  { name: "conductor", required: true, label: "Conductor", align: "center", field: (row) => row.conductor.nombre, sortable: true },
+
   {
     name: "soat",
     required: true,
@@ -238,7 +238,7 @@ const agregarEditarBus = async () => {
 const editarBus = (bus) => {
   placa.value = bus.placa;
   modelo.value = bus.modelo;
-  conductor.value = bus.conductor
+  conductor.value = bus.conductor;
   soat.value = bus.soat;
   n_asiento.value = bus.n_asiento;
   empresa_asignada.value = bus.empresa_asignada;

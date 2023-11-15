@@ -38,9 +38,6 @@
       <q-spinner-ios v-if="loading" color="primary" size="100px" />
     </div>
 
-
-
-
     <div class="cargar_contenedor" v-if="dataLoaded">
       <q-table title="DATOS TICKETS" :rows="rows" :columns="columns" row-key="fecha_venta" class="tableRT">
         <template v-slot:body-cell-status="props">
@@ -238,7 +235,7 @@ const agregarEditarBoleto = async () => {
       fecha: fecha.value.split('T')[0],
     };
     try {
-      await rutaStore.agregarBoleto(nuevoBoleto);
+      await boletoStore.agregarBoleto(nuevoBoleto);
       fecha_venta.value = "";
       hora_venta.value = "";
       fecha_salida.value = "";
