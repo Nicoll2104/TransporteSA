@@ -163,12 +163,11 @@ const columns = [
   { name: "hora_salida", required: true, label: "Hora_salida", align: "left", field: (row) => row.fechas[0].hora_salida, sortable: true },
   { name: "cliente", required: true, label: "Cedula cliente", align: "left", field: (row)=> row.cliente.cedula, sortable: true },
   { name: "cliente", required: true, label: "Nombre Cliente", align: "left", field: (row)=> row.cliente.nombre, sortable: true },
-  { name: "bus", required: true, label: "Bus", align: "left", field: (row)=> row.bus.placa, sortable: true },
+  { name: "bus", required: true, label: "Placa", align: "left", field: (row)=> row.bus.placa, sortable: true },
   { name: "ruta", required: true, label: "Origen", align: "left", field: (row)=> row.ruta.origen, sortable: true },
   { name: "ruta", required: true, label: "Destino", align: "left", field: (row)=> row.ruta.destino, sortable: true },
-  { name: "bus", required: true, label: "Bus", align: "left", field: (row)=> row.bus.n_asiento, sortable: true },
+  { name: "bus", required: true, label: "Número de asientos", align: "left", field: (row)=> row.bus.n_asiento, sortable: true },
   { name: "Precio", required: true, label: "Precio", align: "left", field: "Precio", sortable: true },
-  /* { name: "status", label: "Status", align: "left", field: "status", sortable: true }, */
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
