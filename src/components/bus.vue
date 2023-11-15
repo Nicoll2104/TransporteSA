@@ -38,6 +38,7 @@
                 <label for="PLACA">Placa</label>
                 <div class="containerInput">
                   <input placeholder="Placa" type="text" id="PLACA" v-model="placa" autocomplete="on">
+                  
                 </div>
               </div>
               <br>

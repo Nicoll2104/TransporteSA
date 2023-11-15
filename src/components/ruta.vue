@@ -40,6 +40,7 @@
                 <div class="containerInput">
                   <input placeholder="Origen" type="text" id="ORIGEN" v-model="origen" autocomplete="on">
                 </div>
+                <span class="error">{{ errorOrigen }}</span>
               </div>
               <br>
               <div class="conten_input">
@@ -47,6 +48,7 @@
                 <div class="containerInput">
                   <input placeholder="Destino" type="text" id="DESTINO" v-model="destino" autocomplete="on">
                 </div>
+                <span class="error">{{ errorDestino }}</span>
               </div>
               <br>
               <div class="conten_input">
@@ -54,6 +56,7 @@
                 <div class="containerInput">
                   <input placeholder="Horario" type="text" id="HORARIOS" v-model="horarios" autocomplete="on">
                 </div>
+                <span class="error">{{ errorHorario }}</span>
               </div>
               <br>
               <div class="conten_input">
@@ -61,6 +64,7 @@
                 <div class="containerInput">
                   <input placeholder="Distancia" type="text" id="DISTANCIA" v-model="distancia" autocomplete="on">
                 </div>
+                <span class="error">{{ errorDistancia }}</span>
               </div>
               <br>
               <div class="conten_input">
@@ -68,13 +72,15 @@
                 <div class="containerInput">
                   <input placeholder="Duracion" type="text" id="DURACION" v-model="duracion" autocomplete="on">
                 </div>
+                <span class="error">{{ errorDuracion }}</span>
               </div>
               <br>
               <div class="conten_input">
                 <label for="FECHA">Fecha</label>
                 <div class="containerInput">
-                  <input placeholder="Fecha" type="text" id="FECHA" v-model="fecha" autocomplete="on">
+                  <input placeholder="Fecha" type="date" id="FECHA" v-model="fecha" autocomplete="on">
                 </div>
+                <span class="error">{{ errorFecha }}</span>
               </div>
             </div>
           </div>
@@ -131,9 +137,60 @@ async function obtenerRuta() {
   }
 }
 
+
+
+
+const errorOrigen = ref("");
+const errorDestino = ref("");
+const errorHorario = ref("");
+const errorDistancia = ref("");
+const errorDuracion = ref("");
+const errorFecha = ref("");
+
 const agregarEditarRuta = async () => {
-  cargando.value = true;
-  modalAbierto.value = true;
+
+  if (!origen.value) {
+    errorOrigen.value = "Por favor, ingresa un origen";
+    clearErrors();
+    console.log("Error de origen");
+    return;
+  }
+
+  if (!destino.value) {
+    errorDestino.value = "Por favor, ingresa un destino";
+    clearErrors();
+    console.log("Error de destino");
+    return;
+  }
+
+  if (!horarios.value) {
+    errorHorario.value = "Por favor, ingresa un horario";
+    clearErrors();
+    console.log("Error de horario");
+    return;
+  }
+
+  if (!distancia.value) {
+    errorDistancia.value = "Por favor, ingresa la distancia";
+    clearErrors();
+    console.log("Error de distancia");
+    return;
+  }
+
+  if (!duracion.value) {
+    errorDuracion.value = "Por favor, ingresa la duracion";
+    clearErrors();
+    console.log("Error de duracion");
+    return;
+  }
+
+  if (!fecha.value) {
+    errorFecha.value = "Por favor, ingresa la fecha";
+    clearErrors();
+    console.log("Error de fecha");
+    return;
+  }
+
 
   if (rutaEditando.value) {
     const rutaEditado = {
@@ -217,6 +274,17 @@ const editarRuta = (ruta) => {
     color: 'info',
   });
 }
+
+const clearErrors = () => {
+  setTimeout(()=>{
+  errorOrigen.value = "";
+  errorDestino.value = "";
+  errorHorario.value = "";
+  errorDistancia.value = "";
+  errorDuracion.value = "";
+  errorFecha.value = "";
+},4000);
+};
 
 const limpiar = () => {
   origen.value = "";
@@ -404,6 +472,11 @@ h3 {
     }
 
 }
+
+.error{
+  color: red;
+}
+
 </style>
     
   
