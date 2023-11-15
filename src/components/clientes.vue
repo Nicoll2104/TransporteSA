@@ -65,7 +65,7 @@
                 </div>
                 <br />
                 <div class="conten_input">
-                  <label for="EMAIL">Gmail</label>
+                  <label for="EMAIL">Email</label>
                   <div class="containerInput">
                     <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
                   </div>

@@ -61,6 +61,7 @@
                 <div class="containerInput">
                   <input placeholder="Cedula" type="text" id="CEDULA" v-model="cedula" autocomplete="on">
                 </div>
+                <span class="error">{{ errorCedula }}</span>
               </div>
               <br>
               <div class="conten_input">
@@ -68,6 +69,7 @@
                 <div class="containerInput">
                   <input placeholder="Nombre" type="text" id="NOMBRE" v-model="nombre" autocomplete="on">
                 </div>
+                <span class="error">{{ errorNombre }}</span>
               </div>
               <br>
               <div class="conten_input">
@@ -75,6 +77,7 @@
                 <div class="containerInput">
                   <input placeholder="Numero de licencia" type="text" id="N_LICENCIA" v-model="n_licencia" autocomplete="on">
                 </div>
+                <span class="error">{{ errorN_licencia }}</span>
               </div>
               <br>
               <div class="conten_input">
@@ -82,6 +85,7 @@
                 <div class="containerInput">
                   <input placeholder="Direccion" type="text" id="DIRECCION" v-model="direccion" autocomplete="on">
                 </div>
+                <span class="error">{{ errorDireccion }}</span>
               </div>
               <br>
               <div class="conten_input">
@@ -89,6 +93,7 @@
                 <div class="containerInput">
                   <input placeholder="Telefono" type="number" id="TELEFONO" v-model="telefono" autocomplete="on">
                 </div>
+                <span class="error">{{ errorTelefono }}</span>
               </div>
             </div>
           </div>
@@ -204,9 +209,49 @@ async function obtenerConductor() {
   }
 }
 
+const errorCedula = ref("");
+const errorNombre = ref("");
+const errorN_licencia = ref("");
+const errorDireccion = ref("");
+const errorTelefono = ref("");
+
 const agregarEditarConductor = async () => {
-  cargando.value = true;
-  modalAbierto.value = true;
+
+if (!cedula.value) {
+    errorCedula.value = "Por favor, ingresa el número de cédula";
+    clearErrors();
+    console.log("Error de cédula");
+    return;
+  }
+
+  if (!nombre.value) {
+    errorNombre.value = "Por favor, ingresa tu nombre";
+    clearErrors();
+    console.log("Error de nombre");
+    return;
+  }
+
+  if (!n_licencia.value) {
+    errorN_licencia.value = "Por favor, ingresa tu numero de licencia";
+    clearErrors();
+    console.log("Error de numero");
+    return;
+  }
+
+  if (!direccion.value) {
+    errorDireccion.value = "Por favor, ingresa tu dirección";
+    clearErrors();
+    console.log("Error de direccion");
+    return;
+  }
+
+  if (!telefono.value) {
+    errorTelefono.value = "Por favor, ingresa el número de teléfono";
+    clearErrors();
+    console.log("Error de teléfono");
+    return;
+  }
+
 
   if (conductorEditando.value) {
     const conductorEditado = {
@@ -284,6 +329,16 @@ const editarConductor = (conductor) => {
     icon: "edit",
     color: 'info',
   });
+};
+
+const clearErrors = () => {
+  setTimeout(()=>{
+  errorCedula.value = "";
+  errorNombre.value = "";
+  errorN_licencia.value = "";
+  errorDireccion.value = "";
+  errorTelefono.value = "";
+},4000);
 };
 
 const limpiar = () => {
@@ -462,6 +517,9 @@ h3 {
   padding: 15px;
 }
 
+}
+.error{
+  color: red;
 }
 
 </style>
