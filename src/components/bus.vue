@@ -110,7 +110,7 @@ const modal = ref(false);
 const placa = ref("");
 const modelo = ref("");
 const modeloBus = ref("");
-const conductor = ref("");
+const conductor = ref([]);
 const soat = ref("");
 const n_asiento = ref("");
 const empresa_asignada = ref("");
@@ -174,7 +174,7 @@ const agregarEditarBus = async () => {
       _id: busEditando.value._id,
       placa: placa.value,
       modelo: modelo.value,
-      conductor: modelo.value,
+      conductor: modeloBus.value,
       soat: soat.value,
       n_asiento: n_asiento.value,
       empresa_asignada: empresa_asignada.value,
@@ -204,7 +204,7 @@ const agregarEditarBus = async () => {
     const nuevoBus = {
       placa: placa.value,
       modelo: modelo.value,
-      conductor: modelo.value,
+      conductor: modeloBus.value,
       soat: soat.value,
       n_asiento: n_asiento.value,
       empresa_asignada: empresa_asignada.value,
