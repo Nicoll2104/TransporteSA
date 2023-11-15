@@ -299,6 +299,14 @@ onMounted(() => {
   background-color: rgb(210, 25, 25);
 }
 
+.color1{
+  color: #51ff00;
+}
+
+.color2{
+  color: #f50a0a;
+}
+
 
 .btnEditar {
   margin: 5px;

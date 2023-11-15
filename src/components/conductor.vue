@@ -330,6 +330,14 @@ onMounted(() => {
   margin: 5px;
 }
 
+.color1{
+  color: #51ff00;
+}
+
+.color2{
+  color: #f50a0a;
+}
+
 .agre {
   display: flex;
   justify-content: flex-end;
