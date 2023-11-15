@@ -82,14 +82,14 @@
                 <br />
                 <q-select
         filled
-        :model-value="conductor"
+        v-model:model-value="conductor"
         use-input
         hide-selected
         fill-input
         input-debounce="0"
         :options="opcionesConductor"
         @filter="filterFn"
-        hint="Text autocomplete"
+        hint="Basic filtering"
         style="width: 250px; padding-bottom: 32px"
       >
         <template v-slot:no-option>
@@ -212,12 +212,10 @@ const cargando = ref(false);
 const modalAbierto = ref(false);
 
 function filterFn(val, update) {
+  console.log(val);
   if (val === "") {
     update(() => {
       opcionesConductor.value = opcionesConductor.value;
-
-      // here you have access to "ref" which
-      // is the Vue reference of the QSelect
     });
     return;
   }
@@ -225,85 +223,23 @@ function filterFn(val, update) {
   update(() => {
     const needle = val.toLowerCase();
     opcionesConductor.value = opcionesConductor.value.filter(
-      (v) => v.toLowerCase().indexOf(needle) > -1
+      (v) => {
+        console.log("v",v);
+        return v.label.toLowerCase().indexOf(needle) > -1}
     );
   });
 }
 
 const columns = [
-  {
-    name: "placa",
-    required: true,
-    label: "Placa",
-    align: "center",
-    field: "placa",
-    format: (val) => val,
-  },
-  {
-    name: "numero",
-    required: true,
-    label: "Número",
-    align: "center",
-    field: "numero",
-    sortable: true,
-  },
-  {
-    name: "conductor",
-    required: true,
-    label: "Conductor",
-    align: "center",
-    field: (row) => row.conductor.nombre,
-    sortable: true,
-  },
-  {
-    name: "modelo",
-    required: true,
-    label: "Modelo",
-    align: "center",
-    field: "modelo",
-    sortable: true,
-  },
-  {
-    name: "soat",
-    required: true,
-    label: "Soat",
-    align: "center",
-    field: "soat",
-    sortable: true,
-    format: (val) => {
-      return format(new Date(val), "yyyy-MM-dd");
-    },
-  },
-  {
-    name: "n_asiento",
-    required: true,
-    label: "Número de asientos",
-    align: "center",
-    field: "n_asiento",
-    sortable: true,
-  },
-  {
-    name: "empresa_asignada",
-    required: true,
-    label: "Empresa_asignada",
-    align: "center",
-    field: "empresa_asignada",
-    sortable: true,
-  },
-  {
-    name: "status",
-    label: "Estado",
-    align: "center",
-    field: "status",
-    sortable: true,
-  },
-  {
-    name: "acciones",
-    required: true,
-    label: "Acciones",
-    align: "center",
-    field: "acciones",
-  },
+  {name: "placa",required: true,label: "Placa",align: "center",field: "placa",format: (val) => val,},
+  {name: "numero",required: true,label: "Número",align: "center",field: "numero",sortable: true,},
+  {name: "conductor",required: true,label: "Conductor",align: "center",field: (row) => row.conductor.nombre,sortable: true,},
+  {name: "modelo",required: true,label: "Modelo",align: "center",field: "modelo",sortable: true,},
+  {name: "soat",required: true,label: "Soat",align: "center",field: "soat",sortable: true,format: (val) => {return format(new Date(val), "yyyy-MM-dd");},},
+  {name: "n_asiento",required: true,label: "Número de asientos",align: "center",field: "n_asiento",sortable: true,},
+  {name: "empresa_asignada",required: true,label: "Empresa_asignada",align: "center",field: "empresa_asignada",sortable: true,},
+  {name: "status",label: "Estado",align: "center",field: "status",sortable: true,},
+  {name: "acciones",required: true,label: "Acciones",align: "center",field: "acciones",},
 ];
 
 async function obtenerBus() {
@@ -317,11 +253,13 @@ async function obtenerBus() {
 }
 
 const opcionesConductor = ref([]);
+const conductores = ref([])
 
 async function obtenerConductor() {
   try {
     const response = await conductorStore.obtener();
-    opcionesConductor.value = response.map((conductor) => conductor.nombre);
+    conductores.value = response
+    opcionesConductor.value = response.map((conductor) => {return{label: conductor.nombre, value: conductor._id}});
   } catch (error) {
     console.error("Error al obtener los conductores", error);
   }
@@ -332,18 +270,20 @@ obtenerConductor()
 const agregarEditarBus = async () => {
   cargando.value = true;
   modalAbierto.value = true;
-
+console.log("a",conductor.value);
   if (busEditando.value) {
     const busEditado = {
       _id: busEditando.value._id,
       placa: placa.value,
       numero: numero.value,
-      conductor: conductor._rawValue.value,
+      conductor: conductor.value.value,
       modelo: modelo.value,
       soat: soat.value,
       n_asiento: n_asiento.value,
       empresa_asignada: empresa_asignada.value,
     };
+
+    console.log("data", busEditado.value);
     try {
       await busStore.editarBus(busEditado);
       placa.value = "";
@@ -371,15 +311,18 @@ const agregarEditarBus = async () => {
       });
     }
   } else {
+    console.log("con", conductor.value);
     const nuevoBus = {
       placa: placa.value,
       numero: numero.value,
-      conductor: conductor._rawValue.value,
+      conductor: conductor.value.value,
       modelo: modelo.value,
       soat: soat.value,
       n_asiento: n_asiento.value,
       empresa_asignada: empresa_asignada.value,
     };
+
+    console.log(nuevoBus);
     try {
       await busStore.agregarBus(nuevoBus);
       placa.value = "";
