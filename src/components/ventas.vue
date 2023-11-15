@@ -23,7 +23,7 @@
               </template>
             </q-select>
             <br>
-            <q-select color="blue" filled v-model="selecBus" :options="busOptions" label="Selecciona un bus" >
+            <q-select color="blue" filled v-model="selecBus" :options="routeBuses"  label="Selecciona un bus" >
               <template v-slot:prepend>
                 <img src="https://cdn-icons-png.flaticon.com/128/9830/9830523.png" alt=""
                   style="height: 25px; width: 25px" />
@@ -41,7 +41,7 @@
         <q-separator />
         <q-card-actions align="center">
           <q-btn flat label="Cerrar" class="btnc" color="white" v-close-popup />
-          <q-btn flat label="Aceptar" class="btna" color="white" @click="mostrarPuestos" />
+          <q-btn flat label="Aceptar" class="btna" color="white"  />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -61,7 +61,7 @@ const clienteStore = useClienteStore();
 const modal = ref(false);
 const selecRuta = ref(null);
 const selecBus = ref(null);
-const rowsBuses = ref([]);  
+const rowsBuses = ref([]);
 const rowsClientes = ref([]);  
 const rowsRutas = ref([]);  
 
@@ -69,8 +69,8 @@ const rowsRutas = ref([]);
 async function obtenerInformacion() {
   try {
     await busStore.obtener();
-    console.log('Buses obtenidos:', busStore.datosData.buses);
-    rowsBuses.value = busStore.datosData.buses;
+    console.log('Buses obtenidos:', busStore.datosData);
+    rowsBuses.value = busStore.datosData;
 
     await clienteStore.obtener();
     console.log('Clientes obtenidos:', clienteStore.datosData);
@@ -85,6 +85,7 @@ async function obtenerInformacion() {
   }
 }
 
+
 function mapRutas() {
   return rowsRutas.value.map((ruta) => ({
     label: `${ruta.origen} / ${ruta.destino}`,
@@ -93,16 +94,15 @@ function mapRutas() {
 }
 
 function mapBuses() {
-  return rowsBuses.value.map((bus) => ({
+  return rowsBuses.value.busesPopulate.map((bus) => ({
     label: `${bus.empresa_asignada} - ${bus.n_asiento}`,
     value: bus._id,
     n_asiento: bus.n_asiento,
+    empresa_asignada: bus.empresa_asignada, 
   }));
 }
 
-
-
-const busOptions = computed(() => mapBuses());
+const routeBuses = computed(() => mapBuses());
 const routeRutas = computed(() => mapRutas());
 
 onMounted(() => {
@@ -208,4 +208,5 @@ onMounted(() => {
   background: linear-gradient(90deg, #1976d2, #1976d2, #1976d2, #1976d2, #50a3f7);
   color: #ffffff;
   width: 100%;
-}</style>
+}
+</style>
