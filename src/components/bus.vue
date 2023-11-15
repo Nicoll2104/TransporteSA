@@ -42,9 +42,9 @@
               </div>
               <br>
               <div class="conten_input">
-                <label for="MODELO">Modelo</label>
+                <label for="NUMERO">Numero</label>
                 <div class="containerInput">
-                  <input placeholder="Modelo" type="text" id="MODELO" v-model="modelo" autocomplete="on">
+                  <input placeholder="Numero" type="number" id="NUMERO" v-model="modelo" autocomplete="on">
                 </div>
               </div>
               <br>
@@ -53,6 +53,13 @@
                 <q-icon name="conductor" />
               </template>
               </q-select>
+              <br>
+              <div class="conten_input">
+                <label for="MODELO">Modelo</label>
+                <div class="containerInput">
+                  <input placeholder="Modelo" type="text" id="MODELO" v-model="modelo" autocomplete="on">
+                </div>
+              </div>
               <br>
               <div class="conten_input">
                 <label for="SOAT">Soat</label>
@@ -104,6 +111,7 @@ const conductorStore = useConductorStore();
 const rows = ref([])
 const modal = ref(false);
 const placa = ref("");
+const numero = ref("");
 const modelo = ref("");
 const modeloBus = ref("");
 const conductor = ref([]);
@@ -119,9 +127,9 @@ const modalAbierto = ref(false);
 
 const columns = [
   { name: "placa", required: true, label: "Placa", align: "center", field: "placa", format: (val) => val, },
-  { name: "modelo", required: true, label: "Modelo", align: "center", field: "modelo", sortable: true },
+  { name: "numero", required: true, label: "Número", align: "center", field: "numero", sortable: true },
   { name: "conductor", required: true, label: "Conductor", align: "center", field: (row) => row.conductor.nombre, sortable: true },
-
+  { name: "modelo", required: true, label: "Modelo", align: "center", field: "modelo", sortable: true },
   {
     name: "soat",
     required: true,
@@ -170,8 +178,9 @@ const agregarEditarBus = async () => {
     const busEditado = {
       _id: busEditando.value._id,
       placa: placa.value,
-      modelo: modelo.value,
+      numero: numero.value,
       conductor: modeloBus.value,
+      modelo: modelo.value,
       soat: soat.value,
       n_asiento: n_asiento.value,
       empresa_asignada: empresa_asignada.value,
@@ -179,8 +188,9 @@ const agregarEditarBus = async () => {
     try {
       await busStore.editarBus(busEditado);
       placa.value = "";
-      modelo.value = "";
+      numero.value = "";
       conductor.value = "";
+      modelo.value = "";
       soat.value = "";
       n_asiento.value = "";
       empresa_asignada.value = "";
@@ -200,8 +210,9 @@ const agregarEditarBus = async () => {
   } else {
     const nuevoBus = {
       placa: placa.value,
-      modelo: modelo.value,
+      numero: numero.value,
       conductor: modeloBus.value,
+      modelo: modelo.value,
       soat: soat.value,
       n_asiento: n_asiento.value,
       empresa_asignada: empresa_asignada.value,
@@ -209,8 +220,9 @@ const agregarEditarBus = async () => {
     try {
       await busStore.agregarBus(nuevoBus);
       placa.value = "";
-      modelo.value = "";
+      numero.value = "";
       conductor.value = "";
+      modelo.value = "";
       soat.value = "";
       n_asiento.value = "";
       empresa_asignada.value = "";
@@ -234,8 +246,9 @@ const agregarEditarBus = async () => {
 
 const editarBus = (bus) => {
   placa.value = bus.placa;
-  modelo.value = bus.modelo;
+  numero.value = bus.numero;
   conductor.value = bus.conductor;
+  modelo.value = bus.modelo;
   soat.value = bus.soat;
   n_asiento.value = bus.n_asiento;
   empresa_asignada.value = bus.empresa_asignada;
@@ -251,8 +264,9 @@ const editarBus = (bus) => {
 
 const limpiar = () => {
   placa.value = "";
-  modelo.value = "";
+  numero.value ="";
   conductor.value = "";
+  modelo.value = "";
   soat.value = "";
   n_asiento.value = "";
   empresa_asignada.value = "";
