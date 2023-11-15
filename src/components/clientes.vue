@@ -7,13 +7,16 @@
 
       <div class="spinner-container" v-if="cargando">
         <q-spinner size="100px" color="primary" />
-        <p class="p-carga" >Cargando...</p>
+        <p class="p-carga">Cargando...</p>
       </div>
 
       <div class="contenedor_TD" v-else>
         <div class="raya"></div>
-        <br>
-        <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br>
+        <br />
+        <div class="agre">
+          <q-btn label="Agregar" color="blue" @click="modal = true" />
+        </div>
+        <br />
         <q-table title="DATOS CLIENTES" :rows="rows" :columns="columns" row-key="cedula">
           <template v-slot:body-cell-status="props">
             <q-td key="status" :props="props">
@@ -40,67 +43,70 @@
                 <div class="conten_input">
                   <label for="CEDULA">Cedula</label>
                   <div class="containerInput">
-                    <input placeholder="Cedula" type="text" id="CEDULA"  v-model="cedula" autocomplete="on">
+                    <input placeholder="Cedula" type="text" id="CEDULA" v-model="cedula" autocomplete="on" />
                   </div>
+                  <span class="error">{{ errorCedula }}</span>
                 </div>
-                <br>
+                <br />
                 <div class="conten_input">
                   <label for="NOMBRE">Nombre</label>
                   <div class="containerInput">
-                    <input placeholder="Nombre" type="text" id="NOMBRE"  v-model="nombre"  autocomplete="on">
+                    <input placeholder="Nombre" type="text" id="NOMBRE" v-model="nombre" autocomplete="on" />
                   </div>
+                  <span class="error">{{ errorNombre }}</span>
                 </div>
-                <br>
+                <br />
                 <div class="conten_input">
                   <label for="TELEFONO">Telefono</label>
                   <div class="containerInput">
-                    <input placeholder="Telefono" type="number" id="TELEFONO"  v-model="telefono" autocomplete="on">
+                    <input placeholder="Telefono" type="number" id="TELEFONO" v-model="telefono" autocomplete="on" />
                   </div>
+                  <span class="error">{{ errorTelefono }}</span>
                 </div>
-                <br>
+                <br />
                 <div class="conten_input">
                   <label for="EMAIL">Gmail</label>
                   <div class="containerInput">
-                    <input placeholder="Gmail" type="email" id="EMAIL"  v-model="email"  autocomplete="on">
+                    <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
                   </div>
+                  <span class="error">{{ errorEmail }}</span>
                 </div>
               </div>
             </q-card-section>
-
             <q-separator />
-
             <q-card-actions align="right">
               <q-btn flat label="Cerrar" class="btnc" @click="limpiar" color="white" v-close-popup />
               <q-btn flat label="Aceptar" class="btna" color="white" @click="agregarEditarCliente" :loading="cargando" />
             </q-card-actions>
           </q-card>
         </q-dialog>
-
       </div>
     </div>
   </div>
 </template>
-    
+
 <script setup>
 import { onMounted, ref } from "vue";
-import { useClienteStore } from '../stores/clientes.js';
-import { useQuasar } from 'quasar'
+import { useClienteStore } from "../stores/clientes.js";
+import { useQuasar } from "quasar";
 
-const clienteStore = useClienteStore()
+const clienteStore = useClienteStore();
 
-const rows = ref([])
+const rows = ref([]);
 const modal = ref(false);
 const cedula = ref("");
 const nombre = ref("");
 const telefono = ref("");
 const email = ref("");
 const clienteEditando = ref(null);
-const $q = useQuasar()
+const $q = useQuasar();
+const errorCedula = ref("");
+const errorNombre = ref("");
+const errorTelefono = ref("");
+const errorEmail = ref("");
 
 const cargando = ref(false);
 const modalAbierto = ref(false);
-
-
 
 const columns = [
   { name: "cedula", required: true, label: "Cédula", align: "center", field: "cedula", sortable: true },
@@ -108,80 +114,87 @@ const columns = [
   { name: "telefono", required: true, label: "Teléfono", align: "center", field: "telefono", sortable: true },
   { name: "email", required: true, label: "Email", align: "center", field: "email", sortable: true },
   { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
-  { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
+  { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones" },
 ];
 
 async function obtenerClientes() {
   try {
     cargando.value = true;
     const clientes = await clienteStore.obtener();
-    console.log('Clientes obtenidos:', clientes);
+    console.log("Clientes obtenidos:", clientes);
     rows.value = clienteStore.datosData;
   } catch (error) {
-    console.error('Error al obtener los clientes:', error);
+    console.error("Error al obtener los clientes:", error);
   } finally {
     cargando.value = false;
   }
 }
 
-
 const agregarEditarCliente = async () => {
   cargando.value = true;
   modalAbierto.value = true;
 
-  if (clienteEditando.value) {
-    const clienteEditado = {
-      _id: clienteEditando.value._id,
-      cedula: cedula.value,
-      nombre: nombre.value,
-      telefono: telefono.value,
-      email: email.value,
-    };
-    try {
-      await clienteStore.editarCliente(clienteEditado);
-      cedula.value = "";
-      nombre.value = "";
-      telefono.value = "";
-      email.value = "";
-      modal.value = false;
-      clienteEditando.value = null;
-      $q.notify({ message: 'Cliente actualizado correctamente', textColor: 'white', type: "positive", color: 'green' });
-      obtenerClientes();
-    } catch (error) {
-      console.error('Error al editar el cliente:', error);
-      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
-    }
-  } else {
-    const nuevoCliente = {
-      cedula: cedula.value,
-      nombre: nombre.value,
-      telefono: telefono.value,
-      email: email.value,
-    };
-    try {
-      await clienteStore.agregarCliente(nuevoCliente);
-      cedula.value = "";
-      nombre.value = "";
-      telefono.value = "";
-      email.value = "";
-      modal.value = false;
-      $q.notify({
-        message: 'Cliente agregado 👍',
-        textColor: 'white',
-        type: "positive",
-        color: 'green',
-      });
-      obtenerClientes();
-      limpiar();
-    } catch (error) {
-      console.error('Error al agregar cliente:', error);
-      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
+  try {
+    errorCedula.value = "";
+    errorNombre.value = "";
+    errorTelefono.value = "";
+    errorEmail.value = "";
+
+    if (!cedula.value) {
+      errorCedula.value = "Por favor, ingresar el número de cédula";
+      clearErrors();
+      return;
     }
 
+    if (!nombre.value) {
+      errorNombre.value = "Por favor, ingrese su nombre";
+      clearErrors();
+      return;
+    }
+
+    if (!telefono.value) {
+      errorTelefono.value = "Por favor, ingresar el número de teléfono";
+      clearErrors();
+      return;
+    }
+
+    if (!email.value) {
+      errorEmail.value = "Por favor, ingresar el correo";
+      clearErrors();
+      return;
+    }
+
+    if (clienteEditando.value) {
+      const clienteEditado = {
+        _id: clienteEditando.value._id,
+        cedula: cedula.value,
+        nombre: nombre.value,
+        telefono: telefono.value,
+        email: email.value,
+      };
+      await clienteStore.editarCliente(clienteEditado);
+      $q.notify({ message: "Cliente actualizado correctamente", textColor: "white", type: "positive", color: "green" });
+      obtenerClientes();
+    } else {
+      const nuevoCliente = {
+        cedula: cedula.value,
+        nombre: nombre.value,
+        telefono: telefono.value,
+        email: email.value,
+      };
+      await clienteStore.agregarCliente(nuevoCliente);
+      $q.notify({ message: "Cliente agregado 👍", textColor: "white", type: "positive", color: "green" });
+      obtenerClientes();
+      limpiar();
+    }
+  } catch (error) {
+    console.error("Error en la función agregarEditarCliente:", error);
+    $q.notify({ type: "negative", color: "negative", message: error.response.data.error.errors[0].msg });
+  } finally {
+    cargando.value = false;
+    modalAbierto.value = false;
   }
-  cargando.value = false;
-  modalAbierto.value = false;
-}
+};
 
 const editarCliente = (cliente) => {
   cedula.value = cliente.cedula;
@@ -192,18 +205,17 @@ const editarCliente = (cliente) => {
   modal.value = true;
   $q.notify({
     message: `Editando al cliente ${cliente.nombre}`,
-    textColor: 'blue',
+    textColor: "blue",
     icon: "edit",
-    color: 'white',
+    color: "white",
   });
-}
-
+};
 
 async function activar(id) {
   try {
     const cliente = await clienteStore.activarCliente(id);
   } catch (error) {
-    console.error('Error al activar cliente:', error);
+    console.error("Error al activar cliente:", error);
   }
   obtenerClientes();
 }
@@ -212,7 +224,7 @@ async function desactivar(id) {
   try {
     const cliente = await clienteStore.desactivarCliente(id);
   } catch (error) {
-    console.error('Error al desactivar cliente:', error);
+    console.error("Error al desactivar cliente:", error);
   }
   obtenerClientes();
 }
@@ -222,17 +234,22 @@ const limpiar = () => {
   nombre.value = "";
   telefono.value = "";
   email.value = "";
+  clearErrors();
 };
 
+const clearErrors = () => {
+  setTimeout(()=>{
+  errorCedula.value = "";
+  errorNombre.value = "";
+  errorTelefono.value = "";
+  errorEmail.value = "";
+},4000);
+};
 
 onMounted(() => {
-  obtenerClientes()
+  obtenerClientes();
 });
-
 </script>
-
-
-
 
 <style scoped>
 .btna {
@@ -361,6 +378,10 @@ h3 {
   background: linear-gradient(90deg,#1976d2,#1976d2,#1976d2,#1976d2,#50a3f7);
   color: #ffffff;
   width: 100%;
+}
+
+.error {
+  color: red;
 }
 </style>
     

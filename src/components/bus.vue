@@ -79,14 +79,11 @@
             </div>
           </div>
           </q-card-section>
-
           <q-separator />
-
           <q-card-actions align="right">
             <q-btn flat label="Cerrar" class="btnc" @click="limpiar" color="white" v-close-popup />
             <q-btn flat label="Aceptar" class="btna" @click="agregarEditarBus" color="white" :loading="cargando" />
           </q-card-actions>
-
         </q-card>
       </q-dialog>
 
@@ -288,8 +285,6 @@ onMounted(() => {
 
 </script>
 
-
-  
 <style scoped>
 .btna {
   background-color: #1976d2;
