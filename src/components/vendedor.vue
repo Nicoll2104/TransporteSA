@@ -505,7 +505,6 @@ h3 {
   margin: 0 auto;
 }
 .containerInput {
-  background-color: #000000;
   border: 1px solid black;
   position: relative;
   border-radius: 5px 5px 5px 5px;
@@ -540,7 +539,7 @@ h3 {
   border: none;
   padding: 12px;
   background-color: #ffffff;
-  outline: 5px solid #0a0a0a;
+
 }
 
 .containerInput > input:focus {
