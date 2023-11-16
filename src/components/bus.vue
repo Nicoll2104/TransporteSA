@@ -87,7 +87,7 @@
         hide-selected
         fill-input
         input-debounce="0"
-        :options="opcionesConductor"
+        :options="opcionesConductorFiltro"
         @filter="filterFn"
         hint="Basic filtering"
         style="width: 250px; padding-bottom: 32px"
@@ -210,19 +210,21 @@ const $q = useQuasar();
 const options = ref([])
 const cargando = ref(false);
 const modalAbierto = ref(false);
+const opcionesConductor = ref([]);
 
+const opcionesConductorFiltro = ref(opcionesConductor.value)
 function filterFn(val, update) {
   console.log(val);
   if (val === "") {
     update(() => {
-      opcionesConductor.value = opcionesConductor.value;
+      opcionesConductorFiltro.value = opcionesConductor.value;
     });
     return;
   }
 
   update(() => {
     const needle = val.toLowerCase();
-    opcionesConductor.value = opcionesConductor.value.filter(
+    opcionesConductorFiltro.value = opcionesConductor.value.filter(
       (v) => {
         console.log("v",v);
         return v.label.toLowerCase().indexOf(needle) > -1}
@@ -252,7 +254,7 @@ async function obtenerBus() {
   }
 }
 
-const opcionesConductor = ref([]);
+
 const conductores = ref([])
 
 async function obtenerConductor() {

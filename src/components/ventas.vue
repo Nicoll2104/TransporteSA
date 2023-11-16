@@ -5,9 +5,13 @@
     </div>
 
     <div class="contenedor_asientos">
-      <img src="https://cdn-icons-png.flaticon.com/512/566/566234.png" alt="">
+      <div v-for="asiento in asientos">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/566/566234.png"
+          alt=""
+        />{{ asiento }}
+      </div>
     </div>
-
     <q-dialog v-model="modal">
       <q-card class="conten_modal">
         <q-card-section class="arri">
@@ -16,24 +20,47 @@
         <q-separator />
         <q-card-section>
           <div class="infoDatos">
-            <q-select color="blue" filled v-model="selecRuta" :options="routeRutas" label="Selecciona una ruta">
+            <q-select
+              color="blue"
+              filled
+              v-model="selecRuta"
+              :options="routeRutas"
+              label="Selecciona una ruta"
+            >
               <template v-slot:prepend>
-                <img src="https://cdn-icons-png.flaticon.com/128/3419/3419596.png" alt=""
-                  style="height: 25px; width: 25px" />
+                <img
+                  src="https://cdn-icons-png.flaticon.com/128/3419/3419596.png"
+                  alt=""
+                  style="height: 25px; width: 25px"
+                />
               </template>
             </q-select>
-            <br>
-            <q-select color="blue" filled v-model="selecBus" :options="routeBuses"  label="Selecciona un bus" >
+            <br />
+            <q-select
+              color="blue"
+              filled
+              v-model="selecBus"
+              :options="routeBuses"
+              label="Selecciona un bus"
+            >
               <template v-slot:prepend>
-                <img src="https://cdn-icons-png.flaticon.com/128/9830/9830523.png" alt=""
-                  style="height: 25px; width: 25px" />
+                <img
+                  src="https://cdn-icons-png.flaticon.com/128/9830/9830523.png"
+                  alt=""
+                  style="height: 25px; width: 25px"
+                />
               </template>
             </q-select>
-            <br>
+            <br />
             <div class="conten_input">
               <label for="FECHA">Fecha de venta</label>
               <div class="containerInput">
-                <input placeholder="Fecha de venta" type="date" id="FECHA" autocomplete="on">
+                <input
+                  placeholder="Fecha de venta"
+                  type="date"
+                  id="FECHA"
+                  autocomplete="on"
+                />
               </div>
             </div>
           </div>
@@ -41,7 +68,13 @@
         <q-separator />
         <q-card-actions align="center">
           <q-btn flat label="Cerrar" class="btnc" color="white" v-close-popup />
-          <q-btn flat label="Aceptar" class="btna" color="white"  />
+          <q-btn
+            flat
+            label="Aceptar"
+            class="btna"
+            color="white"
+            @click="generarListaAsientos()"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -51,8 +84,8 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useRutaStore } from "../stores/ruta.js";
-import { useBusStore } from '../stores/bus.js';
-import { useClienteStore } from '../stores/clientes.js';
+import { useBusStore } from "../stores/bus.js";
+import { useClienteStore } from "../stores/clientes.js";
 
 const busStore = useBusStore();
 const rutaStore = useRutaStore();
@@ -62,29 +95,26 @@ const modal = ref(false);
 const selecRuta = ref(null);
 const selecBus = ref(null);
 const rowsBuses = ref([]);
-const rowsClientes = ref([]);  
-const rowsRutas = ref([]);  
-
+const rowsClientes = ref([]);
+const rowsRutas = ref([]);
 
 async function obtenerInformacion() {
   try {
     await busStore.obtener();
-    console.log('Buses obtenidos:', busStore.datosData);
+    console.log("Buses obtenidos:", busStore.datosData);
     rowsBuses.value = busStore.datosData;
 
     await clienteStore.obtener();
-    console.log('Clientes obtenidos:', clienteStore.datosData);
+    console.log("Clientes obtenidos:", clienteStore.datosData);
     rowsClientes.value = clienteStore.datosData;
 
     await rutaStore.obtener();
-    console.log('Rutas obtenidas:', rutaStore.datosData);
+    console.log("Rutas obtenidas:", rutaStore.datosData);
     rowsRutas.value = rutaStore.datosData;
-
   } catch (error) {
-    console.error('Error al obtener la información:', error);
+    console.error("Error al obtener la información:", error);
   }
 }
-
 
 function mapRutas() {
   return rowsRutas.value.map((ruta) => ({
@@ -94,12 +124,33 @@ function mapRutas() {
 }
 
 function mapBuses() {
+  console.log(rowsBuses.value);
   return rowsBuses.value.busesPopulate.map((bus) => ({
     label: `${bus.empresa_asignada} - ${bus.n_asiento}`,
     value: bus._id,
     n_asiento: bus.n_asiento,
-    empresa_asignada: bus.empresa_asignada, 
+    empresa_asignada: bus.empresa_asignada,
   }));
+}
+
+const asientos = ref([]);
+
+function generarListaAsientos() {
+  console.log(rowsBuses.value);
+  const busSeleccionado = rowsBuses.value.busesPopulate.find(
+    (b) => b._id === selecBus.value.value
+  );
+  console.log("a", busSeleccionado);
+  if (busSeleccionado) {
+    const numeroAsientos = busSeleccionado.n_asiento;
+    console.log(numeroAsientos);
+    const listaAsientos = [];
+    asientos.value = []
+    for (let i = 1; i <= numeroAsientos; i++) {
+      asientos.value.push(Number(i));
+    }
+    // asientos.value = listaAsientos;
+  }
 }
 
 const routeBuses = computed(() => mapBuses());
@@ -108,11 +159,7 @@ const routeRutas = computed(() => mapRutas());
 onMounted(() => {
   obtenerInformacion();
 });
-
 </script>
-
-
-
 
 <style scoped>
 .conten_modal {
@@ -142,7 +189,6 @@ onMounted(() => {
   width: 40px;
   border: 1px solid black;
   border-radius: 5px;
-
 }
 
 .boton_agregar {
@@ -167,7 +213,7 @@ onMounted(() => {
 }
 
 .containerInput::before {
-  content: '';
+  content: "";
   width: 110%;
   aspect-ratio: 1;
   position: absolute;
@@ -175,10 +221,15 @@ onMounted(() => {
   margin: auto;
   animation: rotate6234 2.5s ease-in-out infinite;
   z-index: -1;
-  background-image: conic-gradient(from 0deg at 50% 50%, #073AFF00 0%, rgb(28, 49, 235) 25%, #073AFF00 25%);
+  background-image: conic-gradient(
+    from 0deg at 50% 50%,
+    #073aff00 0%,
+    rgb(28, 49, 235) 25%,
+    #073aff00 25%
+  );
 }
 
-.containerInput>input {
+.containerInput > input {
   width: 100%;
   height: 45px;
   font-size: inherit;
@@ -188,15 +239,15 @@ onMounted(() => {
   outline: 5px solid #0a0a0a;
 }
 
-.containerInput>input:focus {
+.containerInput > input:focus {
   outline: none;
 }
 
-.containerInput>input:not(:placeholder-shown) {
+.containerInput > input:not(:placeholder-shown) {
   outline: none;
 }
 
-.containerInput>input:not(:placeholder-shown):valid {
+.containerInput > input:not(:placeholder-shown):valid {
   outline: 4px solid rgb(0, 81, 255);
   border-radius: 0;
 }
@@ -205,7 +256,14 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   background-color: #f50a0a;
-  background: linear-gradient(90deg, #1976d2, #1976d2, #1976d2, #1976d2, #50a3f7);
+  background: linear-gradient(
+    90deg,
+    #1976d2,
+    #1976d2,
+    #1976d2,
+    #1976d2,
+    #50a3f7
+  );
   color: #ffffff;
   width: 100%;
 }
