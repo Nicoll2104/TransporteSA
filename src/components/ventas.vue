@@ -16,35 +16,35 @@
       <div class="conten_clientes" v-if="mostrarFormularioClientes">
         <div class="infoDatos2">
           <div class="grupo_boton">
-          <q-btn color="primary" label="Agregar clientes" />
-          <q-btn color="primary" label="Buscar clientes " />
+          <q-btn color="primary" label="Agregar clientes" @click="confirmarAgregarCliente"  />
+          <q-btn color="primary" label="Buscar clientes " @click="buscarCliente" />
         </div>
         <p>Numero asiento: {{ asientoSeleccionado }}</p>
           <div class="conten_input">
             <label for="CEDULA">Cedula</label>
             <div class="containerInput">
-              <input placeholder="Cedula" type="text" id="CEDULA" autocomplete="on" />
+              <input placeholder="Cedula" type="text" v-model="cedula" id="CEDULA" autocomplete="on" />
             </div>
           </div>
           <br />
           <div class="conten_input">
             <label for="NOMBRE">Nombre</label>
             <div class="containerInput">
-              <input placeholder="Nombre" type="text" id="NOMBRE" autocomplete="on" />
+              <input placeholder="Nombre" type="text" id="NOMBRE" v-model="nombre" autocomplete="on" />
             </div>
           </div>
           <br />
           <div class="conten_input">
             <label for="TELEFONO">Telefono</label>
             <div class="containerInput">
-              <input placeholder="Telefono" type="number" id="TELEFONO" autocomplete="on" />
+              <input placeholder="Telefono" type="number" id="TELEFONO" v-model="telefono" autocomplete="on" />
             </div>
           </div>
           <br />
           <div class="conten_input">
             <label for="EMAIL">Email</label>
             <div class="containerInput">
-              <input placeholder="Gmail" type="email" id="EMAIL" autocomplete="on" />
+              <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
             </div>
           </div>
           <q-btn color="primary" label="Confirmar" />
@@ -93,6 +93,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { useQuasar } from "quasar";
 import { useRutaStore } from "../stores/ruta.js";
 import { useBusStore } from "../stores/bus.js";
 import { useClienteStore } from "../stores/clientes.js";
@@ -107,6 +108,12 @@ const selecBus = ref(null);
 const rowsBuses = ref([]);
 const rowsClientes = ref([]);
 const rowsRutas = ref([]);
+
+const cedula = ref("");
+const nombre = ref("");
+const telefono = ref("");
+const email = ref("");
+const $q = useQuasar();
 
 const asientoSeleccionado = ref(null);
 
@@ -138,7 +145,6 @@ function mapRutas() {
 }
 
 function mapBuses() {
-  console.log(rowsBuses.value);
   return rowsBuses.value.busesPopulate.map((bus) => ({
     label: `${bus.empresa_asignada} - ${bus.n_asiento}`,
     value: bus._id,
@@ -146,6 +152,45 @@ function mapBuses() {
     empresa_asignada: bus.empresa_asignada,
   }));
 }
+
+const agregarCliente = async () => {
+  try {
+    await clienteStore.agregarCliente({
+      cedula: cedula.value,
+      nombre: nombre.value,
+      telefono: telefono.value,
+      email: email.value,
+    });
+    console.log("Cliente agregado exitosamente");
+    $q.notify({ message: "Cliente agregado 👍", textColor: "white", type: "positive", color: "green" });
+    limpiarCampos();
+  } catch (error) {
+    console.error("Error al agregar el cliente:", error);
+    $q.notify({ type: "negative", color: "negative", message: error.response.data.error.errors[0].msg });
+  }
+};
+
+const buscarCliente = () => {
+  const clienteEncontrado = rowsClientes.value.find(cliente => cliente.cedula === cedula.value || cliente.nombre === nombre.value);
+
+  if (clienteEncontrado) {
+    cedula.value = clienteEncontrado.cedula;
+    nombre.value = clienteEncontrado.nombre;
+    telefono.value = clienteEncontrado.telefono;
+    email.value = clienteEncontrado.email;
+    $q.notify({ message: "Cliente encontrado", textColor: "white", type: "positive", color: "green" });
+  } else {
+    limpiarCampos();
+    $q.notify({ message: "Cliente no encontrado", textColor: "white", type: "negative", color: "red" });
+  }
+};
+
+const limpiarCampos = () => {
+  cedula.value = "";
+  nombre.value = "";
+  telefono.value = "";
+  email.value = "";
+};
 
 const asientos = ref([]);
 
@@ -174,6 +219,10 @@ function mostrarFormulario(asiento) {
   mostrarFormularioClientes.value = true;
 
 }
+
+const confirmarAgregarCliente = () => {
+  agregarCliente();
+};
 
 
 const routeBuses = computed(() => mapBuses());
@@ -230,8 +279,6 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
 }
-
-
 
 .contenedor_asientos {
   display: grid;

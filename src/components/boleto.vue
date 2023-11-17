@@ -118,7 +118,7 @@
 
           <q-card-actions align="center">
             <q-btn flat label="Cerrar" color="primary" @click="limpiar" v-close-popup />
-            <q-btn flat label="Aceptar" color="primary" @click="agregarEditarBoleto" v-close-popup />
+            <q-btn flat label="Aceptar" color="primary" @click="agregarEditarBoleto" />
           </q-card-actions>
         </q-card>
       </q-dialog>
