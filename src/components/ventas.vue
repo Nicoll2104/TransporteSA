@@ -16,10 +16,10 @@
       <div class="conten_clientes" v-if="mostrarFormularioClientes">
         <div class="infoDatos2">
           <div class="grupo_boton">
-          <q-btn color="primary" label="Agregar clientes" @click="confirmarAgregarCliente"  />
-          <q-btn color="primary" label="Buscar clientes " @click="buscarCliente" />
-        </div>
-        <p>Numero asiento: {{ asientoSeleccionado }}</p>
+            <q-btn color="primary" label="Agregar clientes" @click="confirmarAgregarCliente" />
+            <q-btn color="primary" label="Buscar clientes " @click="buscarCliente" />
+          </div>
+          <p>Numero asiento: {{ asientoSeleccionado }}</p>
           <div class="conten_input">
             <label for="CEDULA">Cedula</label>
             <div class="containerInput">
@@ -47,7 +47,7 @@
               <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
             </div>
           </div>
-          <q-btn color="primary" label="Confirmar" />
+          <q-btn color="primary" label="Confirmar" @click="crearticket()" />
         </div>
       </div>
     </div>
@@ -59,14 +59,14 @@
         <q-separator />
         <q-card-section>
           <div class="infoDatos">
-            <q-select color="blue" filled v-model="selecRuta" :options="routeRutas" label="Selecciona una ruta">
+            <q-select color="blue" filled v-model:model-value="ruta" :options="routeRutas" label="Selecciona una ruta">
               <template v-slot:prepend>
                 <img src="https://cdn-icons-png.flaticon.com/128/3419/3419596.png" alt=""
                   style="height: 25px; width: 25px" />
               </template>
             </q-select>
             <br />
-            <q-select color="blue" filled v-model="selecBus" :options="routeBuses" label="Selecciona un bus">
+            <q-select color="blue" filled v-model:model-value="bus" :options="routeBuses" label="Selecciona un bus">
               <template v-slot:prepend>
                 <img src="https://cdn-icons-png.flaticon.com/128/9830/9830523.png" alt=""
                   style="height: 25px; width: 25px" />
@@ -76,7 +76,31 @@
             <div class="conten_input">
               <label for="FECHA">Fecha de venta</label>
               <div class="containerInput">
-                <input placeholder="Fecha de venta" type="date" id="FECHA" autocomplete="on" />
+                <input placeholder="Fecha de venta" type="date"  v-model="fecha_venta" />
+              </div>
+            </div>
+            <div class="conten_input">
+              <label for="FECHA">Hora de venta</label>
+              <div class="containerInput">
+                <input placeholder="Fecha de venta" type="time"  v-model="hora_venta" />
+              </div>
+            </div>
+            <div class="conten_input">
+              <label for="FECHA">Fecha de salida</label>
+              <div class="containerInput">
+                <input placeholder="Fecha de venta" type="date" v-model="fecha_salida" />
+              </div>
+            </div>
+            <div class="conten_input">
+              <label for="FECHA">Hora de salida</label>
+              <div class="containerInput">
+                <input placeholder="Fecha de venta" type="time" v-model="hora_salida" />
+              </div>
+            </div>
+            <div class="conten_input">
+              <label for="FECHA">Precio</label>
+              <div class="containerInput">
+                <input placeholder="Fecha de venta" type="number"  v-model="Precio" />
               </div>
             </div>
           </div>
@@ -97,10 +121,12 @@ import { useQuasar } from "quasar";
 import { useRutaStore } from "../stores/ruta.js";
 import { useBusStore } from "../stores/bus.js";
 import { useClienteStore } from "../stores/clientes.js";
+import {useboletoStore} from '../stores/boleto.js'
 
 const busStore = useBusStore();
 const rutaStore = useRutaStore();
 const clienteStore = useClienteStore();
+const boletoStore = useboletoStore()
 
 const modal = ref(false);
 const selecRuta = ref(null);
@@ -114,6 +140,15 @@ const nombre = ref("");
 const telefono = ref("");
 const email = ref("");
 const $q = useQuasar();
+
+const fecha_venta = ref("")
+const hora_venta = ref("")
+const fecha_salida = ref("")
+const hora_salida = ref("")
+const Precio = ref(0)
+const cliente = ref('')
+const bus = ref('')
+const ruta = ref('')
 
 const asientoSeleccionado = ref(null);
 
@@ -170,10 +205,12 @@ const agregarCliente = async () => {
   }
 };
 
+const idcliente = ref('')
 const buscarCliente = () => {
   const clienteEncontrado = rowsClientes.value.find(cliente => cliente.cedula === cedula.value || cliente.nombre === nombre.value);
 
   if (clienteEncontrado) {
+    idcliente.value = clienteEncontrado._id
     cedula.value = clienteEncontrado.cedula;
     nombre.value = clienteEncontrado.nombre;
     telefono.value = clienteEncontrado.telefono;
@@ -195,9 +232,10 @@ const limpiarCampos = () => {
 const asientos = ref([]);
 
 function generarListaAsientos() {
-  if (selecBus.value !== null && selecBus.value !== undefined) {
+  console.log(fecha_venta);
+  if (bus.value !== null && bus.value !== undefined) {
     const busSeleccionado = rowsBuses.value.busesPopulate.find(
-      (b) => b._id === selecBus.value.value
+      (b) => b._id === bus.value.value
     );
     console.log("a", busSeleccionado);
     if (busSeleccionado) {
@@ -210,6 +248,7 @@ function generarListaAsientos() {
       }
     }
   }
+  modal.value = false
   mostrarContenedorAsientos.value = true;
 }
 
@@ -227,6 +266,31 @@ const confirmarAgregarCliente = () => {
 
 const routeBuses = computed(() => mapBuses());
 const routeRutas = computed(() => mapRutas());
+
+const crearticket = async () => {
+  const nuevoBoleto = {
+    fechas: [{
+      fecha_venta: fecha_venta.value,
+      hora_venta: hora_venta.value,
+      fecha_salida: fecha_salida.value,
+      hora_salida: hora_salida.value,
+    }],
+    Precio: Precio.value,
+    cliente: idcliente.value,
+    bus: bus.value.value,
+    ruta: ruta.value.value,
+    vendedor: "6548481da079b612ec4a9428",
+  };
+  try {
+    console.log("nuevoboleto", nuevoBoleto);
+    await boletoStore.agregarBoleto(nuevoBoleto);
+    cliente.value = "";
+    modal.value = false;
+  } catch (error) {
+    console.error('Error al agregar el boleto:', error);
+  }
+}
+
 
 onMounted(() => {
   obtenerInformacion();
@@ -251,6 +315,7 @@ onMounted(() => {
 .infoDatos {
   width: 50%;
 }
+
 .infoDatos2 {
   width: 100%;
 }
@@ -275,14 +340,14 @@ onMounted(() => {
   }
 }
 
-.grupo_boton{
+.grupo_boton {
   display: flex;
   justify-content: space-between;
 }
 
 .contenedor_asientos {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   border: 1px solid #919191;
   background-color: #bbb8b856;
   border-radius: 10px;
@@ -294,7 +359,7 @@ onMounted(() => {
 .asiento-seleccionado {
   background-color: rgb(255, 0, 0);
   border-radius: 5px;
-  
+
 }
 
 .contenedor_asientos div {

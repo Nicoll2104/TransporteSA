@@ -16,9 +16,10 @@ export const useboletoStore = defineStore("boleto", () => {
         }
     };
 
-    /*  const agregarBoleto = async (nuevoBoleto) => {
+     const agregarBoleto = async (nuevoBoleto) => {
         try {
             const response = await axios.post("boleto/agregar", nuevoBoleto);
+            console.log(response);
             return response.data;
         } catch (error) {
             console.error('Error al agregar el boleto:', error);
@@ -35,7 +36,7 @@ export const useboletoStore = defineStore("boleto", () => {
             console.error('Error al editar boleto:', error);
             throw error;
         }
-    }; */
+    };
 
     /* const activarRuta = async (rutaId) => {
         try {
@@ -62,8 +63,8 @@ export const useboletoStore = defineStore("boleto", () => {
     return {
         datosData,
         obtener,
-    /*   agregarBoleto,
-        editarBoleto, */
+      agregarBoleto,
+        editarBoleto,
     };
 
 });
