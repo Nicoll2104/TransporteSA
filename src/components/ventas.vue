@@ -181,7 +181,7 @@ function mapRutas() {
 
 function mapBuses() {
   return rowsBuses.value.busesPopulate.map((bus) => ({
-    label: `${bus.empresa_asignada} - ${bus.n_asiento}`,
+    label: `${bus.placa} / ${bus.empresa_asignada} - ${bus.numero}`,
     value: bus._id,
     n_asiento: bus.n_asiento,
     empresa_asignada: bus.empresa_asignada,
