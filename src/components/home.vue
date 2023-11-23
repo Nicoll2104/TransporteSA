@@ -7,11 +7,15 @@
       <div class="card"><router-link to="/clientes"><img src="https://cdn-icons-png.flaticon.com/128/3201/3201521.png" style="height: 150px; width: 150px;"> <br> Clientes</router-link></div>
       <div class="card"><router-link to="/ventas"><img src="https://cdn-icons-png.flaticon.com/128/1019/1019607.png" style="height: 150px; width: 150px;"> <br>Ventas</router-link></div>
       <div class="card"><router-link to="/boleto"><img src="https://cdn-icons-png.flaticon.com/128/6030/6030250.png" style="height: 150px; width: 150px;"> <br>Tiquetes</router-link></div>
-      <div class="card"><router-link to="/"><img src="https://cdn-icons-png.flaticon.com/128/1176/1176434.png" style="height: 150px; width: 150px;"> <br> Cerrar sesión</router-link></div>  
+      <div class="card" @click="cerrarSesion"><router-link to="/"><img src="https://cdn-icons-png.flaticon.com/128/1176/1176434.png" style="height: 150px; width: 150px;"> <br> Cerrar sesión</router-link></div>  
     </div>
   </template>
     
-    <script>
+    <script setup>
+    const cerrarSesion = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('vendedor');
+};
   </script>
   
   
