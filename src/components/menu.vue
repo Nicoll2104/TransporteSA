@@ -3,14 +3,18 @@
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
-        <p class="nombreLogo" >TrasporteEDG</p>
+        <p class="nombreLogo">TrasporteEDG</p>
 
         <q-toolbar-title>
-          <q-avatar>
-          </q-avatar>
+          <q-avatar> </q-avatar>
 
-        <div><router-link to="/"> <img src="https://cdn-icons-png.flaticon.com/128/1176/1176434.png" style="height: 35px; width: 35px;"></router-link></div>
-          
+          <div @click="cerrarSesion">
+            <router-link to="/"
+              ><img
+                src="https://cdn-icons-png.flaticon.com/128/1176/1176434.png"
+                style="height: 35px; width: 35px"
+            /></router-link>
+          </div>
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -54,7 +58,8 @@
             ><img
               src="https://cdn-icons-png.flaticon.com/128/0/308.png"
               style="height: 30px; width: 30px"
-            />Buses</router-link>
+            />Buses</router-link
+          >
         </button>
         <button class="btn">
           <router-link to="/clientes"
@@ -90,7 +95,6 @@
             />Tiquetes</router-link
           >
         </button>
-
       </div>
     </q-drawer>
 
@@ -105,8 +109,8 @@
     </q-toolbar>
   </q-layout>
 </template>
-  
-  <script>
+
+<script>
 import { ref } from "vue";
 
 export default {
@@ -118,19 +122,22 @@ export default {
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
+      cerrarSesion() {
+        console.log("Cerrando sesión...");
+        localStorage.removeItem("token");
+        localStorage.removeItem("vendedor");
+      },
     };
   },
 };
 </script>
-
-
 
 <style scoped>
 .perfil {
   display: flex;
   justify-content: center;
 }
-.nombreLogo{
+.nombreLogo {
   position: relative;
   top: 9px;
   color: transparent;
@@ -170,18 +177,18 @@ h1 {
 }
 
 .q-toolbar__title {
-    display: flex;
-    font-size: 21px;
-    font-weight: normal;
-    letter-spacing: 0.01em;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  font-size: 21px;
+  font-weight: normal;
+  letter-spacing: 0.01em;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .q-toolbar {
-    position: relative;
-    padding: 12px;
-    min-height: 50px;
-    width: 100%;
+  position: relative;
+  padding: 12px;
+  min-height: 50px;
+  width: 100%;
 }
 </style>

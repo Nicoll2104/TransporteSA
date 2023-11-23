@@ -12,10 +12,11 @@
   </template>
     
     <script setup>
-    const cerrarSesion = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('vendedor');
-};
+  const cerrarSesion = () => {
+    console.log("Cerrando sesión...");
+    localStorage.removeItem('token');
+    localStorage.removeItem('vendedor');
+  };
   </script>
   
   
