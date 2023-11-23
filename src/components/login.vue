@@ -81,8 +81,9 @@ const acceder = async () => {
     });
 
     console.log("Respuesta del servidor:", res);
-
+    
     localStorage.setItem('token', res.data.token)
+    localStorage.setItem('vendedor', res.data.vendedores._id)
 
     if (res.status == 200) {
       router.push("/home");

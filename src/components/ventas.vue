@@ -279,7 +279,7 @@ const crearticket = async () => {
     cliente: idcliente.value,
     bus: bus.value.value,
     ruta: ruta.value.value,
-    vendedor: "6548481da079b612ec4a9428",
+    vendedor: localStorage.getItem('vendedor'),
     asientos: asientoSeleccionado.value
   };
   try {
