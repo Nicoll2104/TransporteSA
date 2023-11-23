@@ -157,19 +157,38 @@ const dataLoaded = ref(false);
 const columns = [
 { name: "vendedor", required: true, label: "Cedula vendedor", align: "left", field:(row)=> row.vendedor.cedula, sortable: true },
   { name: "vendedor", required: true, label: "Nombre vendedor", align: "left", field:(row)=> row.vendedor.nombre, sortable: true },
-  { name: "fecha_venta", required: true, label: "Fecha_Venta", align: "left", field: (row) => row.fechas[0].fecha_salida, sortable: true },
-  { name: "hora_venta", required: true, label: "Hora_Venta", align: "left", field: (row) => row.fechas[0].hora_venta, sortable: true },
-  { name: "fecha_salida", required: true, label: "Fecha_Salida", align: "left", field: (row) => row.fechas[0].fecha_salida, sortable: true },
-  { name: "hora_salida", required: true, label: "Hora_salida", align: "left", field: (row) => row.fechas[0].hora_salida, sortable: true },
+  { name: "fecha_venta", required: true, label: "Fecha_Venta", align: "left", field: (row) => convertirFecha(row.fechas[0].fecha_salida), sortable: true },
+  { name: "hora_venta", required: true, label: "Hora_Venta", align: "left", field: (row) => (row.fechas[0].hora_venta), sortable: true },
+  { name: "fecha_salida", required: true, label: "Fecha_Salida", align: "left", field: (row) => convertirFecha(row.fechas[0].fecha_salida), sortable: true },
+  { name: "hora_salida", required: true, label: "Hora_salida", align: "left", field: (row) => (row.fechas[0].hora_salida), sortable: true },
   { name: "cliente", required: true, label: "Cedula cliente", align: "left", field: (row)=> row.cliente.cedula, sortable: true },
   { name: "cliente", required: true, label: "Nombre Cliente", align: "left", field: (row)=> row.cliente.nombre, sortable: true },
-  { name: "bus", required: true, label: "Placa", align: "left", field: (row)=> row.bus.placa, sortable: true },
+  { name: "placa", required: true, label: "Placa", align: "left", field: (row)=> row.bus.placa, sortable: true },
   { name: "ruta", required: true, label: "Origen", align: "left", field: (row)=> row.ruta.origen, sortable: true },
   { name: "ruta", required: true, label: "Destino", align: "left", field: (row)=> row.ruta.destino, sortable: true },
-  { name: "bus", required: true, label: "Número de asientos", align: "left", field: (row)=> row.bus.n_asiento, sortable: true },
+  { name: "Número de asientos", required: true, label: "Número de asientos", align: "left", field: (row)=> row.asientos, sortable: true },
   { name: "Precio", required: true, label: "Precio", align: "left", field: "Precio", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
+
+function convertirFecha(cadenaFecha) {
+  const fecha = new Date(cadenaFecha);
+  const año = fecha.getFullYear();
+  const mes = (fecha.getMonth() + 1).toString().padStart(2, "0");
+  const dia = fecha.getDate().toString().padStart(2, "0");
+
+  const fechaFormateada = `${año}/${mes}/${dia}`;
+  return fechaFormateada;
+}
+
+function convertirHora(cadenaFecha) {
+  const fecha = new Date(cadenaFecha);
+  const horas = fecha.getUTCHours().toString().padStart(2, "0");
+  const minutos = fecha.getUTCMinutes().toString().padStart(2, "0");
+
+  const horaFormateada = `${horas}:${minutos}`;
+  return horaFormateada;
+}
 
 const obtenerBoleto = async () => {
   loading.value = true;

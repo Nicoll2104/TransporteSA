@@ -280,6 +280,7 @@ const crearticket = async () => {
     bus: bus.value.value,
     ruta: ruta.value.value,
     vendedor: "6548481da079b612ec4a9428",
+    asientos: asientoSeleccionado.value
   };
   try {
     console.log("nuevoboleto", nuevoBoleto);

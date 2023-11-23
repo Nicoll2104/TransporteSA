@@ -82,6 +82,8 @@ const acceder = async () => {
 
     console.log("Respuesta del servidor:", res);
 
+    localStorage.setItem('token', res.data.token)
+
     if (res.status == 200) {
       router.push("/home");
     }
