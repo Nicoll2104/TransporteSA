@@ -12,12 +12,7 @@
       </div>
       <br />
 
-      <q-table
-        title="DATOS BUSES"
-        :rows="rows"
-        :columns="columns"
-        row-key="cedula"
-      >
+      <q-table title="DATOS BUSES" :rows="rows" :columns="columns" row-key="cedula">
         <template v-slot:body-cell-status="props">
           <q-td key="status" :props="props">
             <span class="color1" v-if="props.row.status == 1">Activo</span>
@@ -26,21 +21,9 @@
         </template>
         <template v-slot:body-cell-acciones="props">
           <q-td key="acciones" :props="props">
-            <q-btn
-              class="btnEditar"
-              icon="edit"
-              color="primary"
-              @click="editarBus(props.row)"
-            ></q-btn>
-            <q-btn
-              class="btnActivar"
-              v-if="props.row.status == 1"
-              @click="desactivar(props.row._id)"
-              >❌</q-btn
-            >
-            <q-btn class="btnActivar" v-else @click="activar(props.row._id)"
-              >✅</q-btn
-            >
+            <q-btn class="btnEditar" icon="edit" color="primary" @click="editarBus(props.row)"></q-btn>
+            <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
+            <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
           </q-td>
         </template>
       </q-table>
@@ -57,105 +40,56 @@
                 <div class="conten_input">
                   <label for="PLACA">Placa</label>
                   <div class="containerInput">
-                    <input
-                      placeholder="Placa"
-                      type="text"
-                      id="PLACA"
-                      v-model="placa"
-                      autocomplete="on"
-                    />
+                    <input placeholder="Placa" type="text" id="PLACA" v-model="placa" autocomplete="on" />
                   </div>
                 </div>
                 <br />
                 <div class="conten_input">
                   <label for="NUMERO">Numero</label>
                   <div class="containerInput">
-                    <input
-                      placeholder="Numero"
-                      type="number"
-                      id="NUMERO"
-                      v-model="numero"
-                      autocomplete="on"
-                    />
+                    <input placeholder="Numero" type="number" id="NUMERO" v-model="numero" autocomplete="on" />
                   </div>
                 </div>
                 <br />
-                <q-select
-        filled
-        v-model:model-value="conductor"
-        use-input
-        hide-selected
-        fill-input
-        input-debounce="0"
-        :options="opcionesConductorFiltro"
-        @filter="filterFn"
-        hint="Basic filtering"
-        style="width: 250px; padding-bottom: 32px"
-      >
-        <template v-slot:no-option>
-          <q-item>
-            <q-item-section class="text-grey">
-              No results
-            </q-item-section>
-          </q-item>
-        </template>
-      </q-select>
-
-                <!--               <q-select color="blue" filled v-model="conductor" :options="opcionesConductor" label="conductor" id="conductor">
-              <template v-slot:prepend>
-                <q-icon name="conductor" />
-              </template>
-              </q-select> -->
+                <q-select class="input" filled v-model:model-value="conductor" use-input hide-selected fill-input input-debounce="0"
+                  :options="opcionesConductorFiltro" @filter="filterFn" 
+                  style="width: 100%; padding-bottom: 32px;">
+                  <template v-slot:no-option>
+                    <q-item>
+                      <q-item-section class="text-grey">
+                        No results
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select>
                 <br />
                 <div class="conten_input">
                   <label for="MODELO">Modelo</label>
                   <div class="containerInput">
-                    <input
-                      placeholder="Modelo"
-                      type="text"
-                      id="MODELO"
-                      v-model="modelo"
-                      autocomplete="on"
-                    />
+                    <input placeholder="Modelo" type="text" id="MODELO" v-model="modelo" autocomplete="on" />
                   </div>
                 </div>
                 <br />
                 <div class="conten_input">
                   <label for="SOAT">Soat</label>
                   <div class="containerInput">
-                    <input
-                      placeholder="Soat"
-                      type="date"
-                      id="SOAT"
-                      v-model="soat"
-                      autocomplete="on"
-                    />
+                    <input placeholder="Soat" type="date" id="SOAT" v-model="soat" autocomplete="on" />
                   </div>
                 </div>
                 <br />
                 <div class="conten_input">
                   <label for="N_ASIENTO">Numero de asientos</label>
                   <div class="containerInput">
-                    <input
-                      placeholder="Numero de asientos"
-                      type="number"
-                      id="N_ASIENTO"
-                      v-model="n_asiento"
-                      autocomplete="on"
-                    />
+                    <input placeholder="Numero de asientos" type="number" id="N_ASIENTO" v-model="n_asiento"
+                      autocomplete="on" />
                   </div>
                 </div>
                 <br />
                 <div class="conten_input">
                   <label for="EMPRESA_ASIGNADA">Empresa asignada </label>
                   <div class="containerInput">
-                    <input
-                      placeholder="Empresa asignada"
-                      type="text"
-                      id="EMPRESA_ASIGNADA"
-                      v-model="empresa_asignada"
-                      autocomplete="on"
-                    />
+                    <input placeholder="Empresa asignada" type="text" id="EMPRESA_ASIGNADA" v-model="empresa_asignada"
+                      autocomplete="on" />
                   </div>
                 </div>
               </div>
@@ -163,22 +97,8 @@
           </q-card-section>
           <q-separator />
           <q-card-actions align="right">
-            <q-btn
-              flat
-              label="Cerrar"
-              class="btnc"
-              @click="limpiar"
-              color="white"
-              v-close-popup
-            />
-            <q-btn
-              flat
-              label="Aceptar"
-              class="btna"
-              @click="agregarEditarBus"
-              color="white"
-              :loading="cargando"
-            />
+            <q-btn flat label="Cerrar" class="btnc" @click="limpiar" color="white" v-close-popup />
+            <q-btn flat label="Aceptar" class="btna" @click="agregarEditarBus" color="white" :loading="cargando" />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -226,22 +146,23 @@ function filterFn(val, update) {
     const needle = val.toLowerCase();
     opcionesConductorFiltro.value = opcionesConductor.value.filter(
       (v) => {
-        console.log("v",v);
-        return v.label.toLowerCase().indexOf(needle) > -1}
+        console.log("v", v);
+        return v.label.toLowerCase().indexOf(needle) > -1
+      }
     );
   });
 }
 
 const columns = [
-  {name: "placa",required: true,label: "Placa",align: "center",field: "placa",format: (val) => val,},
-  {name: "numero",required: true,label: "Número",align: "center",field: "numero",sortable: true,},
-  {name: "conductor",required: true,label: "Conductor",align: "center",field: (row) => row.conductor.nombre,sortable: true,},
-  {name: "modelo",required: true,label: "Modelo",align: "center",field: "modelo",sortable: true,},
-  {name: "soat",required: true,label: "Soat",align: "center",field: "soat",sortable: true,format: (val) => {return format(new Date(val), "yyyy-MM-dd");},},
-  {name: "n_asiento",required: true,label: "Número de asientos",align: "center",field: "n_asiento",sortable: true,},
-  {name: "empresa_asignada",required: true,label: "Empresa_asignada",align: "center",field: "empresa_asignada",sortable: true,},
-  {name: "status",label: "Estado",align: "center",field: "status",sortable: true,},
-  {name: "acciones",required: true,label: "Acciones",align: "center",field: "acciones",},
+  { name: "placa", required: true, label: "Placa", align: "center", field: "placa", format: (val) => val, },
+  { name: "numero", required: true, label: "Número", align: "center", field: "numero", sortable: true, },
+  { name: "conductor", required: true, label: "Conductor", align: "center", field: (row) => row.conductor.nombre, sortable: true, },
+  { name: "modelo", required: true, label: "Modelo", align: "center", field: "modelo", sortable: true, },
+  { name: "soat", required: true, label: "Soat", align: "center", field: "soat", sortable: true, format: (val) => { return format(new Date(val), "yyyy-MM-dd"); }, },
+  { name: "n_asiento", required: true, label: "Número de asientos", align: "center", field: "n_asiento", sortable: true, },
+  { name: "empresa_asignada", required: true, label: "Empresa_asignada", align: "center", field: "empresa_asignada", sortable: true, },
+  { name: "status", label: "Estado", align: "center", field: "status", sortable: true, },
+  { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
 async function obtenerBus() {
@@ -261,7 +182,7 @@ async function obtenerConductor() {
   try {
     const response = await conductorStore.obtener();
     conductores.value = response
-    opcionesConductor.value = response.map((conductor) => {return{label: conductor.nombre, value: conductor._id}});
+    opcionesConductor.value = response.map((conductor) => { return { label: conductor.nombre, value: conductor._id } });
   } catch (error) {
     console.error("Error al obtener los conductores", error);
   }
@@ -272,7 +193,7 @@ obtenerConductor()
 const agregarEditarBus = async () => {
   cargando.value = true;
   modalAbierto.value = true;
-console.log("a",conductor.value);
+  console.log("a", conductor.value);
   if (busEditando.value) {
     const busEditado = {
       _id: busEditando.value._id,
@@ -465,7 +386,8 @@ h3 {
 
 .imagen_formulario {
   background-image: url("../assets/logo.PNG");
-  background-size: cover; /* Esto ajustará la imagen para que quepa en el contenedor */
+  background-size: cover;
+  /* Esto ajustará la imagen para que quepa en el contenedor */
   background-position: center;
   padding: 15px;
 }
@@ -488,6 +410,8 @@ h3 {
   font-size: 15px;
 }
 
+
+
 .containerInput::before {
   content: "";
   width: 110%;
@@ -497,15 +421,13 @@ h3 {
   margin: auto;
   animation: rotate6234 2.5s ease-in-out infinite;
   z-index: -1;
-  background-image: conic-gradient(
-    from 0deg at 50% 50%,
-    #073aff00 0%,
-    rgb(28, 49, 235) 25%,
-    #073aff00 25%
-  );
+  background-image: conic-gradient(from 0deg at 50% 50%,
+      #073aff00 0%,
+      rgb(28, 49, 235) 25%,
+      #073aff00 25%);
 }
 
-.containerInput > input {
+.containerInput>input {
   width: 100%;
   height: 35px;
   font-size: inherit;
@@ -515,15 +437,15 @@ h3 {
   outline: 5px solid #0a0a0a;
 }
 
-.containerInput > input:focus {
+.containerInput>input:focus {
   outline: none;
 }
 
-.containerInput > input:not(:placeholder-shown) {
+.containerInput>input:not(:placeholder-shown) {
   outline: none;
 }
 
-.containerInput > input:not(:placeholder-shown):valid {
+.containerInput>input:not(:placeholder-shown):valid {
   outline: 4px solid rgb(0, 81, 255);
   border-radius: 0;
 }
@@ -544,14 +466,12 @@ h3 {
   align-items: center;
   background-color: #1976d2;
   height: 50px;
-  background: linear-gradient(
-    90deg,
-    #1976d2,
-    #1976d2,
-    #1976d2,
-    #1976d2,
-    #50a3f7
-  );
+  background: linear-gradient(90deg,
+      #1976d2,
+      #1976d2,
+      #1976d2,
+      #1976d2,
+      #50a3f7);
   color: #ffffff;
   width: 100%;
 }

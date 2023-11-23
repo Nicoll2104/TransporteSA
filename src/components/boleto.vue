@@ -50,7 +50,7 @@
           <q-td key="acciones" :props="props">
             <q-btn class="btnEditar" icon="edit" color="primary" @click="editarBoleto(props.row)"></q-btn>
             <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
-            <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
+            <q-btn class="btnEditar" color="white" text-color="black" label="📄" @click="generarPDF(props.row)"/>
           </q-td>
         </template>
 
@@ -130,6 +130,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useboletoStore } from "../stores/boleto.js";
+import { jsPDF } from "jspdf";
 import { useBusStore } from '../stores/bus.js';
 
 const boletoStore = useboletoStore()
@@ -300,11 +301,19 @@ const limpiar = () => {
   fecha.value = "";
 };
 
+function generarPDF(ticket) {
+ 
+ const doc = new jsPDF();
+
+ doc.text(`Información del Ticket`, 20, 10);
+ doc.text(`Nombre cliente: ${ticket.cliente.nombre} Cedula ${ticket.cliente.cedula}`, 20, 20);
+ doc.save(`ticket_${ticket._id}.pdf`);
+}
+
 
 onMounted(() => {
   obtenerBoleto();
 });
-
 </script>
       
 <style scoped>
