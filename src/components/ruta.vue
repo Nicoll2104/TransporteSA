@@ -54,7 +54,7 @@
               <div class="conten_input">
                 <label for="HORARIOS">Horario</label>
                 <div class="containerInput">
-                  <input placeholder="Horario" type="text" id="HORARIOS" v-model="horarios" autocomplete="on">
+                  <input placeholder="Horario" type="time" id="HORARIOS" v-model="horarios" autocomplete="on">
                 </div>
                 <span class="error">{{ errorHorario }}</span>
               </div>
