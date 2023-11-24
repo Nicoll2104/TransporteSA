@@ -301,7 +301,7 @@ const crearticket = async () => {
     cliente.value = "";
     modal.value = false;
   } catch (error) {
-    console.error('Error al agregar el boleto:', error);
+    $q.notify({ type: "negative", color: "negative", message: error.response.data.error.errors[0].msg });
   }
 }
 
