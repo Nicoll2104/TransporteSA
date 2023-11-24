@@ -122,7 +122,7 @@ const columns = [
   { name: "horarios", required: true, label: "Horario", align: "center", field: "horarios", sortable: true },
   { name: "distancia", required: true, label: "Distancia", align: "center", field: "distancia", sortable: true },
   { name: "duracion", required: true, label: "Duracion", align: "center", field: "duracion", sortable: true },
-  { name: "fecha", required: true, label: "Fecha", align: "center", field: "fecha", sortable: true },
+  { name: "fecha", required: true, label: "Fecha", align: "center", field: (row) => convertirFecha(row.fecha), sortable: true },
   { name: "status", label: "Status", align: "center", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
@@ -137,7 +137,15 @@ async function obtenerRuta() {
   }
 }
 
+function convertirFecha(cadenaFecha) {
+  const fecha = new Date(cadenaFecha);
+  const año = fecha.getFullYear();
+  const mes = (fecha.getMonth() + 1).toString().padStart(2, "0");
+  const dia = fecha.getDate().toString().padStart(2, "0");
 
+  const fechaFormateada = `${año}/${mes}/${dia}`;
+  return fechaFormateada;
+}
 
 
 const errorOrigen = ref("");

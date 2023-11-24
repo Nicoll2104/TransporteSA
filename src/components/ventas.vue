@@ -364,8 +364,6 @@ function generarListaAsientos() {
   fecha_venta.value = formattedDate;
   hora_venta.value = formattedTime;
 
-  fecha_salida.value = formattedDate;
-  hora_salida.value = formattedTime;
 
   if (bus.value !== null && bus.value !== undefined) {
     const busSeleccionado = rowsBuses.value.busesPopulate.find(
@@ -429,6 +427,7 @@ const crearticket = async () => {
     await boletoStore.agregarBoleto(nuevoBoleto);
     cliente.value = "";
     modal.value = false;
+    $q.notify({ message: "Boleto de cliente creado", textColor: "white", type: "positive", color: "green" });
   } catch (error) {
     $q.notify({
       type: "negative",
@@ -447,8 +446,6 @@ const limpiarTodo = () => {
 
 onMounted(() => {
   obtenerInformacion();
-  const now = new Date();
-  fecha_salida.value = now.toISOString().split("T")[0];
 });
 </script>
 
