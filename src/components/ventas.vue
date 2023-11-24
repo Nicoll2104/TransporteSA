@@ -6,49 +6,95 @@
 
     <div class="contenedor_info">
       <div class="contenedor_asientos" v-if="mostrarContenedorAsientos">
-        <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">
+        <div
+          v-for="(asiento, index) in asientos"
+          :key="index"
+          @click="mostrarFormulario(asiento)"
+        >
           {{ asiento }}
-          <div :class="{ 'asiento-seleccionado': asientoSeleccionado === asiento }">
-            <img class="icon_img" src="https://cdn-icons-png.flaticon.com/512/566/566234.png" alt="" />
+          <div
+            :class="{ 'asiento-seleccionado': asientoSeleccionado === asiento }"
+          >
+            <img
+              class="icon_img"
+              src="https://cdn-icons-png.flaticon.com/512/566/566234.png"
+              alt=""
+            />
           </div>
         </div>
       </div>
       <div class="conten_clientes" v-if="mostrarFormularioClientes">
         <div class="infoDatos2">
           <div class="grupo_boton">
-            <q-btn color="primary" label="Agregar clientes" @click="confirmarAgregarCliente" />
-            <q-btn color="primary" label="Buscar clientes " @click="buscarCliente" />
+            <q-btn
+              color="primary"
+              label="Agregar clientes"
+              @click="confirmarAgregarCliente"
+            />
+            <q-btn
+              color="primary"
+              label="Buscar clientes "
+              @click="buscarCliente"
+            />
           </div>
           <p>Numero asiento: {{ asientoSeleccionado }}</p>
           <div class="conten_input">
             <label for="CEDULA">Cedula</label>
             <div class="containerInput">
-              <input placeholder="Cedula" type="text" v-model="cedula" id="CEDULA" autocomplete="on" />
+              <input
+                placeholder="Cedula"
+                type="text"
+                v-model="cedula"
+                id="CEDULA"
+                autocomplete="on"
+              />
             </div>
           </div>
           <br />
           <div class="conten_input">
             <label for="NOMBRE">Nombre</label>
             <div class="containerInput">
-              <input placeholder="Nombre" type="text" id="NOMBRE" v-model="nombre" autocomplete="on" />
+              <input
+                placeholder="Nombre"
+                type="text"
+                id="NOMBRE"
+                v-model="nombre"
+                autocomplete="on"
+              />
             </div>
           </div>
           <br />
           <div class="conten_input">
             <label for="TELEFONO">Telefono</label>
             <div class="containerInput">
-              <input placeholder="Telefono" type="number" id="TELEFONO" v-model="telefono" autocomplete="on" />
+              <input
+                placeholder="Telefono"
+                type="number"
+                id="TELEFONO"
+                v-model="telefono"
+                autocomplete="on"
+              />
             </div>
           </div>
           <br />
           <div class="conten_input">
             <label for="EMAIL">Email</label>
             <div class="containerInput">
-              <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
+              <input
+                placeholder="Gmail"
+                type="email"
+                id="EMAIL"
+                v-model="email"
+                autocomplete="on"
+              />
             </div>
           </div>
-          <q-btn color="primary" label="Confirmar" @click="crearticket()" />
-          <q-btn color="primary" label="Limpiar" @click="limpiarTodo" />
+
+          <div class="botones">
+            <q-btn color="primary" label="Confirmar" @click="crearticket()" />
+            <q-btn color="primary" label="Limpiar" @click="limpiarTodo" />
+          </div>
+
         </div>
       </div>
     </div>
@@ -60,44 +106,101 @@
         <q-separator />
         <q-card-section>
           <div class="infoDatos">
-            <q-select color="blue" filled v-model:model-value="ruta" :options="routeRutas" label="Selecciona una ruta">
+            <q-select
+              color="blue"
+              filled
+              v-model:model-value="ruta"
+              :options="routeRutas"
+              label="Selecciona una ruta"
+            >
               <template v-slot:prepend>
-                <img src="https://cdn-icons-png.flaticon.com/128/3419/3419596.png" alt=""
-                  style="height: 25px; width: 25px" />
+                <img
+                  src="https://cdn-icons-png.flaticon.com/128/3419/3419596.png"
+                  alt=""
+                  style="height: 25px; width: 25px"
+                />
               </template>
             </q-select>
             <br />
-            <q-select color="blue" filled v-model:model-value="bus" :options="routeBuses" label="Selecciona un bus">
+            <q-select
+              color="blue"
+              filled
+              v-model:model-value="bus"
+              :options="routeBuses"
+              label="Selecciona un bus"
+            >
               <template v-slot:prepend>
-                <img src="https://cdn-icons-png.flaticon.com/128/9830/9830523.png" alt=""
-                  style="height: 25px; width: 25px" />
+                <img
+                  src="https://cdn-icons-png.flaticon.com/128/9830/9830523.png"
+                  alt=""
+                  style="height: 25px; width: 25px"
+                />
               </template>
             </q-select>
-            <br />
+            
             <div class="conten_input">
-              <label for="FECHA">Fecha de salida</label>
-              <div class="containerInput">
-                <input placeholder="Fecha de venta" type="date" v-model="fecha_salida"  />
-              </div>
-            </div>
-            <div class="conten_input">
-              <label for="FECHA">Hora de salida</label>
-              <div class="containerInput">
-                <input placeholder="Fecha de venta" type="time" v-model="hora_salida" />
-              </div>
-            </div>
-            <div class="conten_input">
-              <label for="FECHA">Precio</label>
-              <div class="containerInput">
-                <input placeholder="Fecha de venta" type="number" v-model="Precio" />
-              </div>
-            </div>
+    <label for="FECHA">Fecha de salida</label>
+    <div class="containerInput">
+      <input
+        placeholder="Fecha de salida"
+        type="date"
+        v-model="fecha_salida"
+        required
+      />
+      
+    </div>
+    <div v-if="!fecha_salida" class="mensaje-error">
+        La fecha de salida es requerida.
+      </div>
+  </div>
+  <br />
+
+  <div class="conten_input">
+    <label for="HORA">Hora de salida</label>
+    <div class="containerInput">
+      <input
+        placeholder="Hora de salida"
+        type="time"
+        v-model="hora_salida"
+        required
+      />
+      
+    </div>
+    <div v-if="!hora_salida" class="mensaje-error">
+        La hora de salida es requerida.
+      </div>
+  </div>
+  <br />
+
+  <div class="conten_input">
+    <label for="PRECIO">Precio</label>
+    <div class="containerInput">
+      <input
+        placeholder="Precio"
+        type="number"
+        v-model="precio"
+        required
+      />
+      
+    </div>
+    <div v-if="!precio" class="mensaje-error">
+        El precio es requerido.
+      </div>
+  </div>
+  <br />
+
           </div>
         </q-card-section>
         <q-separator />
         <q-card-actions align="center">
           <q-btn flat label="Cerrar" class="btnc" color="white" v-close-popup />
-          <q-btn flat label="Aceptar" class="btna" color="white" @click="generarListaAsientos()" />
+          <q-btn
+            flat
+            label="Aceptar"
+            class="btna"
+            color="white"
+            @click="generarListaAsientos()"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -105,17 +208,22 @@
 </template>
 
 <script setup>
+
+
+const precio = ref('');
+
+
 import { ref, onMounted, computed } from "vue";
 import { useQuasar } from "quasar";
 import { useRutaStore } from "../stores/ruta.js";
 import { useBusStore } from "../stores/bus.js";
 import { useClienteStore } from "../stores/clientes.js";
-import { useboletoStore } from '../stores/boleto.js'
+import { useboletoStore } from "../stores/boleto.js";
 
 const busStore = useBusStore();
 const rutaStore = useRutaStore();
 const clienteStore = useClienteStore();
-const boletoStore = useboletoStore()
+const boletoStore = useboletoStore();
 
 const modal = ref(false);
 const selecRuta = ref(null);
@@ -130,20 +238,19 @@ const telefono = ref("");
 const email = ref("");
 const $q = useQuasar();
 
-const fecha_venta = ref("")
-const hora_venta = ref("")
-const fecha_salida = ref('')
-const hora_salida = ref('')
-const Precio = ref(0)
-const cliente = ref('')
-const bus = ref('')
-const ruta = ref('')
+const fecha_venta = ref("");
+const hora_venta = ref("");
+const fecha_salida = ref("");
+const hora_salida = ref("");
+const Precio = ref(0);
+const cliente = ref("");
+const bus = ref("");
+const ruta = ref("");
 
 const asientoSeleccionado = ref(null);
 
 const mostrarContenedorAsientos = ref(false);
 const mostrarFormularioClientes = ref(false);
-
 
 async function obtenerInformacion() {
   try {
@@ -161,6 +268,7 @@ async function obtenerInformacion() {
   }
 }
 
+
 function mapRutas() {
   return rowsRutas.value.map((ruta) => ({
     label: `${ruta.origen} / ${ruta.destino} - ${ruta.distancia}`,
@@ -177,7 +285,7 @@ function mapBuses() {
       empresa_asignada: bus.empresa_asignada,
     }));
   } else {
-    return []; 
+    return [];
   }
 }
 
@@ -191,28 +299,50 @@ const agregarCliente = async () => {
       email: email.value,
     });
     console.log("Cliente agregado exitosamente");
-    $q.notify({ message: "Cliente agregado 👍", textColor: "white", type: "positive", color: "green" });
+    $q.notify({
+      message: "Cliente agregado 👍",
+      textColor: "white",
+      type: "positive",
+      color: "green",
+    });
     limpiarCampos();
   } catch (error) {
     console.error("Error al agregar el cliente:", error);
-    $q.notify({ type: "negative", color: "negative", message: error.response.data.error.errors[0].msg });
+    $q.notify({
+      type: "negative",
+      color: "negative",
+      message: error.response.data.error.errors[0].msg,
+    });
   }
 };
 
-const idcliente = ref('')
+const idcliente = ref("");
 const buscarCliente = () => {
-  const clienteEncontrado = rowsClientes.value.find(cliente => cliente.cedula === cedula.value || cliente.nombre === nombre.value);
+  const clienteEncontrado = rowsClientes.value.find(
+    (cliente) =>
+      cliente.cedula === cedula.value || cliente.nombre === nombre.value
+  );
 
   if (clienteEncontrado) {
-    idcliente.value = clienteEncontrado._id
+    idcliente.value = clienteEncontrado._id;
     cedula.value = clienteEncontrado.cedula;
     nombre.value = clienteEncontrado.nombre;
     telefono.value = clienteEncontrado.telefono;
     email.value = clienteEncontrado.email;
-    $q.notify({ message: "Cliente encontrado", textColor: "white", type: "positive", color: "green" });
+    $q.notify({
+      message: "Cliente encontrado",
+      textColor: "white",
+      type: "positive",
+      color: "green",
+    });
   } else {
     limpiarCampos();
-    $q.notify({ message: "Cliente no encontrado", textColor: "white", type: "negative", color: "red" });
+    $q.notify({
+      message: "Cliente no encontrado",
+      textColor: "white",
+      type: "negative",
+      color: "red",
+    });
   }
 };
 
@@ -228,7 +358,7 @@ const asientos = ref([]);
 function generarListaAsientos() {
   const now = new Date();
 
-  const formattedDate = now.toISOString().split('T')[0];
+  const formattedDate = now.toISOString().split("T")[0];
   const formattedTime = formatAMPM(now);
 
   fecha_venta.value = formattedDate;
@@ -250,50 +380,49 @@ function generarListaAsientos() {
       }
     }
   }
-  modal.value = false
+  modal.value = false;
   mostrarContenedorAsientos.value = true;
 }
 
 function formatAMPM(date) {
   let hours = date.getHours();
   let minutes = date.getMinutes();
-  const ampm = hours >= 12 ? 'PM' : 'AM';
+  const ampm = hours >= 12 ? "PM" : "AM";
   hours = hours % 12;
   hours = hours ? hours : 12;
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-  const strTime = hours + ':' + minutes + ' ' + ampm;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  const strTime = hours + ":" + minutes + " " + ampm;
   return strTime;
 }
-
 
 function mostrarFormulario(asiento) {
   asientoSeleccionado.value = asiento;
   mostrarFormularioClientes.value = true;
-
 }
 
 const confirmarAgregarCliente = () => {
   agregarCliente();
 };
 
-
 const routeBuses = computed(() => mapBuses());
 const routeRutas = computed(() => mapRutas());
 
 const crearticket = async () => {
   const nuevoBoleto = {
-    fechas: [{
-      fecha_venta: fecha_venta.value,
-      hora_venta: hora_venta.value,
-      fecha_salida: fecha_salida.value,
-      hora_salida: hora_salida.value,
-    }],
+    fechas: [
+      {
+        fecha_venta: fecha_venta.value,
+        hora_venta: hora_venta.value,
+        fecha_salida: fecha_salida.value,
+        hora_salida: hora_salida.value,
+      },
+    ],
     Precio: Precio.value,
     cliente: idcliente.value,
     bus: bus.value.value,
     ruta: ruta.value.value,
-    vendedor: localStorage.getItem('vendedor'),
-    asientos: asientoSeleccionado.value
+    vendedor: localStorage.getItem("vendedor"),
+    asientos: asientoSeleccionado.value,
   };
   try {
     console.log("nuevoboleto", nuevoBoleto);
@@ -301,9 +430,13 @@ const crearticket = async () => {
     cliente.value = "";
     modal.value = false;
   } catch (error) {
-    $q.notify({ type: "negative", color: "negative", message: error.response.data.error.errors[0].msg });
+    $q.notify({
+      type: "negative",
+      color: "negative",
+      message: error.response.data.error.errors[0].msg,
+    });
   }
-}
+};
 
 const limpiarTodo = () => {
   cedula.value = "";
@@ -312,12 +445,10 @@ const limpiarTodo = () => {
   email.value = "";
 };
 
-
-
 onMounted(() => {
   obtenerInformacion();
   const now = new Date();
-  fecha_salida.value = now.toISOString().split('T')[0];
+  fecha_salida.value = now.toISOString().split("T")[0];
 });
 </script>
 
@@ -383,7 +514,6 @@ onMounted(() => {
 .asiento-seleccionado {
   background-color: rgb(255, 0, 0);
   border-radius: 5px;
-
 }
 
 .contenedor_asientos div {
@@ -430,13 +560,15 @@ onMounted(() => {
   margin: auto;
   animation: rotate6234 2.5s ease-in-out infinite;
   z-index: -1;
-  background-image: conic-gradient(from 0deg at 50% 50%,
-      #073aff00 0%,
-      rgb(28, 49, 235) 25%,
-      #073aff00 25%);
+  background-image: conic-gradient(
+    from 0deg at 50% 50%,
+    #073aff00 0%,
+    rgb(28, 49, 235) 25%,
+    #073aff00 25%
+  );
 }
 
-.containerInput>input {
+.containerInput > input {
   width: 100%;
   height: 45px;
   font-size: inherit;
@@ -446,15 +578,15 @@ onMounted(() => {
   outline: 5px solid #0a0a0a;
 }
 
-.containerInput>input:focus {
+.containerInput > input:focus {
   outline: none;
 }
 
-.containerInput>input:not(:placeholder-shown) {
+.containerInput > input:not(:placeholder-shown) {
   outline: none;
 }
 
-.containerInput>input:not(:placeholder-shown):valid {
+.containerInput > input:not(:placeholder-shown):valid {
   outline: 4px solid rgb(0, 81, 255);
   border-radius: 0;
 }
@@ -463,13 +595,29 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   background-color: #f50a0a;
-  background: linear-gradient(90deg,
-      #1976d2,
-      #1976d2,
-      #1976d2,
-      #1976d2,
-      #50a3f7);
+  background: linear-gradient(
+    90deg,
+    #1976d2,
+    #1976d2,
+    #1976d2,
+    #1976d2,
+    #50a3f7
+  );
   color: #ffffff;
   width: 100%;
 }
+
+.botones{
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin: 15px;
+}
+
+.mensaje-error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
 </style>
