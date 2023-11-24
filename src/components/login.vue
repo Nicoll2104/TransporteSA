@@ -1,43 +1,23 @@
 <template>
   <div class="container">
     <div class="container2">
-      <div class="logo"><img src="https://static.vecteezy.com/system/resources/thumbnails/007/794/726/small/travel-bus-illustration-logo-on-light-background-free-vector.jpg" alt=""> </div>
-      <p   class="titulo"> Transporte</p>
+      <div class="logo"><img
+          src="https://static.vecteezy.com/system/resources/thumbnails/007/794/726/small/travel-bus-illustration-logo-on-light-background-free-vector.jpg"
+          alt=""> </div>
+      <p class="titulo"> Transporte</p>
       <div class="contenedor_input">
-  <input
-    type="text"
-    name="email"
-    id="email"
-    class="input"
-    placeholder="Nombre de usuario"
-    v-model="usuario"
-    autocomplete="on"
-  />
-  <p class="error-message">{{ errorUsuario }}</p>
-  <input
-    type="password"
-    name="password"
-    id="password"
-    class="input"
-    placeholder="Contraseña"
-    v-model="contrasena"
-    autocomplete="on"
-  />
-  <p class="error-message">{{ errorContrasena }}</p>
-  <br />
-  <q-btn
-    flat
-    class="btn"
-    label="Acceder"
-    type="submit"
-    color="white"
-    @click="acceder"
-    :loading="loading"
-  />
-  <p class="forgotten">
-    Olvidaste tus datos ? <a href="#">ayuda para iniciar sesión.</a>
-  </p>
-</div>
+        <input type="text" name="email" id="email" class="input" placeholder="Nombre de usuario" v-model="usuario"
+          autocomplete="on" />
+        <p class="error-message">{{ errorUsuario }}</p>
+        <input type="password" name="password" id="password" class="input" placeholder="Contraseña" v-model="contrasena"
+          autocomplete="on" />
+        <p class="error-message">{{ errorContrasena }}</p>
+        <br />
+        <q-btn flat class="btn" label="Acceder" type="submit" color="white" @click="acceder" :loading="loading" />
+        <p class="forgotten">
+          Olvidaste tus datos ? <a href="#">ayuda para iniciar sesión.</a>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -81,7 +61,7 @@ const acceder = async () => {
     });
 
     console.log("Respuesta del servidor:", res);
-    
+
     localStorage.setItem('token', res.data.token)
     localStorage.setItem('vendedor', res.data.vendedores._id)
 
@@ -99,9 +79,8 @@ const clearErrors = () => {
   setTimeout(() => {
     errorUsuario.value = "";
     errorContrasena.value = "";
-  }, 4000); 
+  }, 4000);
 };
-
 
 </script>
 
@@ -120,9 +99,9 @@ const clearErrors = () => {
   text-align: center;
   border-radius: 10px;
   background-color: rgba(5, 64, 124, 0.377);
-  border: 1px solid #ccc; 
+  border: 1px solid #ccc;
   box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.568);
-  padding: 20px; 
+  padding: 20px;
 }
 
 .logo img {
@@ -130,21 +109,21 @@ const clearErrors = () => {
   width: 40%;
 }
 
-.error-message{
+.error-message {
   color: red;
 }
 
 .titulo {
   display: grid;
-  font-size: 60px; 
+  font-size: 60px;
   text-align: center;
-  color: #fff; 
+  color: #fff;
   justify-content: center;
 }
 
 .contenedor_input {
   display: grid;
-  gap: 10px; 
+  gap: 10px;
 }
 
 .input {
@@ -191,16 +170,14 @@ const clearErrors = () => {
   border: 0;
   text-transform: uppercase;
   box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
-  clip-path: polygon(
-    0% var(--curve-size),
-    var(--curve-size) 0,
+  clip-path: polygon(0% var(--curve-size),
+      var(--curve-size) 0,
 
-    100% 0,
-    100% calc(100% - var(--curve-size)),
-    calc(100% - var(--curve-size)) 100%,
+      100% 0,
+      100% calc(100% - var(--curve-size)),
+      calc(100% - var(--curve-size)) 100%,
 
-    0 100%
-  );
+      0 100%);
   transition: color 250ms;
 }
 
@@ -236,35 +213,31 @@ const clearErrors = () => {
   background: var(--bg);
   z-index: -1;
   clip-path: polygon(
-    /* Top-left */ var(--border-width)
-      calc(var(--curve-size) + var(--border-width) * 0.5),
-    calc(var(--curve-size) + var(--border-width) * 0.5) var(--border-width),
-    /* top-right */ calc(100% - var(--border-width)) var(--border-width),
-    calc(100% - var(--border-width))
-      calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
-    /* bottom-right 1 */
-      calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5))
-      calc(100% - var(--border-width)),
-    /* bottom-right 2 */ var(--border-width) calc(100% - var(--border-width))
-  );
+      /* Top-left */
+      var(--border-width) calc(var(--curve-size) + var(--border-width) * 0.5),
+      calc(var(--curve-size) + var(--border-width) * 0.5) var(--border-width),
+      /* top-right */
+      calc(100% - var(--border-width)) var(--border-width),
+      calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+      /* bottom-right 1 */
+      calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)),
+      /* bottom-right 2 */
+      var(--border-width) calc(100% - var(--border-width)));
   transition: clip-path 500ms;
 }
 
 .btn:where(:hover, :focus)::after {
   clip-path: polygon(
-    /* Top-left */ calc(100% - var(--border-width))
-      calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
-    calc(100% - var(--border-width)) var(--border-width),
-    /* top-right */ calc(100% - var(--border-width)) var(--border-width),
-    calc(100% - var(--border-width))
-      calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
-    /* bottom-right 1 */
-      calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5))
-      calc(100% - var(--border-width)),
-    /* bottom-right 2 */
-      calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5))
-      calc(100% - var(--border-width))
-  );
+      /* Top-left */
+      calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+      calc(100% - var(--border-width)) var(--border-width),
+      /* top-right */
+      calc(100% - var(--border-width)) var(--border-width),
+      calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+      /* bottom-right 1 */
+      calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)),
+      /* bottom-right 2 */
+      calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)));
   transition: 200ms;
 }
 
@@ -282,9 +255,9 @@ const clearErrors = () => {
   }
 
   .logo img {
-  border-radius: 50%;
-  width: 65%;
-}
+    border-radius: 50%;
+    width: 65%;
+  }
 
   .input {
     padding: 8px;

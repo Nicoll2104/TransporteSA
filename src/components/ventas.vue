@@ -64,29 +64,31 @@
         <q-separator />
         <q-card-section>
           <div class="infoDatos">
+            <label for="">Rutas</label>
             <q-select color="blue" filled v-model:model-value="ruta" :options="routeRutas" label="Selecciona una ruta">
               <template v-slot:prepend>
                 <img src="https://cdn-icons-png.flaticon.com/128/3419/3419596.png" alt=""
                   style="height: 25px; width: 25px" />
               </template>
             </q-select>
-            <br />
+            <span class="error">{{ errorRutas }}</span>
+            <br>
+            <label for="">Buses</label>
             <q-select color="blue" filled v-model:model-value="bus" :options="routeBuses" label="Selecciona un bus">
               <template v-slot:prepend>
                 <img src="https://cdn-icons-png.flaticon.com/128/9830/9830523.png" alt=""
                   style="height: 25px; width: 25px" />
               </template>
             </q-select>
-
+            <span class="error">{{ errorBuses }}</span>
+            <br>
             <div class="conten_input">
               <label for="FECHA">Fecha de salida</label>
               <div class="containerInput">
                 <input placeholder="Fecha de salida" type="date" v-model="fecha_salida" required />
-
               </div>
             </div>
             <br />
-
             <div class="conten_input">
               <label for="HORA">Hora de salida</label>
               <div class="containerInput">
@@ -94,16 +96,13 @@
               </div>
             </div>
             <br />
-
             <div class="conten_input">
               <label for="PRECIO">Precio</label>
               <div class="containerInput">
-                <input placeholder="Precio" type="number" v-model="precio" required />
-
+                <input placeholder="Precio" type="number" v-model="Precio" required />
               </div>
             </div>
             <br />
-
           </div>
         </q-card-section>
         <q-separator />
@@ -119,8 +118,6 @@
 <script setup>
 
 
-const precio = ref('');
-
 
 import { ref, onMounted, computed } from "vue";
 import { useQuasar } from "quasar";
@@ -135,8 +132,6 @@ const clienteStore = useClienteStore();
 const boletoStore = useboletoStore();
 
 const modal = ref(false);
-const selecRuta = ref(null);
-const selecBus = ref(null);
 const rowsBuses = ref([]);
 const rowsClientes = ref([]);
 const rowsRutas = ref([]);
@@ -147,6 +142,8 @@ const telefono = ref("");
 const email = ref("");
 const $q = useQuasar();
 
+
+const asientos = ref([]);
 const fecha_venta = ref("");
 const hora_venta = ref("");
 const fecha_salida = ref("");
@@ -155,6 +152,8 @@ const Precio = ref(0);
 const cliente = ref("");
 const bus = ref("");
 const ruta = ref("");
+const errorRutas = ref("");
+const errorBuses = ref("");
 
 const asientoSeleccionado = ref(null);
 
@@ -167,7 +166,6 @@ async function obtenerInformacion() {
     rowsBuses.value = busStore.datosData;
 
     await clienteStore.obtener();
-    console.log("Clientes obtenidos:", clienteStore.datosData);
     rowsClientes.value = clienteStore.datosData;
 
     await rutaStore.obtener();
@@ -262,34 +260,69 @@ const limpiarCampos = () => {
   email.value = "";
 };
 
-const asientos = ref([]);
+
+const validarCampos = () => {
+  let errores = false;
+
+  if (!ruta.value) {
+    errorRutas.value = "Por favor, selecciona una ruta";
+    ocultarMensajeDeError("errorRutas");
+    errores = true;
+  } else {
+    errorRutas.value = "";
+  }
+
+  if (!bus.value) {
+    errorBuses.value = "Por favor, selecciona un bus";
+    ocultarMensajeDeError("errorBuses");
+    errores = true;
+  } else {
+    errorBuses.value = "";
+  }
+
+  return !errores;
+};
+
+const ocultarMensajeDeError = (campo) => {
+  setTimeout(() => {
+    if (campo === "errorRutas") {
+      errorRutas.value = "";
+      errorBuses.value = "";
+    }
+  }, 4000); 
+};
 
 function generarListaAsientos() {
-  const now = new Date();
+  const camposValidos = validarCampos();
 
-  const formattedDate = now.toISOString().split("T")[0];
-  const formattedTime = formatAMPM(now);
+  if (camposValidos) {
+    const now = new Date();
 
-  fecha_venta.value = formattedDate;
-  hora_venta.value = formattedTime;
+    const formattedDate = now.toISOString().split("T")[0];
+    const formattedTime = formatAMPM(now);
 
+    fecha_venta.value = formattedDate;
+    hora_venta.value = formattedTime;
 
-  if (bus.value !== null && bus.value !== undefined) {
-    const busSeleccionado = rowsBuses.value.busesPopulate.find(
-      (b) => b._id === bus.value.value
-    );
-    if (busSeleccionado) {
-      const numeroAsientos = busSeleccionado.n_asiento;
-      const listaAsientos = [];
-      asientos.value = [];
-      for (let i = 1; i <= numeroAsientos; i++) {
-        asientos.value.push(Number(i));
+    if (bus.value !== null && bus.value !== undefined) {
+      const busSeleccionado = rowsBuses.value.busesPopulate.find(
+        (b) => b._id === bus.value.value
+      );
+      if (busSeleccionado) {
+        const numeroAsientos = busSeleccionado.n_asiento;
+        const listaAsientos = [];
+        asientos.value = [];
+        for (let i = 1; i <= numeroAsientos; i++) {
+          asientos.value.push(Number(i));
+        }
       }
     }
+
+    modal.value = false;
+    mostrarContenedorAsientos.value = true;
   }
-  modal.value = false;
-  mostrarContenedorAsientos.value = true;
 }
+
 
 function formatAMPM(date) {
   let hours = date.getHours();
@@ -381,6 +414,11 @@ onMounted(() => {
   width: 100%;
 }
 
+.error{
+  position: relative;
+  left: 10px;
+  color: #f50a0a;
+}
 .contenedor_info {
   display: flex;
   width: 100%;

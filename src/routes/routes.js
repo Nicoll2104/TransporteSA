@@ -24,10 +24,8 @@ const authGuard = (to, from, next) => {
     console.log(isAuthenticated());
     if (!isAuthenticated()) {
       next({ path: "/" });
-      console.log("h");
     } else {
       next();
-      console.log("a");
     }
   } else {
     next();
