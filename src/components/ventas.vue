@@ -234,8 +234,6 @@ function generarListaAsientos() {
   fecha_venta.value = formattedDate;
   hora_venta.value = formattedTime;
 
-  fecha_salida.value = formattedDate;
-  hora_salida.value = formattedTime;
 
   if (bus.value !== null && bus.value !== undefined) {
     const busSeleccionado = rowsBuses.value.busesPopulate.find(
@@ -316,8 +314,6 @@ const limpiarTodo = () => {
 
 onMounted(() => {
   obtenerInformacion();
-  const now = new Date();
-  fecha_salida.value = now.toISOString().split('T')[0];
 });
 </script>
 
