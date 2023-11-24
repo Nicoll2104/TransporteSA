@@ -6,87 +6,45 @@
 
     <div class="contenedor_info">
       <div class="contenedor_asientos" v-if="mostrarContenedorAsientos">
-        <div
-          v-for="(asiento, index) in asientos"
-          :key="index"
-          @click="mostrarFormulario(asiento)"
-        >
+        <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">
           {{ asiento }}
-          <div
-            :class="{ 'asiento-seleccionado': asientoSeleccionado === asiento }"
-          >
-            <img
-              class="icon_img"
-              src="https://cdn-icons-png.flaticon.com/512/566/566234.png"
-              alt=""
-            />
+          <div :class="{ 'asiento-seleccionado': asientoSeleccionado === asiento }">
+            <img class="icon_img" src="https://cdn-icons-png.flaticon.com/512/566/566234.png" alt="" />
           </div>
         </div>
       </div>
       <div class="conten_clientes" v-if="mostrarFormularioClientes">
         <div class="infoDatos2">
           <div class="grupo_boton">
-            <q-btn
-              color="primary"
-              label="Agregar clientes"
-              @click="confirmarAgregarCliente"
-            />
-            <q-btn
-              color="primary"
-              label="Buscar clientes "
-              @click="buscarCliente"
-            />
+            <q-btn color="primary" label="Agregar clientes" @click="confirmarAgregarCliente" />
+            <q-btn color="primary" label="Buscar clientes " @click="buscarCliente" />
           </div>
           <p>Numero asiento: {{ asientoSeleccionado }}</p>
           <div class="conten_input">
             <label for="CEDULA">Cedula</label>
             <div class="containerInput">
-              <input
-                placeholder="Cedula"
-                type="text"
-                v-model="cedula"
-                id="CEDULA"
-                autocomplete="on"
-              />
+              <input placeholder="Cedula" type="text" v-model="cedula" id="CEDULA" autocomplete="on" />
             </div>
           </div>
           <br />
           <div class="conten_input">
             <label for="NOMBRE">Nombre</label>
             <div class="containerInput">
-              <input
-                placeholder="Nombre"
-                type="text"
-                id="NOMBRE"
-                v-model="nombre"
-                autocomplete="on"
-              />
+              <input placeholder="Nombre" type="text" id="NOMBRE" v-model="nombre" autocomplete="on" />
             </div>
           </div>
           <br />
           <div class="conten_input">
             <label for="TELEFONO">Telefono</label>
             <div class="containerInput">
-              <input
-                placeholder="Telefono"
-                type="number"
-                id="TELEFONO"
-                v-model="telefono"
-                autocomplete="on"
-              />
+              <input placeholder="Telefono" type="number" id="TELEFONO" v-model="telefono" autocomplete="on" />
             </div>
           </div>
           <br />
           <div class="conten_input">
             <label for="EMAIL">Email</label>
             <div class="containerInput">
-              <input
-                placeholder="Gmail"
-                type="email"
-                id="EMAIL"
-                v-model="email"
-                autocomplete="on"
-              />
+              <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
             </div>
           </div>
 
@@ -106,91 +64,52 @@
         <q-separator />
         <q-card-section>
           <div class="infoDatos">
-            <q-select
-              color="blue"
-              filled
-              v-model:model-value="ruta"
-              :options="routeRutas"
-              label="Selecciona una ruta"
-            >
+            <q-select color="blue" filled v-model:model-value="ruta" :options="routeRutas" label="Selecciona una ruta">
               <template v-slot:prepend>
-                <img
-                  src="https://cdn-icons-png.flaticon.com/128/3419/3419596.png"
-                  alt=""
-                  style="height: 25px; width: 25px"
-                />
+                <img src="https://cdn-icons-png.flaticon.com/128/3419/3419596.png" alt=""
+                  style="height: 25px; width: 25px" />
               </template>
             </q-select>
             <br />
-            <q-select
-              color="blue"
-              filled
-              v-model:model-value="bus"
-              :options="routeBuses"
-              label="Selecciona un bus"
-            >
+            <q-select color="blue" filled v-model:model-value="bus" :options="routeBuses" label="Selecciona un bus">
               <template v-slot:prepend>
-                <img
-                  src="https://cdn-icons-png.flaticon.com/128/9830/9830523.png"
-                  alt=""
-                  style="height: 25px; width: 25px"
-                />
+                <img src="https://cdn-icons-png.flaticon.com/128/9830/9830523.png" alt=""
+                  style="height: 25px; width: 25px" />
               </template>
             </q-select>
-            
+
             <div class="conten_input">
-    <label for="FECHA">Fecha de salida</label>
-    <div class="containerInput">
-      <input
-        placeholder="Fecha de salida"
-        type="date"
-        v-model="fecha_salida"
-        required
-      />
-      
-    </div>
-  </div>
-  <br />
+              <label for="FECHA">Fecha de salida</label>
+              <div class="containerInput">
+                <input placeholder="Fecha de salida" type="date" v-model="fecha_salida" required />
 
-  <div class="conten_input">
-    <label for="HORA">Hora de salida</label>
-    <div class="containerInput">
-      <input
-        placeholder="Hora de salida"
-        type="time"
-        v-model="hora_salida"
-        required
-      />
-    </div>
-  </div>
-  <br />
+              </div>
+            </div>
+            <br />
 
-  <div class="conten_input">
-    <label for="PRECIO">Precio</label>
-    <div class="containerInput">
-      <input
-        placeholder="Precio"
-        type="number"
-        v-model="precio"
-        required
-      />
-      
-    </div>
-  </div>
-  <br />
+            <div class="conten_input">
+              <label for="HORA">Hora de salida</label>
+              <div class="containerInput">
+                <input placeholder="Hora de salida" type="time" v-model="hora_salida" required />
+              </div>
+            </div>
+            <br />
+
+            <div class="conten_input">
+              <label for="PRECIO">Precio</label>
+              <div class="containerInput">
+                <input placeholder="Precio" type="number" v-model="precio" required />
+
+              </div>
+            </div>
+            <br />
 
           </div>
         </q-card-section>
         <q-separator />
         <q-card-actions align="center">
           <q-btn flat label="Cerrar" class="btnc" color="white" v-close-popup />
-          <q-btn
-            flat
-            label="Aceptar"
-            class="btna"
-            color="white"
-            @click="generarListaAsientos()"
-          />
+          <q-btn flat label="Aceptar" class="btna" color="white" @click="generarListaAsientos()" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -547,15 +466,13 @@ onMounted(() => {
   margin: auto;
   animation: rotate6234 2.5s ease-in-out infinite;
   z-index: -1;
-  background-image: conic-gradient(
-    from 0deg at 50% 50%,
-    #073aff00 0%,
-    rgb(28, 49, 235) 25%,
-    #073aff00 25%
-  );
+  background-image: conic-gradient(from 0deg at 50% 50%,
+      #073aff00 0%,
+      rgb(28, 49, 235) 25%,
+      #073aff00 25%);
 }
 
-.containerInput > input {
+.containerInput>input {
   width: 100%;
   height: 45px;
   font-size: inherit;
@@ -565,15 +482,15 @@ onMounted(() => {
   outline: 5px solid #0a0a0a;
 }
 
-.containerInput > input:focus {
+.containerInput>input:focus {
   outline: none;
 }
 
-.containerInput > input:not(:placeholder-shown) {
+.containerInput>input:not(:placeholder-shown) {
   outline: none;
 }
 
-.containerInput > input:not(:placeholder-shown):valid {
+.containerInput>input:not(:placeholder-shown):valid {
   outline: 4px solid rgb(0, 81, 255);
   border-radius: 0;
 }
@@ -582,23 +499,21 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   background-color: #f50a0a;
-  background: linear-gradient(
-    90deg,
-    #1976d2,
-    #1976d2,
-    #1976d2,
-    #1976d2,
-    #50a3f7
-  );
+  background: linear-gradient(90deg,
+      #1976d2,
+      #1976d2,
+      #1976d2,
+      #1976d2,
+      #50a3f7);
   color: #ffffff;
   width: 100%;
 }
 
-.botones{
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    margin: 15px;
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin: 15px;
 }
 
 .mensaje-error {
@@ -606,5 +521,4 @@ onMounted(() => {
   font-size: 12px;
   margin-top: 5px;
 }
-
 </style>
