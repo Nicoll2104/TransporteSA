@@ -149,9 +149,6 @@
       />
       
     </div>
-    <div v-if="!fecha_salida" class="mensaje-error">
-        La fecha de salida es requerida.
-      </div>
   </div>
   <br />
 
@@ -164,11 +161,7 @@
         v-model="hora_salida"
         required
       />
-      
     </div>
-    <div v-if="!hora_salida" class="mensaje-error">
-        La hora de salida es requerida.
-      </div>
   </div>
   <br />
 
@@ -183,9 +176,6 @@
       />
       
     </div>
-    <div v-if="!precio" class="mensaje-error">
-        El precio es requerido.
-      </div>
   </div>
   <br />
 
