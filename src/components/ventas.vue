@@ -298,6 +298,7 @@ const crearticket = async () => {
     await boletoStore.agregarBoleto(nuevoBoleto);
     cliente.value = "";
     modal.value = false;
+    $q.notify({ message: "Boleto de cliente creado", textColor: "white", type: "positive", color: "green" });
   } catch (error) {
     $q.notify({ type: "negative", color: "negative", message: error.response.data.error.errors[0].msg });
   }
