@@ -48,6 +48,7 @@
             </div>
           </div>
           <q-btn color="primary" label="Confirmar" @click="crearticket()" />
+          <q-btn color="primary" label="Limpiar" @click="limpiarTodo" />
         </div>
       </div>
     </div>
@@ -74,21 +75,9 @@
             </q-select>
             <br />
             <div class="conten_input">
-              <label for="FECHA">Fecha de venta</label>
-              <div class="containerInput">
-                <input placeholder="Fecha de venta" type="date"  v-model="fecha_venta" />
-              </div>
-            </div>
-            <div class="conten_input">
-              <label for="FECHA">Hora de venta</label>
-              <div class="containerInput">
-                <input placeholder="Fecha de venta" type="time"  v-model="hora_venta" />
-              </div>
-            </div>
-            <div class="conten_input">
               <label for="FECHA">Fecha de salida</label>
               <div class="containerInput">
-                <input placeholder="Fecha de venta" type="date" v-model="fecha_salida" />
+                <input placeholder="Fecha de venta" type="date" v-model="fecha_salida"  />
               </div>
             </div>
             <div class="conten_input">
@@ -100,7 +89,7 @@
             <div class="conten_input">
               <label for="FECHA">Precio</label>
               <div class="containerInput">
-                <input placeholder="Fecha de venta" type="number"  v-model="Precio" />
+                <input placeholder="Fecha de venta" type="number" v-model="Precio" />
               </div>
             </div>
           </div>
@@ -121,7 +110,7 @@ import { useQuasar } from "quasar";
 import { useRutaStore } from "../stores/ruta.js";
 import { useBusStore } from "../stores/bus.js";
 import { useClienteStore } from "../stores/clientes.js";
-import {useboletoStore} from '../stores/boleto.js'
+import { useboletoStore } from '../stores/boleto.js'
 
 const busStore = useBusStore();
 const rutaStore = useRutaStore();
@@ -143,8 +132,8 @@ const $q = useQuasar();
 
 const fecha_venta = ref("")
 const hora_venta = ref("")
-const fecha_salida = ref("")
-const hora_salida = ref("")
+const fecha_salida = ref('')
+const hora_salida = ref('')
 const Precio = ref(0)
 const cliente = ref('')
 const bus = ref('')
@@ -180,13 +169,18 @@ function mapRutas() {
 }
 
 function mapBuses() {
-  return rowsBuses.value.busesPopulate.map((bus) => ({
-    label: `${bus.placa} / ${bus.empresa_asignada} - ${bus.numero}`,
-    value: bus._id,
-    n_asiento: bus.n_asiento,
-    empresa_asignada: bus.empresa_asignada,
-  }));
+  if (rowsBuses.value && Array.isArray(rowsBuses.value.busesPopulate)) {
+    return rowsBuses.value.busesPopulate.map((bus) => ({
+      label: `${bus.placa} / ${bus.empresa_asignada} - ${bus.numero}`,
+      value: bus._id,
+      n_asiento: bus.n_asiento,
+      empresa_asignada: bus.empresa_asignada,
+    }));
+  } else {
+    return []; 
+  }
 }
+
 
 const agregarCliente = async () => {
   try {
@@ -232,15 +226,23 @@ const limpiarCampos = () => {
 const asientos = ref([]);
 
 function generarListaAsientos() {
-  console.log(fecha_venta);
+  const now = new Date();
+
+  const formattedDate = now.toISOString().split('T')[0];
+  const formattedTime = formatAMPM(now);
+
+  fecha_venta.value = formattedDate;
+  hora_venta.value = formattedTime;
+
+  fecha_salida.value = formattedDate;
+  hora_salida.value = formattedTime;
+
   if (bus.value !== null && bus.value !== undefined) {
     const busSeleccionado = rowsBuses.value.busesPopulate.find(
       (b) => b._id === bus.value.value
     );
-    console.log("a", busSeleccionado);
     if (busSeleccionado) {
       const numeroAsientos = busSeleccionado.n_asiento;
-      console.log(numeroAsientos);
       const listaAsientos = [];
       asientos.value = [];
       for (let i = 1; i <= numeroAsientos; i++) {
@@ -250,6 +252,17 @@ function generarListaAsientos() {
   }
   modal.value = false
   mostrarContenedorAsientos.value = true;
+}
+
+function formatAMPM(date) {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  const strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
 }
 
 
@@ -281,7 +294,7 @@ const crearticket = async () => {
     ruta: ruta.value.value,
     vendedor: localStorage.getItem('vendedor'),
     asientos: asientoSeleccionado.value
-  };
+  };$q.notify({ message: "Boleto de cliente agregado", textColor: "white", type: "positive", color: "green" });
   try {
     console.log("nuevoboleto", nuevoBoleto);
     await boletoStore.agregarBoleto(nuevoBoleto);
@@ -292,9 +305,19 @@ const crearticket = async () => {
   }
 }
 
+const limpiarTodo = () => {
+  cedula.value = "";
+  nombre.value = "";
+  telefono.value = "";
+  email.value = "";
+};
+
+
 
 onMounted(() => {
   obtenerInformacion();
+  const now = new Date();
+  fecha_salida.value = now.toISOString().split('T')[0];
 });
 </script>
 

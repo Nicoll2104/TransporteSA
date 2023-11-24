@@ -46,7 +46,7 @@ const dataLoaded = ref(false);
 const columns = [
   { name: "vendedor", required: true, label: "Cedula vendedor", align: "left", field: (row) => row.vendedor.cedula, sortable: true },
   { name: "vendedor", required: true, label: "Nombre vendedor", align: "left", field: (row) => row.vendedor.nombre, sortable: true },
-  { name: "fecha_venta", required: true, label: "Fecha_Venta", align: "left", field: (row) => convertirFecha(row.fechas[0].fecha_salida), sortable: true },
+  { name: "fecha_venta", required: true, label: "Fecha_Venta", align: "left", field: (row) => convertirFecha(row.fechas[0].fecha_venta), sortable: true },
   { name: "hora_venta", required: true, label: "Hora_Venta", align: "left", field: (row) => (row.fechas[0].hora_venta), sortable: true },
   { name: "fecha_salida", required: true, label: "Fecha_Salida", align: "left", field: (row) => convertirFecha(row.fechas[0].fecha_salida), sortable: true },
   { name: "hora_salida", required: true, label: "Hora_salida", align: "left", field: (row) => (row.fechas[0].hora_salida), sortable: true },
@@ -96,7 +96,7 @@ const obtenerBoleto = async () => {
 };
 
 
-function generarPDF() {
+const generarPDF = (registro) => {
   const doc = new jsPDF({
     orientation: 'portrait', 
     unit: 'mm', 
@@ -108,20 +108,20 @@ function generarPDF() {
 
   doc.text(`Boleto de Autobús`, doc.internal.pageSize.getWidth() / 2, 5, { align: 'center' });
   const ticketInfo = [
-    { label: "Cedula vendedor", value: rows.value[0].vendedor.cedula },
-    { label: "Nombre vendedor", value: rows.value[0].vendedor.nombre },
-    { label: "Fecha  Venta", value: convertirFecha(rows.value[0].fechas[0].fecha_salida) },
-    { label: "Horan  Venta", value: rows.value[0].fechas[0].hora_venta },
-    { label: "Fecha  Salida", value: convertirFecha(rows.value[0].fechas[0].fecha_salida) },
-    { label: "Hora   Salida", value: rows.value[0].fechas[0].hora_salida },
+    { label: "Cedula vendedor", value: registro.vendedor.cedula },
+    { label: "Nombre vendedor", value: registro.vendedor.nombre },
+    { label: "Fecha  Venta", value: convertirFecha(registro.fechas[0].fecha_salida) },
+    { label: "Horan  Venta", value: registro.fechas[0].hora_venta },
+    { label: "Fecha  Salida", value: convertirFecha(registro.fechas[0].fecha_salida) },
+    { label: "Hora   Salida", value: registro.fechas[0].hora_salida },
     { type: "line" },
-    { label: "Cedula cliente", value: rows.value[0].cliente.cedula },
-    { label: "Nombre Cliente", value: rows.value[0].cliente.nombre },
-    { label: "Placa", value: rows.value[0].bus.placa },
-    { label: "Origen", value: rows.value[0].ruta.origen },
-    { label: "Destino", value: rows.value[0].ruta.destino },
-    { label: "Número de asiento", value: rows.value[0].asientos },
-    { label: "Precio", value: rows.value[0].Precio },
+    { label: "Cedula cliente", value: registro.cliente.cedula },
+    { label: "Nombre Cliente", value: registro.cliente.nombre },
+    { label: "Placa", value: registro.bus.placa },
+    { label: "Origen", value: registro.ruta.origen },
+    { label: "Destino", value: registro.ruta.destino },
+    { label: "Número de asiento", value: registro.asientos },
+    { label: "Precio", value: registro.Precio },
   ];
 
   let y = 15; 
@@ -136,8 +136,8 @@ function generarPDF() {
     y += (info.type === "line") ? 12 : 6; 
   });
 
-  doc.save(`Boleto_${rows.value[0]._id}.pdf`);
-}
+  doc.save(`Boleto_${registro._id}.pdf`);
+};
 
 
 
