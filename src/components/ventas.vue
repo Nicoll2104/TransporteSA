@@ -294,7 +294,7 @@ const crearticket = async () => {
     ruta: ruta.value.value,
     vendedor: localStorage.getItem('vendedor'),
     asientos: asientoSeleccionado.value
-  };$q.notify({ message: "Boleto de cliente agregado", textColor: "white", type: "positive", color: "green" });
+  };
   try {
     console.log("nuevoboleto", nuevoBoleto);
     await boletoStore.agregarBoleto(nuevoBoleto);
