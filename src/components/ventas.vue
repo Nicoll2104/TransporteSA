@@ -294,14 +294,14 @@ const crearticket = async () => {
     ruta: ruta.value.value,
     vendedor: localStorage.getItem('vendedor'),
     asientos: asientoSeleccionado.value
-  };$q.notify({ message: "Boleto de cliente agregado", textColor: "white", type: "positive", color: "green" });
+  };
   try {
     console.log("nuevoboleto", nuevoBoleto);
     await boletoStore.agregarBoleto(nuevoBoleto);
     cliente.value = "";
     modal.value = false;
   } catch (error) {
-    console.error('Error al agregar el boleto:', error);
+    $q.notify({ type: "negative", color: "negative", message: error.response.data.error.errors[0].msg });
   }
 }
 
