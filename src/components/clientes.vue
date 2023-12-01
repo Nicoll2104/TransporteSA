@@ -122,7 +122,7 @@ async function obtenerClientes() {
     cargando.value = true;
     const clientes = await clienteStore.obtener();
     console.log("Clientes obtenidos:", clientes);
-    rows.value = clienteStore.datosData;
+    rows.value = clienteStore.datosData.reverse();
   } catch (error) {
     console.error("Error al obtener los clientes:", error);
   } finally {
@@ -189,7 +189,17 @@ const agregarEditarCliente = async () => {
     }
   } catch (error) {
     console.error("Error en la función agregarEditarCliente:", error);
-    $q.notify({ type: "negative", color: "negative", message: error.response.data.error.errors[0].msg });
+
+    if (error.response && error.response.data && error.response.data.error && error.response.data.error.errors && error.response.data.error.errors.length > 0) {
+
+      $q.notify({ type: "negative", color: "negative", message: error.response.data.error.errors[0].msg });
+    } else if (error.response && error.response.data && error.response.data.error) {
+      $q.notify({ type: "negative", color: "negative", message: error.response.data.error });
+    } else {
+      $q.notify({ type: "negative", color: "negative", message: "Error en la operación" });
+    }
+
+    console.error("Error en la función de editarCliente:", error);
   } finally {
     cargando.value = false;
     modalAbierto.value = false;
