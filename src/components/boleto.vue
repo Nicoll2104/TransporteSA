@@ -1,8 +1,5 @@
 <template>
   <div class="q-pa-md">
-
-
-
     <div class="cargando">
       <q-spinner-ios v-if="loading" color="primary" size="100px" />
     </div>

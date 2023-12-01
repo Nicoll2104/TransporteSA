@@ -11,12 +11,7 @@
     </div>
     <br /><br />
 
-    <q-table
-      title="DATOS CONDUCTORES"
-      :rows="rows"
-      :columns="columns"
-      row-key="cedula"
-    >
+    <q-table title="DATOS CONDUCTORES" :rows="rows" :columns="columns" row-key="cedula">
       <template v-slot:body-cell-status="props">
         <q-td key="status" :props="props">
           <span class="color1" v-if="props.row.status == 1">Activo</span>
@@ -26,27 +21,15 @@
 
       <template v-slot:body-cell-acciones="props">
         <q-td key="acciones" :props="props">
-          <q-btn
-            class="btnEditar"
-            icon="edit"
-            color="blue"
-            @click="editarConductor(props.row)"
-          ></q-btn>
-          <q-btn
-            class="btnActivar"
-            v-if="props.row.status == 1"
-            @click="desactivar(props.row._id)"
-            >❌</q-btn
-          >
-          <q-btn class="btnActivar" v-else @click="activar(props.row._id)"
-            >✅</q-btn
-          >
+          <q-btn class="btnEditar" icon="edit" color="blue" @click="editarConductor(props.row)"></q-btn>
+          <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
+          <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
         </q-td>
       </template>
     </q-table>
 
 
-    
+
     <q-dialog v-model="modal">
       <q-card class="conten_modal">
         <q-card-section class="arri">
@@ -55,8 +38,8 @@
         <q-separator />
         <q-card-section>
           <div class="imagen_formulario">
-          <div class="infoDatos">
-            <div class="conten_input">
+            <div class="infoDatos">
+              <div class="conten_input">
                 <label for="CEDULA">Cedula</label>
                 <div class="containerInput">
                   <input placeholder="Cedula" type="text" id="CEDULA" v-model="cedula" autocomplete="on">
@@ -75,7 +58,8 @@
               <div class="conten_input">
                 <label for="N_LICENCIA">Numero de licencia</label>
                 <div class="containerInput">
-                  <input placeholder="Numero de licencia" type="text" id="N_LICENCIA" v-model="n_licencia" autocomplete="on">
+                  <input placeholder="Numero de licencia" type="text" id="N_LICENCIA" v-model="n_licencia"
+                    autocomplete="on">
                 </div>
                 <span class="error">{{ errorN_licencia }}</span>
               </div>
@@ -100,22 +84,8 @@
         </q-card-section>
         <q-separator />
         <q-card-actions align="right">
-          <q-btn
-            flat
-            class="btn_A"
-            label="Cerrar"
-            color="white"
-            @click="limpiar"
-            v-close-popup
-          />
-          <q-btn
-            flat
-            class="btn_AC"
-            label="Aceptar"
-            color="white"
-            @click="agregarEditarConductor"
-            :loading="cargando"
-          />
+          <q-btn flat class="btn_A" label="Cerrar" color="white" @click="limpiar" v-close-popup />
+          <q-btn flat class="btn_AC" label="Aceptar" color="white" @click="agregarEditarConductor" :loading="cargando" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -217,7 +187,7 @@ const errorTelefono = ref("");
 
 const agregarEditarConductor = async () => {
 
-if (!cedula.value) {
+  if (!cedula.value) {
     errorCedula.value = "Por favor, ingresa el número de cédula";
     clearErrors();
     console.log("Error de cédula");
@@ -332,13 +302,13 @@ const editarConductor = (conductor) => {
 };
 
 const clearErrors = () => {
-  setTimeout(()=>{
-  errorCedula.value = "";
-  errorNombre.value = "";
-  errorN_licencia.value = "";
-  errorDireccion.value = "";
-  errorTelefono.value = "";
-},4000);
+  setTimeout(() => {
+    errorCedula.value = "";
+    errorNombre.value = "";
+    errorN_licencia.value = "";
+    errorDireccion.value = "";
+    errorTelefono.value = "";
+  }, 4000);
 };
 
 const limpiar = () => {
@@ -377,6 +347,7 @@ onMounted(() => {
 .btn_AC {
   background-color: #1976d2;
 }
+
 .btn_A {
   background-color: rgb(210, 25, 25);
 }
@@ -385,11 +356,11 @@ onMounted(() => {
   margin: 5px;
 }
 
-.color1{
+.color1 {
   color: #51ff00;
 }
 
-.color2{
+.color2 {
   color: #f50a0a;
 }
 
@@ -397,11 +368,13 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end;
 }
+
 .title {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 h3 {
   font-weight: bold;
 }
@@ -418,13 +391,14 @@ h3 {
 }
 
 .q-card__section--vert {
-    padding: 0px;
+  padding: 0px;
 }
 
 
-.imagen_formulario{
+.imagen_formulario {
   background-image: url("../assets/logo.PNG");
-  background-size: cover; /* Esto ajustará la imagen para que quepa en el contenedor */
+  background-size: cover;
+  /* Esto ajustará la imagen para que quepa en el contenedor */
   background-position: center;
   padding: 15px;
 }
@@ -503,23 +477,23 @@ h3 {
   width: 100%;
 }
 
-@media (max-width: 500px){
-  
+@media (max-width: 500px) {
+
   .infoDatos {
     width: 95%;
+  }
+
+  .imagen_formulario {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    padding: 15px;
+  }
+
 }
 
-.imagen_formulario{
-  background-repeat: no-repeat;
-  background-size: contain; 
-  background-position: center;
-  padding: 15px;
-}
-
-}
-.error{
+.error {
   color: red;
 }
-
 </style>
     

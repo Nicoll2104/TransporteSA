@@ -42,18 +42,21 @@
                   <div class="containerInput">
                     <input placeholder="Placa" type="text" id="PLACA" v-model="placa" autocomplete="on" />
                   </div>
+                  <span>{{ errorPlaca }}</span>
                 </div>
                 <br />
                 <div class="conten_input">
-                  <label for="NUMERO">Numero</label>
+                  <label for="NUMERO">Numero de bus</label>
                   <div class="containerInput">
                     <input placeholder="Numero" type="number" id="NUMERO" v-model="numero" autocomplete="on" />
                   </div>
+                  <span>{{ errorNumero }}</span>
                 </div>
                 <br />
+                <label for="">Conductor</label>
                 <q-select class="input" filled v-model:model-value="conductor" use-input hide-selected fill-input input-debounce="0"
                   :options="opcionesConductorFiltro" @filter="filterFn" 
-                  style="width: 100%; padding-bottom: 32px;">
+                  style="width: 100%; border: 1px solid black; border-radius: 5px; height: 1%; background: rgba(255, 255, 255, 0);">
                   <template v-slot:no-option>
                     <q-item>
                       <q-item-section class="text-grey">
@@ -62,12 +65,14 @@
                     </q-item>
                   </template>
                 </q-select>
+                <span>{{ errorConductor }}</span>
                 <br />
                 <div class="conten_input">
                   <label for="MODELO">Modelo</label>
                   <div class="containerInput">
                     <input placeholder="Modelo" type="text" id="MODELO" v-model="modelo" autocomplete="on" />
                   </div>
+                  <span>{{ errorModelo }}</span>
                 </div>
                 <br />
                 <div class="conten_input">
@@ -75,14 +80,16 @@
                   <div class="containerInput">
                     <input placeholder="Soat" type="date" id="SOAT" v-model="soat" autocomplete="on" />
                   </div>
+                  <span>{{ errorSoat }}</span>
                 </div>
                 <br />
                 <div class="conten_input">
-                  <label for="N_ASIENTO">Numero de asientos</label>
+                  <label for="NUMERO DE ASIENTOS">Numero de asientos</label>
                   <div class="containerInput">
                     <input placeholder="Numero de asientos" type="number" id="N_ASIENTO" v-model="n_asiento"
                       autocomplete="on" />
                   </div>
+                  <span>{{ errorAsiento }}</span>
                 </div>
                 <br />
                 <div class="conten_input">
@@ -91,6 +98,7 @@
                     <input placeholder="Empresa asignada" type="text" id="EMPRESA_ASIGNADA" v-model="empresa_asignada"
                       autocomplete="on" />
                   </div>
+                  <span>{{ errorEmpresa }}</span>
                 </div>
               </div>
             </div>
@@ -188,12 +196,113 @@ async function obtenerConductor() {
   }
 }
 
-obtenerConductor()
+const clearErrors = () => {
+  setTimeout(() => {
+    errorPlaca.value = "";
+    errorConductor.value = "";
+    errorNumero.value = "";
+    errorModelo.value = "";
+    errorSoat.value = "";
+    errorAsiento.value = "";
+    errorEmpresa.value = "";
+  }, 4000);
+};
+
+let errorPlaca = ref("");
+let errorNumero = ref("");
+let errorConductor = ref("");
+let errorModelo = ref("");
+let errorSoat = ref("");
+let errorAsiento = ref("");
+let errorEmpresa = ref("");
+
 
 const agregarEditarBus = async () => {
   cargando.value = true;
   modalAbierto.value = true;
-  console.log("a", conductor.value);
+
+  if (!placa.value.trim()) {
+    errorPlaca.value = "Por favor, ingresar la placa del bus";
+    cargando.value = false;
+    clearErrors();
+    return;
+  } else {
+    errorPlaca.value = "";
+  }
+
+
+  if (!numero.value) {
+    errorNumero.value = "Por favor, ingresar el número del bus";
+    cargando.value = false;
+    clearErrors();
+    return;
+  } else {
+    errorNumero.value = "";
+  }
+
+  if (!conductor.value) {
+    errorConductor.value = "Por favor, seleccionar un conductor para el bus";
+    cargando.value = false;
+    clearErrors();
+    return;
+  } else {
+    errorConductor.value = "";
+  }
+
+  if (!modelo.value.trim()) {
+    errorModelo.value = "Por favor, ingresar un modelo para el bus";
+    cargando.value = false;
+    clearErrors();
+    return;
+  } else {
+    errorModelo.value = "";
+  }
+
+  if (!soat.value) {
+    errorSoat.value = "Por favor, ingresar un SOAT";
+    cargando.value = false;
+    clearErrors();
+    return;
+  } else {
+    errorSoat.value = "";
+  }
+
+  const fechaActual = new Date();
+  const fechaSeleccionada = new Date(soat.value);
+
+  if (fechaSeleccionada < fechaActual) {
+    errorSoat.value = "La fecha no puede ser menor que la actual";
+    cargando.value = false;
+    clearErrors();
+    return;
+  } else {
+    errorSoat.value = "";
+  }
+
+  if (!n_asiento.value) {
+    errorAsiento.value = "Por favor, ingresar el número de asientos del bus";
+    cargando.value = false;
+    clearErrors();
+    return;
+  } else if (n_asiento.value<= 0) {
+    errorAsiento.value = "El número de asientos debe ser mayor que 0";
+    cargando.value = false;
+    clearErrors();
+    return;
+  } else {
+    errorAsiento.value = "";
+  }
+  
+
+  if (!empresa_asignada.value.trim()) {
+    errorEmpresa.value = "Por favor, ingresar la empresa asignada del bus";
+    cargando.value = false;
+    clearErrors();
+    return;
+  } else {
+    errorEmpresa.value = "";
+  }
+  
   if (busEditando.value) {
     const busEditado = {
       _id: busEditando.value._id,
@@ -205,8 +314,6 @@ const agregarEditarBus = async () => {
       n_asiento: n_asiento.value,
       empresa_asignada: empresa_asignada.value,
     };
-
-    console.log("data", busEditado.value);
     try {
       await busStore.editarBus(busEditado);
       placa.value = "";
@@ -234,7 +341,6 @@ const agregarEditarBus = async () => {
       });
     }
   } else {
-    console.log("con", conductor.value);
     const nuevoBus = {
       placa: placa.value,
       numero: numero.value,
@@ -244,8 +350,6 @@ const agregarEditarBus = async () => {
       n_asiento: n_asiento.value,
       empresa_asignada: empresa_asignada.value,
     };
-
-    console.log(nuevoBus);
     try {
       await busStore.agregarBus(nuevoBus);
       placa.value = "";
@@ -348,6 +452,10 @@ onMounted(() => {
 
 .color2 {
   color: #f50a0a;
+}
+
+span{
+  color: red;
 }
 
 .btnEditar {
