@@ -49,6 +49,7 @@ const columns = [
   { name: "hora_salida", required: true, label: "Hora_salida", align: "left", field: (row) => (row.fechas[0].hora_salida), sortable: true },
   { name: "cliente", required: true, label: "Cedula cliente", align: "left", field: (row) => row.cliente.cedula, sortable: true },
   { name: "cliente", required: true, label: "Nombre Cliente", align: "left", field: (row) => row.cliente.nombre, sortable: true },
+  { name: "conductor", required: true, label:"Conductor",align: "left", field: (row)=> row.conductor.nombre, sortable: true},
   { name: "placa", required: true, label: "Placa", align: "left", field: (row) => row.bus.placa, sortable: true },
   { name: "ruta", required: true, label: "Origen", align: "left", field: (row) => row.ruta.origen, sortable: true },
   { name: "ruta", required: true, label: "Destino", align: "left", field: (row) => row.ruta.destino, sortable: true },
@@ -114,6 +115,7 @@ const generarPDF = (registro) => {
     { type: "line" },
     { label: "Cedula cliente", value: registro.cliente.cedula },
     { label: "Nombre Cliente", value: registro.cliente.nombre },
+    {label: "Conductor", value: registro.conductor.nombre},
     { label: "Placa", value: registro.bus.placa },
     { label: "Origen", value: registro.ruta.origen },
     { label: "Destino", value: registro.ruta.destino },
@@ -135,9 +137,6 @@ const generarPDF = (registro) => {
 
   doc.save(`Boleto_${registro._id}.pdf`);
 };
-
-
-
 
 onMounted(() => {
   obtenerBoleto();
