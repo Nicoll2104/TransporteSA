@@ -132,7 +132,7 @@ const columns = [
   {
     name: "n_licencia",
     required: true,
-    label: "N_licencia",
+    label: "Numero de licencia",
     align: "center",
     field: "n_licencia",
     sortable: true,
@@ -155,7 +155,7 @@ const columns = [
   },
   {
     name: "status",
-    label: "Status",
+    label: "Estado",
     align: "center",
     field: "status",
     sortable: true,

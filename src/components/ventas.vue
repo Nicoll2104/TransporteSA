@@ -9,7 +9,7 @@
         <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">
           {{ asiento }}
           <div :class="{ 'asiento-seleccionado': asientoSeleccionado === asiento }">
-            <img class="icon_img" src="https://cdn-icons-png.flaticon.com/512/566/566234.png" alt="" />
+            <img class="icon_img" src="../assets/ii.png" alt="" />
           </div>
         </div>
       </div>
@@ -19,7 +19,10 @@
             <q-btn color="primary" label="Agregar clientes" @click="confirmarAgregarCliente" />
             <q-btn color="primary" label="Buscar clientes " @click="buscarCliente" />
           </div>
-          <p>Numero asiento: {{ asientoSeleccionado }}</p>
+          <div class="numero-con">
+          <h4>Numero asiento:</h4>
+          <p class="numero" >{{ asientoSeleccionado }}</p>
+        </div>
           <div class="conten_input">
             <label for="CEDULA">Cedula</label>
             <div class="containerInput">
@@ -47,12 +50,17 @@
               <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
             </div>
           </div>
-
+          <br>
+          <div class="conten_input">
+              <label for="PRECIO">Precio</label>
+              <div class="containerInput">
+                <input placeholder="Precio" type="number" v-model="Precio" required />
+              </div>
+            </div>
           <div class="botones">
             <q-btn color="primary" label="Confirmar" @click="crearticket()" />
             <q-btn color="primary" label="Limpiar" @click="limpiarTodo" />
           </div>
-
         </div>
       </div>
     </div>
@@ -86,20 +94,6 @@
               <label for="FECHA">Fecha de salida</label>
               <div class="containerInput">
                 <input placeholder="Fecha de salida" type="date" v-model="fecha_salida" required />
-              </div>
-            </div>
-            <br />
-            <div class="conten_input">
-              <label for="HORA">Hora de salida</label>
-              <div class="containerInput">
-                <input placeholder="Hora de salida" type="time" v-model="hora_salida" required />
-              </div>
-            </div>
-            <br />
-            <div class="conten_input">
-              <label for="PRECIO">Precio</label>
-              <div class="containerInput">
-                <input placeholder="Precio" type="number" v-model="Precio" required />
               </div>
             </div>
             <br />
@@ -147,8 +141,7 @@ const asientos = ref([]);
 const fecha_venta = ref("");
 const hora_venta = ref("");
 const fecha_salida = ref("");
-const hora_salida = ref("");
-const Precio = ref(0);
+const Precio = ref("");
 const cliente = ref("");
 const bus = ref("");
 const ruta = ref("");
@@ -178,7 +171,7 @@ async function obtenerInformacion() {
 
 function mapRutas() {
   return rowsRutas.value.map((ruta) => ({
-    label: `${ruta.origen} / ${ruta.destino} - ${ruta.distancia}`,
+    label: `${ruta.origen} / ${ruta.destino} - ${ruta.horarios}`,
     value: ruta._id,
   }));
 }
@@ -258,6 +251,7 @@ const limpiarCampos = () => {
   nombre.value = "";
   telefono.value = "";
   email.value = "";
+  Precio.value = "";
 };
 
 
@@ -354,7 +348,6 @@ const crearticket = async () => {
         fecha_venta: fecha_venta.value,
         hora_venta: hora_venta.value,
         fecha_salida: fecha_salida.value,
-        hora_salida: hora_salida.value,
       },
     ],
     Precio: Precio.value,
@@ -384,6 +377,7 @@ const limpiarTodo = () => {
   nombre.value = "";
   telefono.value = "";
   email.value = "";
+  Precio.value = ""
 };
 
 onMounted(() => {
@@ -408,6 +402,15 @@ onMounted(() => {
 
 .infoDatos {
   width: 50%;
+}
+
+.numero{
+  font-size: 55px;
+}
+
+.numero-con{
+  display: flex;
+  align-items: baseline;
 }
 
 .infoDatos2 {
