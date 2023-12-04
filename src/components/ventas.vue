@@ -9,7 +9,7 @@
         <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">
           {{ asiento }}
           <div :class="{ 'asiento-seleccionado': asientoSeleccionado === asiento }">
-            <img class="icon_img" src="../assets/ii.png" alt="" />
+            <img class="icon_img" src="https://cdn-icons-png.flaticon.com/512/566/566234.png" alt="" />
           </div>
         </div>
       </div>
@@ -50,17 +50,12 @@
               <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
             </div>
           </div>
-          <br>
-          <div class="conten_input">
-              <label for="PRECIO">Precio</label>
-              <div class="containerInput">
-                <input placeholder="Precio" type="number" v-model="Precio" required />
-              </div>
-            </div>
+
           <div class="botones">
             <q-btn color="primary" label="Confirmar" @click="crearticket()" />
             <q-btn color="primary" label="Limpiar" @click="limpiarTodo" />
           </div>
+
         </div>
       </div>
     </div>
@@ -93,8 +88,16 @@
             <div class="conten_input">
               <label for="FECHA">Fecha de salida</label>
               <div class="containerInput">
-                <input placeholder="Fecha de salida" type="date" v-model="fecha_salida" required />
+                <input placeholder="Fecha de salida" type="date" id="FECHA" v-model="fecha_salida" required />
               </div>
+            </div>
+            <br />
+            <div class="conten_input">
+              <label for="PRECIO">Precio</label>
+              <div class="containerInput">
+                <input placeholder="Precio" type="number" id="PRECIO" v-model="Precio" required />
+              </div>
+              <span class="error">{{ errorPrecio }}</span>
             </div>
             <br />
           </div>
@@ -110,9 +113,6 @@
 </template>
 
 <script setup>
-
-
-
 import { ref, onMounted, computed } from "vue";
 import { useQuasar } from "quasar";
 import { useRutaStore } from "../stores/ruta.js";
@@ -134,19 +134,21 @@ const cedula = ref("");
 const nombre = ref("");
 const telefono = ref("");
 const email = ref("");
+const idcliente = ref("");
 const $q = useQuasar();
 
 
-const asientos = ref([]);
-const fecha_venta = ref("");
-const hora_venta = ref("");
-const fecha_salida = ref("");
-const Precio = ref("");
-const cliente = ref("");
-const bus = ref("");
-const ruta = ref("");
-const errorRutas = ref("");
-const errorBuses = ref("");
+let asientos = ref([]);
+let fecha_venta = ref("");
+let hora_venta = ref("");
+let fecha_salida = ref("");
+let Precio = ref("");
+let cliente = ref("");
+let bus = ref("");
+let ruta = ref("");
+let errorRutas = ref("");
+let errorBuses = ref("");
+let errorPrecio = ref("");
 
 const asientoSeleccionado = ref(null);
 
@@ -160,7 +162,7 @@ async function obtenerInformacion() {
 
     await clienteStore.obtener();
     rowsClientes.value = clienteStore.datosData;
-
+    
     await rutaStore.obtener();
     rowsRutas.value = rutaStore.datosData;
   } catch (error) {
@@ -216,7 +218,6 @@ const agregarCliente = async () => {
   }
 };
 
-const idcliente = ref("");
 const buscarCliente = () => {
   const clienteEncontrado = rowsClientes.value.find(
     (cliente) =>
@@ -246,14 +247,6 @@ const buscarCliente = () => {
   }
 };
 
-const limpiarCampos = () => {
-  cedula.value = "";
-  nombre.value = "";
-  telefono.value = "";
-  email.value = "";
-  Precio.value = "";
-};
-
 
 const validarCampos = () => {
   let errores = false;
@@ -274,6 +267,15 @@ const validarCampos = () => {
     errorBuses.value = "";
   }
 
+  if (Precio.value <= 0) {
+    errorPrecio.value = "Por favor, ingrese un precio válido mayor que 0";
+    ocultarMensajeDeError("errorPrecio");
+    errores = true;
+} else {
+    errorPrecio.value = "";
+}
+
+
   return !errores;
 };
 
@@ -282,8 +284,9 @@ const ocultarMensajeDeError = (campo) => {
     if (campo === "errorRutas") {
       errorRutas.value = "";
       errorBuses.value = "";
+      errorPrecio.value = "";
     }
-  }, 4000); 
+  }, 4000);
 };
 
 function generarListaAsientos() {
@@ -291,12 +294,10 @@ function generarListaAsientos() {
 
   if (camposValidos) {
     const now = new Date();
-
-    const formattedDate = now.toISOString().split("T")[0];
-    const formattedTime = formatAMPM(now);
-
-    fecha_venta.value = formattedDate;
-    hora_venta.value = formattedTime;
+  const formattedDate = now.toISOString().split("T")[0];
+  const formattedTime = formatAMPM(now);
+  fecha_venta.value = formattedDate;
+  hora_venta.value = formattedTime;
 
     if (bus.value !== null && bus.value !== undefined) {
       const busSeleccionado = rowsBuses.value.busesPopulate.find(
@@ -311,12 +312,10 @@ function generarListaAsientos() {
         }
       }
     }
-
     modal.value = false;
     mostrarContenedorAsientos.value = true;
   }
 }
-
 
 function formatAMPM(date) {
   let hours = date.getHours();
@@ -333,13 +332,6 @@ function mostrarFormulario(asiento) {
   asientoSeleccionado.value = asiento;
   mostrarFormularioClientes.value = true;
 }
-
-const confirmarAgregarCliente = () => {
-  agregarCliente();
-};
-
-const routeBuses = computed(() => mapBuses());
-const routeRutas = computed(() => mapRutas());
 
 const crearticket = async () => {
   const nuevoBoleto = {
@@ -377,10 +369,33 @@ const limpiarTodo = () => {
   nombre.value = "";
   telefono.value = "";
   email.value = "";
-  Precio.value = ""
 };
 
+const limpiarCampos = () => {
+  cedula.value = "";
+  nombre.value = "";
+  telefono.value = "";
+  email.value = "";
+};
+
+const confirmarAgregarCliente = () => {
+  agregarCliente();
+};
+
+const routeBuses = computed(() => mapBuses());
+const routeRutas = computed(() => mapRutas());
+
 onMounted(() => {
+  const today = new Date();
+  const year = today.getFullYear(); 
+  let month = today.getMonth() + 1; 
+  let day = today.getDate(); 
+
+
+  month = month < 10 ? `0${month}` : month;
+  day = day < 10 ? `0${day}` : day;
+
+  fecha_salida.value = `${year}-${month}-${day}`;
   obtenerInformacion();
 });
 </script>
@@ -404,24 +419,16 @@ onMounted(() => {
   width: 50%;
 }
 
-.numero{
-  font-size: 55px;
-}
-
-.numero-con{
-  display: flex;
-  align-items: baseline;
-}
-
 .infoDatos2 {
   width: 100%;
 }
 
-.error{
+.error {
   position: relative;
   left: 10px;
   color: #f50a0a;
 }
+
 .contenedor_info {
   display: flex;
   width: 100%;
@@ -555,6 +562,15 @@ onMounted(() => {
   justify-content: center;
   gap: 25px;
   margin: 15px;
+}
+
+.numero{
+  font-size: 55px;
+}
+
+.numero-con{
+  display: flex;
+  align-items: baseline;
 }
 
 .mensaje-error {

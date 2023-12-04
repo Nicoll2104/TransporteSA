@@ -189,8 +189,9 @@ const conductores = ref([])
 async function obtenerConductor() {
   try {
     const response = await conductorStore.obtener();
-    conductores.value = response
-    opcionesConductor.value = response.map((conductor) => { return { label: conductor.nombre, value: conductor._id } });
+    const conductoresActivos = response.filter((conductor) => conductor.status === 1);
+    conductores.value = conductoresActivos;
+    opcionesConductor.value = conductoresActivos.map((conductor) => ({ label: conductor.nombre, value: conductor._id }));
   } catch (error) {
     console.error("Error al obtener los conductores", error);
   }
