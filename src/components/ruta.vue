@@ -123,7 +123,7 @@ const columns = [
   { name: "distancia", required: true, label: "Distancia", align: "center", field: "distancia", sortable: true },
   { name: "duracion", required: true, label: "Duracion", align: "center", field: "duracion", sortable: true },
   { name: "fecha", required: true, label: "Fecha", align: "center", field: (row) => convertirFecha(row.fecha), sortable: true },
-  { name: "status", label: "Status", align: "center", field: "status", sortable: true },
+  { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
