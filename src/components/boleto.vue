@@ -84,7 +84,7 @@ const obtenerBoleto = async () => {
     dataLoaded.value = true;
     console.log(response);
     if (response && response.boletoPopulate) {
-      rows.value = response.boletoPopulate;
+      rows.value = response.boletoPopulate.reverse();
     }
   } catch (error) {
     console.error('Error al obtener los boletos:', error);
