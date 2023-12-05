@@ -184,7 +184,6 @@ const agregarEditarRuta = async () => {
       horarios: horarios.value,
       distancia: distancia.value,
       duracion: duracion.value,
-      fecha: fecha.value.split('T')[0],
     };
     try {
       await rutaStore.editarRuta(rutaEditado);
