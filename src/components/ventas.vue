@@ -6,9 +6,10 @@
 
     <div class="contenedor_info">
       <div class="contenedor_asientos" v-if="mostrarContenedorAsientos">
-        <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">{{ asiento }}
+        <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">
+          {{ asiento }}
           <div :class="{ 'asiento-seleccionado': asientoSeleccionado === asiento }">
-            <img  class="icon_img" src="../assets/ii.png" alt="" :class="{ 'asiento-vendido': esAsientoVendido(asiento) }" />
+            <img class="icon_img" src="https://cdn-icons-png.flaticon.com/512/566/566234.png" alt="" />
           </div>
         </div>
       </div>
@@ -48,6 +49,13 @@
             <div class="containerInput">
               <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
             </div>
+          </div>
+          <div class="conten_input">
+            <label for="PRECIO">Precio</label>
+            <div class="containerInput">
+              <input placeholder="Precio" type="number" id="PRECIO" v-model="Precio" required />
+            </div>
+            <span class="error">{{ errorPrecio }}</span>
           </div>
 
           <div class="botones">
@@ -91,13 +99,7 @@
               </div>
             </div>
             <br />
-            <div class="conten_input">
-              <label for="PRECIO">Precio</label>
-              <div class="containerInput">
-                <input placeholder="Precio" type="number" id="PRECIO" v-model="Precio" required />
-              </div>
-              <span class="error">{{ errorPrecio }}</span>
-            </div>
+
             <br />
           </div>
         </q-card-section>
@@ -193,11 +195,6 @@ function mapBuses() {
   }
 }
 
-const asientosVendidos = ref([]);
-
-const esAsientoVendido = (asiento) => {
-  return asientosVendidos.value.includes(asiento);
-};
 
 const agregarCliente = async () => {
   try {
@@ -274,13 +271,7 @@ const validarCampos = () => {
     errorBuses.value = "";
   }
 
-  if (Precio.value <= 0) {
-    errorPrecio.value = "Por favor, ingrese un precio válido mayor que 0";
-    ocultarMensajeDeError("errorPrecio");
-    errores = true;
-  } else {
-    errorPrecio.value = "";
-  }
+
   return !errores;
 };
 
@@ -338,28 +329,6 @@ function mostrarFormulario(asiento) {
   mostrarFormularioClientes.value = true;
 }
 
-const actualizarAsientosDisponibles = () => {
-  // Supongamos que tienes una lista de todos los asientos
-  const todosLosAsientos = document.querySelectorAll('.asiento');
-
-  // Lógica para obtener los asientos vendidos del almacenamiento local
-  const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos')) || [];
-
-  // Recorremos todos los asientos y marcamos los vendidos en rojo y los disponibles en verde
-  todosLosAsientos.forEach(asiento => {
-    const numeroAsiento = asiento.dataset.numero; // Supongamos que tienes un atributo 'data-numero' que almacena el número del asiento
-
-    if (asientosVendidosLocalStorage.includes(numeroAsiento)) {
-      asiento.style.backgroundColor = 'red'; // Asiento vendido
-    } else {
-      asiento.style.backgroundColor = 'green'; // Asiento disponible
-    }
-  });
-};
-
-
-
-
 const crearticket = async () => {
   const nuevoBoleto = {
     fechas: [
@@ -377,19 +346,243 @@ const crearticket = async () => {
     asientos: asientoSeleccionado.value,
   };
   try {
+    if (Precio.value <= 0) {
+      errorPrecio.value = "Por favor, ingrese un precio válido mayor que 0";
+      ocultarMensajeDeError("errorPrecio");
+      // errores = true;
+      return
+    } else {
+      errorPrecio.value = "";
+    }
     console.log("nuevoboleto", nuevoBoleto);
     await boletoStore.agregarBoleto(nuevoBoleto);
-
-    if (asientoSeleccionado.value) {
-      const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos')) || [];
-      asientosVendidosLocalStorage.push(asientoSeleccionado.value);
-      localStorage.setItem('asientosVendidos', JSON.stringify(asientosVendidosLocalStorage));
-    }
-
     cliente.value = "";
     modal.value = false;
     $q.notify({ message: "Boleto de cliente creado", textColor: "white", type: "positive", color: "green" });
   } catch (error) {
+    $q.notify({
+      type: "negative",
+      color: "negative",
+      message: error.response.data.error.errors[0].msg,
+    });
+  }
+};
+
+const limpiarTodo = () => {
+  cedula.value = "";
+  nombre.value = "";
+  telefono.value = "";
+  email.value = "";
+};
+
+const limpiarCampos = () => {
+  cedula.value = "";
+  nombre.value = "";
+  telefono.value = "";
+  email.value = "";
+};
+
+const confirmarAgregarCliente = () => {
+  agregarCliente();
+};
+
+const routeBuses = computed(() => mapBuses());
+const routeRutas = computed(() => mapRutas());
+
+onMounted(() => {
+  const today = new Date();
+  const year = today.getFullYear();
+  let month = today.getMonth() + 1;
+  let day = today.getDate();
+
+
+  month = month < 10 ? `0${month}` : month;
+  day = day < 10 ? `0${day}` : day;
+
+  fecha_salida.value = `${year}-${month}-${day}`;
+  obtenerInformacion();
+});
+</script>
+
+<style scoped>
+.conten_modal {
+  width: 100%;
+  background-image: url("../assets/logo.PNG");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  max-width: 630px;
+  margin: 0 auto;
+}
+
+.btna {
+  background-color: #1976d2;
+}
+
+.infoDatos {
+  width: 50%;
+}
+
+.infoDatos2 {
+  width: 100%;
+}
+
+.error {
+  position: relative;
+  left: 10px;
+  color: #f50a0a;
+}
+
+.contenedor_info {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.conten_clientes {
+  box-sizing: border-box;
+  width: 50%;
+  padding: 10px;
+}
+
+@media screen and (max-width: 600px) {
+  .conten_clientes {
+    width: 70%;
+    margin: 5px auto;
+  }
+}
+
+.grupo_boton {
+  display: flex;
+  justify-content: space-between;
+}
+
+.contenedor_asientos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  border: 1px solid #919191;
+  background-color: #bbb8b856;
+  border-radius: 10px;
+  width: 50%;
+  padding: 10px;
+  justify-content: center;
+}
+
+.numero-con {
+  display: flex;
+  align-items: baseline;
+}
+
+.numero {
+  font-size: 50px;
+}
+
+.asiento-seleccionado {
+  background-color: rgb(255, 0, 0);
+  border-radius: 5px;
+}
+
+.contenedor_asientos div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon_img {
+  width: 40px;
+  cursor: pointer;
+  border: 1px solid black;
+  background-color: #ffffffad;
+  border-radius: 5px;
+}
+
+.boton_agregar {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+
+.btnc {
+  background-color: rgb(210, 25, 25);
+}
+
+.containerInput {
+  background-color: #000000;
+  position: relative;
+  border-radius: 5px 5px 5px 5px;
+  overflow: hidden;
+  margin: 0;
+  padding: 0 0 4px 0;
+  z-index: 1;
+  font-size: 15px;
+}
+
+.containerInput::before {
+  content: "";
+  width: 110%;
+  aspect-ratio: 1;
+  position: absolute;
+  inset: 0 0 0 0;
+  margin: auto;
+  animation: rotate6234 2.5s ease-in-out infinite;
+  z-index: -1;
+  background-image: conic-gradient(from 0deg at 50% 50%,
+      #073aff00 0%,
+      rgb(28, 49, 235) 25%,
+      #073aff00 25%);
+}
+
+.containerInput>input {
+  width: 100%;
+  height: 45px;
+  font-size: inherit;
+  border: none;
+  padding: 12px;
+  background-color: rgb(238, 236, 236);
+  outline: 5px solid #0a0a0a;
+}
+
+.containerInput>input:focus {
+  outline: none;
+}
+
+.containerInput>input:not(:placeholder-shown) {
+  outline: none;
+}
+
+.containerInput>input:not(:placeholder-shown):valid {
+  outline: 4px solid rgb(0, 81, 255);
+  border-radius: 0;
+}
+
+.arri {
+  display: flex;
+  justify-content: center;
+  background-color: #f50a0a;
+  background: linear-gradient(90deg,
+      #1976d2,
+      #1976d2,
+      #1976d2,
+      #1976d2,
+      #50a3f7);
+  color: #ffffff;
+  width: 100%;
+}
+
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin: 15px;
+}
+
+.mensaje-error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+</style>
     $q.notify({
       type: "negative",
       color: "negative",
