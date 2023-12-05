@@ -52,7 +52,7 @@
               </div>
               <br>
               <div class="conten_input">
-                <label for="Horario de salida">Horario</label>
+                <label for="HORARIOS">Horario de salida</label>
                 <div class="containerInput">
                   <input placeholder="Horario" type="time" id="HORARIOS" v-model="horarios" autocomplete="on">
                 </div>
@@ -111,7 +111,7 @@ const modalAbierto = ref(false);
 const columns = [
   { name: "origen", required: true, label: "Origen", align: "center", field: "origen", sortable: true },
   { name: "destino", required: true, label: "Destino", align: "center", field: "destino", sortable: true },
-  { name: "horarios", required: true, label: "Horario", align: "center", field: "horarios", sortable: true },
+  { name: "horarios", required: true, label: "Hora de salida", align: "center", field: "horarios", sortable: true },
   { name: "distancia", required: true, label: "Distancia", align: "center", field: "distancia", sortable: true },
   { name: "duracion", required: true, label: "Duracion", align: "center", field: "duracion", sortable: true },
   { name: "status", label: "Estado", align: "center", field: "status", sortable: true },

@@ -32,7 +32,7 @@
 
   .padre a{
     text-decoration: none;
-  color: #1976d2;
+    color: #000000;
   }
   
   .card {
@@ -59,6 +59,7 @@
   .card:hover {
     border: 1px solid black;
     transform: scale(1.05);
+    background-color: rgb(0, 136, 255);
   }
   
   .card:active {

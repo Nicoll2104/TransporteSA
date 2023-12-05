@@ -163,7 +163,7 @@ function filterFn(val, update) {
 
 const columns = [
   { name: "placa", required: true, label: "Placa", align: "center", field: "placa", format: (val) => val, },
-  { name: "numero", required: true, label: "Número", align: "center", field: "numero", sortable: true, },
+  { name: "numero", required: true, label: "Número de bus", align: "center", field: "numero", sortable: true, },
   { name: "conductor", required: true, label: "Conductor", align: "center", field: (row) => row.conductor.nombre, sortable: true, },
   { name: "modelo", required: true, label: "Modelo", align: "center", field: "modelo", sortable: true, },
   { name: "soat", required: true, label: "Soat", align: "center", field: "soat", sortable: true, format: (val) => { return format(new Date(val), "yyyy-MM-dd"); }, },
@@ -338,7 +338,7 @@ const agregarEditarBus = async () => {
       $q.notify({
         type: "negative",
         color: "negative",
-        message: error.response.data.error.errors[0].msg,
+        message: error.response.data.error,
       });
     }
   } else {
@@ -374,7 +374,7 @@ const agregarEditarBus = async () => {
       $q.notify({
         type: "negative",
         color: "negative",
-        message: error.response.data.error.errors[0].msg,
+        message: error.response.data.error,
       });
     }
   }

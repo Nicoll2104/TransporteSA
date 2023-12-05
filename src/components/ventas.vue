@@ -383,6 +383,7 @@ const limpiarTodo = () => {
   nombre.value = "";
   telefono.value = "";
   email.value = "";
+  Precio.value = "";
 };
 
 const limpiarCampos = () => {
@@ -390,6 +391,7 @@ const limpiarCampos = () => {
   nombre.value = "";
   telefono.value = "";
   email.value = "";
+  Precio.value = "";
 };
 
 const confirmarAgregarCliente = () => {
@@ -496,7 +498,7 @@ onMounted(() => {
 }
 
 .numero {
-  font-size: 50px;
+  font-size: 35px;
 }
 
 .asiento-seleccionado {
