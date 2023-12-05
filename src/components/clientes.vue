@@ -17,7 +17,12 @@
           <q-btn label="Agregar" color="blue" @click="modal = true" />
         </div>
         <br />
-        <q-table title="DATOS CLIENTES" :rows="rows" :columns="columns" row-key="cedula">
+        <q-table
+          title="DATOS CLIENTES"
+          :rows="rows"
+          :columns="columns"
+          row-key="cedula"
+        >
           <template v-slot:body-cell-status="props">
             <q-td key="status" :props="props">
               <span class="color1" v-if="props.row.status == 1">Activo</span>
@@ -26,9 +31,21 @@
           </template>
           <template v-slot:body-cell-acciones="props">
             <q-td key="acciones" :props="props">
-              <q-btn class="btnEditar" icon="edit" color="blue" @click="editarCliente(props.row)"></q-btn>
-              <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
-              <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
+              <q-btn
+                class="btnEditar"
+                icon="edit"
+                color="blue"
+                @click="editarCliente(props.row)"
+              ></q-btn>
+              <q-btn
+                class="btnActivar"
+                v-if="props.row.status == 1"
+                @click="desactivar(props.row._id)"
+                >❌</q-btn
+              >
+              <q-btn class="btnActivar" v-else @click="activar(props.row._id)"
+                >✅</q-btn
+              >
             </q-td>
           </template>
         </q-table>
@@ -43,7 +60,13 @@
                 <div class="conten_input">
                   <label for="CEDULA">Cedula</label>
                   <div class="containerInput">
-                    <input placeholder="Cedula" type="text" id="CEDULA" v-model="cedula" autocomplete="on" />
+                    <input
+                      placeholder="Cedula"
+                      type="text"
+                      id="CEDULA"
+                      v-model="cedula"
+                      autocomplete="on"
+                    />
                   </div>
                   <span class="error">{{ errorCedula }}</span>
                 </div>
@@ -51,7 +74,13 @@
                 <div class="conten_input">
                   <label for="NOMBRE">Nombre</label>
                   <div class="containerInput">
-                    <input placeholder="Nombre" type="text" id="NOMBRE" v-model="nombre" autocomplete="on" />
+                    <input
+                      placeholder="Nombre"
+                      type="text"
+                      id="NOMBRE"
+                      v-model="nombre"
+                      autocomplete="on"
+                    />
                   </div>
                   <span class="error">{{ errorNombre }}</span>
                 </div>
@@ -59,7 +88,13 @@
                 <div class="conten_input">
                   <label for="TELEFONO">Telefono</label>
                   <div class="containerInput">
-                    <input placeholder="Telefono" type="number" id="TELEFONO" v-model="telefono" autocomplete="on" />
+                    <input
+                      placeholder="Telefono"
+                      type="number"
+                      id="TELEFONO"
+                      v-model="telefono"
+                      autocomplete="on"
+                    />
                   </div>
                   <span class="error">{{ errorTelefono }}</span>
                 </div>
@@ -67,7 +102,13 @@
                 <div class="conten_input">
                   <label for="EMAIL">Email</label>
                   <div class="containerInput">
-                    <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
+                    <input
+                      placeholder="Gmail"
+                      type="email"
+                      id="EMAIL"
+                      v-model="email"
+                      autocomplete="on"
+                    />
                   </div>
                   <span class="error">{{ errorEmail }}</span>
                 </div>
@@ -75,8 +116,22 @@
             </q-card-section>
             <q-separator />
             <q-card-actions align="right">
-              <q-btn flat label="Cerrar" class="btnc" @click="limpiar" color="white" v-close-popup />
-              <q-btn flat label="Aceptar" class="btna" color="white" @click="agregarEditarCliente" :loading="cargando" />
+              <q-btn
+                flat
+                label="Cerrar"
+                class="btnc"
+                @click="limpiar"
+                color="white"
+                v-close-popup
+              />
+              <q-btn
+                flat
+                label="Aceptar"
+                class="btna"
+                color="white"
+                @click="agregarEditarCliente"
+                :loading="cargando"
+              />
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -109,12 +164,52 @@ const cargando = ref(false);
 const modalAbierto = ref(false);
 
 const columns = [
-  { name: "cedula", required: true, label: "Cédula", align: "center", field: "cedula", sortable: true },
-  { name: "nombre", required: true, label: "Nombre", align: "center", field: "nombre", sortable: true },
-  { name: "telefono", required: true, label: "Teléfono", align: "center", field: "telefono", sortable: true },
-  { name: "email", required: true, label: "Email", align: "center", field: "email", sortable: true },
-  { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
-  { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones" },
+  {
+    name: "cedula",
+    required: true,
+    label: "Cédula",
+    align: "center",
+    field: "cedula",
+    sortable: true,
+  },
+  {
+    name: "nombre",
+    required: true,
+    label: "Nombre",
+    align: "center",
+    field: "nombre",
+    sortable: true,
+  },
+  {
+    name: "telefono",
+    required: true,
+    label: "Teléfono",
+    align: "center",
+    field: "telefono",
+    sortable: true,
+  },
+  {
+    name: "email",
+    required: true,
+    label: "Email",
+    align: "center",
+    field: "email",
+    sortable: true,
+  },
+  {
+    name: "status",
+    label: "Estado",
+    align: "center",
+    field: "status",
+    sortable: true,
+  },
+  {
+    name: "acciones",
+    required: true,
+    label: "Acciones",
+    align: "center",
+    field: "acciones",
+  },
 ];
 
 async function obtenerClientes() {
@@ -173,7 +268,12 @@ const agregarEditarCliente = async () => {
         email: email.value,
       };
       await clienteStore.editarCliente(clienteEditado);
-      $q.notify({ message: "Cliente actualizado correctamente", textColor: "white", type: "positive", color: "green" });
+      $q.notify({
+        message: "Cliente actualizado correctamente",
+        textColor: "white",
+        type: "positive",
+        color: "green",
+      });
       obtenerClientes();
     } else {
       const nuevoCliente = {
@@ -183,20 +283,46 @@ const agregarEditarCliente = async () => {
         email: email.value,
       };
       await clienteStore.agregarCliente(nuevoCliente);
-      $q.notify({ message: "Cliente agregado 👍", textColor: "white", type: "positive", color: "green" });
+      $q.notify({
+        message: "Cliente agregado 👍",
+        textColor: "white",
+        type: "positive",
+        color: "green",
+      });
       obtenerClientes();
       limpiar();
     }
   } catch (error) {
     console.error("Error en la función agregarEditarCliente:", error);
 
-    if (error.response && error.response.data && error.response.data.error && error.response.data.error.errors && error.response.data.error.errors.length > 0) {
-
-      $q.notify({ type: "negative", color: "negative", message: error.response.data.error.errors[0].msg });
-    } else if (error.response && error.response.data && error.response.data.error) {
-      $q.notify({ type: "negative", color: "negative", message: error.response.data.error });
+    if (
+      error.response &&
+      error.response.data &&
+      error.response.data.error &&
+      error.response.data.error.errors &&
+      error.response.data.error.errors.length > 0
+    ) {
+      $q.notify({
+        type: "negative",
+        color: "negative",
+        message: error.response.data.error.errors[0].msg,
+      });
+    } else if (
+      error.response &&
+      error.response.data &&
+      error.response.data.error
+    ) {
+      $q.notify({
+        type: "negative",
+        color: "negative",
+        message: error.response.data.error,
+      });
     } else {
-      $q.notify({ type: "negative", color: "negative", message: "Error en la operación" });
+      $q.notify({
+        type: "negative",
+        color: "negative",
+        message: "Error en la operación",
+      });
     }
 
     console.error("Error en la función de editarCliente:", error);
@@ -248,12 +374,12 @@ const limpiar = () => {
 };
 
 const clearErrors = () => {
-  setTimeout(()=>{
-  errorCedula.value = "";
-  errorNombre.value = "";
-  errorTelefono.value = "";
-  errorEmail.value = "";
-},4000);
+  setTimeout(() => {
+    errorCedula.value = "";
+    errorNombre.value = "";
+    errorTelefono.value = "";
+    errorEmail.value = "";
+  }, 4000);
 };
 
 onMounted(() => {
@@ -270,15 +396,15 @@ onMounted(() => {
   background-color: rgb(210, 25, 25);
 }
 
-.color1{
+.color1 {
   color: #51ff00;
 }
 
-.color2{
+.color2 {
   color: #f50a0a;
 }
 
-.p-carga{
+.p-carga {
   position: relative;
   bottom: 85px;
   left: 10px;
@@ -289,7 +415,7 @@ onMounted(() => {
   background-image: url("../assets/logo.PNG");
   background-size: contain;
   background-repeat: no-repeat;
-  background-position:center ;
+  background-position: center;
   max-width: 630px;
   margin: 0 auto;
 }
@@ -332,11 +458,11 @@ h3 {
   background-color: rgba(82, 131, 253, 0.85);
 }
 
+
 .containerInput {
-  background-color: #000000;
   border: 1px solid black;
   position: relative;
-  border-radius:5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
   overflow: hidden;
   margin: 0;
   padding: 0 0 4px 0;
@@ -345,7 +471,7 @@ h3 {
 }
 
 .containerInput::before {
-  content: '';
+  content: "";
   width: 110%;
   aspect-ratio: 1;
   position: absolute;
@@ -353,28 +479,32 @@ h3 {
   margin: auto;
   animation: rotate6234 2.5s ease-in-out infinite;
   z-index: -1;
-  background-image: conic-gradient(from 0deg at 50% 50%, #073AFF00 0%, rgb(28, 49, 235) 25%, #073AFF00 25%);
+  background-image: conic-gradient(
+    from 0deg at 50% 50%,
+    #073aff00 0%,
+    rgb(28, 49, 235) 25%,
+    #073aff00 25%
+  );
 }
 
-.containerInput>input {
+.containerInput > input {
   width: 100%;
   height: 35px;
   font-size: inherit;
   border: none;
   padding: 12px;
   background-color: #ffffff;
-  outline: 5px solid #0a0a0a;
 }
 
-.containerInput>input:focus {
+.containerInput > input:focus {
   outline: none;
 }
 
-.containerInput>input:not(:placeholder-shown) {
+.containerInput > input:not(:placeholder-shown) {
   outline: none;
 }
 
-.containerInput>input:not(:placeholder-shown):valid {
+.containerInput > input:not(:placeholder-shown):valid {
   outline: 4px solid rgb(0, 81, 255);
   border-radius: 0;
 }
@@ -393,7 +523,14 @@ h3 {
   display: flex;
   justify-content: center;
   background-color: #f50a0a;
-  background: linear-gradient(90deg,#1976d2,#1976d2,#1976d2,#1976d2,#50a3f7);
+  background: linear-gradient(
+    90deg,
+    #1976d2,
+    #1976d2,
+    #1976d2,
+    #1976d2,
+    #50a3f7
+  );
   color: #ffffff;
   width: 100%;
 }
@@ -401,5 +538,6 @@ h3 {
 .error {
   color: red;
 }
+
+
 </style>
-    
