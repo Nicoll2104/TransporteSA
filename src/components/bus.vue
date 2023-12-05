@@ -177,7 +177,7 @@ async function obtenerBus() {
   try {
     const buses = await busStore.obtener();
     console.log("Buses obtenidos:", buses);
-    rows.value = buses.busesPopulate;
+    rows.value = buses.busesPopulate.reverse();
   } catch (error) {
     console.error("Error al obtener los clientes:", error);
   }

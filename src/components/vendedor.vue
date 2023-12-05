@@ -247,7 +247,7 @@ async function obtenerVendedor() {
   try {
     const Vendedores = await vendedorStore.obtener();
     console.log("Vendedores obtenidos:", Vendedores);
-    rows.value = vendedorStore.datosData;
+    rows.value = vendedorStore.datosData.reverse();
   } catch (error) {
     console.error("Error al obtener los Vendedores:", error);
   }
@@ -370,7 +370,7 @@ const agregarEditarVendedor = async () => {
       $q.notify({
         type: "negative",
         color: "negative",
-        message: error.response.data.error.errors[0].msg,
+        message: error.response.data.error,
       });
     }
   }
