@@ -6,10 +6,9 @@
 
     <div class="contenedor_info">
       <div class="contenedor_asientos" v-if="mostrarContenedorAsientos">
-        <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">
-          {{ asiento }}
+        <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">{{ asiento }}
           <div :class="{ 'asiento-seleccionado': asientoSeleccionado === asiento }">
-            <img class="icon_img" src="https://cdn-icons-png.flaticon.com/512/566/566234.png" alt="" />
+            <img  class="icon_img" src="../assets/ii.png" alt="" :class="{ 'asiento-vendido': esAsientoVendido(asiento) }" />
           </div>
         </div>
       </div>
@@ -49,13 +48,6 @@
             <div class="containerInput">
               <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
             </div>
-          </div>
-          <div class="conten_input">
-            <label for="PRECIO">Precio</label>
-            <div class="containerInput">
-              <input placeholder="Precio" type="number" id="PRECIO" v-model="Precio" required />
-            </div>
-            <span class="error">{{ errorPrecio }}</span>
           </div>
 
           <div class="botones">
@@ -99,7 +91,13 @@
               </div>
             </div>
             <br />
-
+            <div class="conten_input">
+              <label for="PRECIO">Precio</label>
+              <div class="containerInput">
+                <input placeholder="Precio" type="number" id="PRECIO" v-model="Precio" required />
+              </div>
+              <span class="error">{{ errorPrecio }}</span>
+            </div>
             <br />
           </div>
         </q-card-section>
@@ -195,6 +193,11 @@ function mapBuses() {
   }
 }
 
+const asientosVendidos = ref([]);
+
+const esAsientoVendido = (asiento) => {
+  return asientosVendidos.value.includes(asiento);
+};
 
 const agregarCliente = async () => {
   try {
@@ -271,7 +274,13 @@ const validarCampos = () => {
     errorBuses.value = "";
   }
 
-
+  if (Precio.value <= 0) {
+    errorPrecio.value = "Por favor, ingrese un precio válido mayor que 0";
+    ocultarMensajeDeError("errorPrecio");
+    errores = true;
+  } else {
+    errorPrecio.value = "";
+  }
   return !errores;
 };
 
@@ -329,6 +338,28 @@ function mostrarFormulario(asiento) {
   mostrarFormularioClientes.value = true;
 }
 
+const actualizarAsientosDisponibles = () => {
+  // Supongamos que tienes una lista de todos los asientos
+  const todosLosAsientos = document.querySelectorAll('.asiento');
+
+  // Lógica para obtener los asientos vendidos del almacenamiento local
+  const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos')) || [];
+
+  // Recorremos todos los asientos y marcamos los vendidos en rojo y los disponibles en verde
+  todosLosAsientos.forEach(asiento => {
+    const numeroAsiento = asiento.dataset.numero; // Supongamos que tienes un atributo 'data-numero' que almacena el número del asiento
+
+    if (asientosVendidosLocalStorage.includes(numeroAsiento)) {
+      asiento.style.backgroundColor = 'red'; // Asiento vendido
+    } else {
+      asiento.style.backgroundColor = 'green'; // Asiento disponible
+    }
+  });
+};
+
+
+
+
 const crearticket = async () => {
   const nuevoBoleto = {
     fechas: [
@@ -346,16 +377,15 @@ const crearticket = async () => {
     asientos: asientoSeleccionado.value,
   };
   try {
-    if (Precio.value <= 0) {
-      errorPrecio.value = "Por favor, ingrese un precio válido mayor que 0";
-      ocultarMensajeDeError("errorPrecio");
-      // errores = true;
-      return
-    } else {
-      errorPrecio.value = "";
-    }
     console.log("nuevoboleto", nuevoBoleto);
     await boletoStore.agregarBoleto(nuevoBoleto);
+
+    if (asientoSeleccionado.value) {
+      const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos')) || [];
+      asientosVendidosLocalStorage.push(asientoSeleccionado.value);
+      localStorage.setItem('asientosVendidos', JSON.stringify(asientosVendidosLocalStorage));
+    }
+
     cliente.value = "";
     modal.value = false;
     $q.notify({ message: "Boleto de cliente creado", textColor: "white", type: "positive", color: "green" });
@@ -363,7 +393,7 @@ const crearticket = async () => {
     $q.notify({
       type: "negative",
       color: "negative",
-      message: error.response.data.error,
+      message: error.response.data.error.errors[0].msg,
     });
   }
 };
@@ -401,6 +431,13 @@ onMounted(() => {
 
   fecha_salida.value = `${year}-${month}-${day}`;
   obtenerInformacion();
+  const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos'));
+
+
+  if (asientosVendidosLocalStorage) {
+    asientosVendidos.value = asientosVendidosLocalStorage;
+  }
+
 });
 </script>
 
@@ -421,6 +458,10 @@ onMounted(() => {
 
 .infoDatos {
   width: 50%;
+}
+
+.asiento-vendido {
+  background-color: red;
 }
 
 .infoDatos2 {
@@ -479,7 +520,7 @@ onMounted(() => {
 }
 
 .asiento-seleccionado {
-  background-color: rgb(255, 0, 0);
+  background-color: rgb(255, 208, 0);
   border-radius: 5px;
 }
 
@@ -490,10 +531,9 @@ onMounted(() => {
 }
 
 .icon_img {
-  width: 40px;
+  width: 45px;
   cursor: pointer;
   border: 1px solid black;
-  background-color: #ffffffad;
   border-radius: 5px;
 }
 
