@@ -129,8 +129,6 @@ async function obtenerRuta() {
 }
 
 
-
-
 const errorOrigen = ref("");
 const errorDestino = ref("");
 const errorHorario = ref("");
