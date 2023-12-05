@@ -52,7 +52,7 @@
               </div>
               <br>
               <div class="conten_input">
-                <label for="HORARIOS">Horario</label>
+                <label for="Horario de salida">Horario</label>
                 <div class="containerInput">
                   <input placeholder="Horario" type="time" id="HORARIOS" v-model="horarios" autocomplete="on">
                 </div>
@@ -75,13 +75,6 @@
                 <span class="error">{{ errorDuracion }}</span>
               </div>
               <br>
-              <div class="conten_input">
-                <label for="FECHA">Fecha</label>
-                <div class="containerInput">
-                  <input placeholder="Fecha" type="date" id="FECHA" v-model="fecha" autocomplete="on">
-                </div>
-                <span class="error">{{ errorFecha }}</span>
-              </div>
             </div>
           </div>
         </q-card-section>
@@ -109,7 +102,6 @@ const destino = ref("");
 const horarios = ref("");
 const distancia = ref("");
 const duracion = ref("");
-const fecha = ref("");
 const rutaEditando = ref(null);
 const $q = useQuasar()
 
@@ -122,7 +114,6 @@ const columns = [
   { name: "horarios", required: true, label: "Horario", align: "center", field: "horarios", sortable: true },
   { name: "distancia", required: true, label: "Distancia", align: "center", field: "distancia", sortable: true },
   { name: "duracion", required: true, label: "Duracion", align: "center", field: "duracion", sortable: true },
-  { name: "fecha", required: true, label: "Fecha", align: "center", field: (row) => convertirFecha(row.fecha), sortable: true },
   { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
@@ -137,15 +128,7 @@ async function obtenerRuta() {
   }
 }
 
-function convertirFecha(cadenaFecha) {
-  const fecha = new Date(cadenaFecha);
-  const año = fecha.getFullYear();
-  const mes = (fecha.getMonth() + 1).toString().padStart(2, "0");
-  const dia = fecha.getDate().toString().padStart(2, "0");
 
-  const fechaFormateada = `${año}/${mes}/${dia}`;
-  return fechaFormateada;
-}
 
 
 const errorOrigen = ref("");
@@ -153,7 +136,6 @@ const errorDestino = ref("");
 const errorHorario = ref("");
 const errorDistancia = ref("");
 const errorDuracion = ref("");
-const errorFecha = ref("");
 
 const agregarEditarRuta = async () => {
 
@@ -172,7 +154,7 @@ const agregarEditarRuta = async () => {
   }
 
   if (!horarios.value) {
-    errorHorario.value = "Por favor, ingresa un horario";
+    errorHorario.value = "Por favor, ingresa la hora de salida";
     clearErrors();
     console.log("Error de horario");
     return;
@@ -192,12 +174,6 @@ const agregarEditarRuta = async () => {
     return;
   }
 
-  if (!fecha.value) {
-    errorFecha.value = "Por favor, ingresa la fecha";
-    clearErrors();
-    console.log("Error de fecha");
-    return;
-  }
 
 
   if (rutaEditando.value) {
@@ -217,7 +193,6 @@ const agregarEditarRuta = async () => {
       horarios.value = "";
       distancia.value = "";
       duracion.value = "";
-      fecha.value = "";
       modal.value = false;
       rutaEditando.value = null;
       $q.notify({
@@ -238,7 +213,6 @@ const agregarEditarRuta = async () => {
       horarios: horarios.value,
       distancia: distancia.value,
       duracion: duracion.value,
-      fecha: fecha.value.split('T')[0],
     };
     try {
       await rutaStore.agregarRuta(nuevoRuta);
@@ -247,7 +221,6 @@ const agregarEditarRuta = async () => {
       horarios.value = "";
       distancia.value = "";
       duracion.value = "";
-      fecha.value = "";
       modal.value = false;
       $q.notify({
         message: 'Ruta agregado correctamente',
@@ -272,7 +245,6 @@ const editarRuta = (ruta) => {
   horarios.value = ruta.horarios;
   distancia.value = ruta.distancia;
   duracion.value = ruta.duracion;
-  fecha.value = ruta.fecha;
   rutaEditando.value = ruta;
   modal.value = true;
   $q.notify({
@@ -290,7 +262,6 @@ const clearErrors = () => {
   errorHorario.value = "";
   errorDistancia.value = "";
   errorDuracion.value = "";
-  errorFecha.value = "";
 },4000);
 };
 
@@ -300,7 +271,6 @@ const limpiar = () => {
   horarios.value = "";
   distancia.value = "";
   duracion.value = "";
-  fecha.value = "";
 };
 
 async function activar(id) {

@@ -6,10 +6,9 @@
 
     <div class="contenedor_info">
       <div class="contenedor_asientos" v-if="mostrarContenedorAsientos">
-        <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">
-          {{ asiento }}
+        <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">{{ asiento }}
           <div :class="{ 'asiento-seleccionado': asientoSeleccionado === asiento }">
-            <img class="icon_img" src="https://cdn-icons-png.flaticon.com/512/566/566234.png" alt="" />
+            <img  class="icon_img" src="../assets/ii.png" alt="" :class="{ 'asiento-vendido': esAsientoVendido(asiento) }" />
           </div>
         </div>
       </div>
@@ -20,9 +19,9 @@
             <q-btn color="primary" label="Buscar clientes " @click="buscarCliente" />
           </div>
           <div class="numero-con">
-          <h4>Numero asiento:</h4>
-          <p class="numero" >{{ asientoSeleccionado }}</p>
-        </div>
+            <h4>Numero asiento:</h4>
+            <p class="numero">{{ asientoSeleccionado }}</p>
+          </div>
           <div class="conten_input">
             <label for="CEDULA">Cedula</label>
             <div class="containerInput">
@@ -162,7 +161,7 @@ async function obtenerInformacion() {
 
     await clienteStore.obtener();
     rowsClientes.value = clienteStore.datosData;
-    
+
     await rutaStore.obtener();
     rowsRutas.value = rutaStore.datosData;
   } catch (error) {
@@ -194,6 +193,11 @@ function mapBuses() {
   }
 }
 
+const asientosVendidos = ref([]);
+
+const esAsientoVendido = (asiento) => {
+  return asientosVendidos.value.includes(asiento);
+};
 
 const agregarCliente = async () => {
   try {
@@ -274,9 +278,9 @@ const validarCampos = () => {
     errorPrecio.value = "Por favor, ingrese un precio válido mayor que 0";
     ocultarMensajeDeError("errorPrecio");
     errores = true;
-} else {
+  } else {
     errorPrecio.value = "";
-}
+  }
   return !errores;
 };
 
@@ -295,10 +299,10 @@ function generarListaAsientos() {
 
   if (camposValidos) {
     const now = new Date();
-  const formattedDate = now.toISOString().split("T")[0];
-  const formattedTime = formatAMPM(now);
-  fecha_venta.value = formattedDate;
-  hora_venta.value = formattedTime;
+    const formattedDate = now.toISOString().split("T")[0];
+    const formattedTime = formatAMPM(now);
+    fecha_venta.value = formattedDate;
+    hora_venta.value = formattedTime;
 
     if (bus.value !== null && bus.value !== undefined) {
       const busSeleccionado = rowsBuses.value.busesPopulate.find(
@@ -334,6 +338,28 @@ function mostrarFormulario(asiento) {
   mostrarFormularioClientes.value = true;
 }
 
+const actualizarAsientosDisponibles = () => {
+  // Supongamos que tienes una lista de todos los asientos
+  const todosLosAsientos = document.querySelectorAll('.asiento');
+
+  // Lógica para obtener los asientos vendidos del almacenamiento local
+  const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos')) || [];
+
+  // Recorremos todos los asientos y marcamos los vendidos en rojo y los disponibles en verde
+  todosLosAsientos.forEach(asiento => {
+    const numeroAsiento = asiento.dataset.numero; // Supongamos que tienes un atributo 'data-numero' que almacena el número del asiento
+
+    if (asientosVendidosLocalStorage.includes(numeroAsiento)) {
+      asiento.style.backgroundColor = 'red'; // Asiento vendido
+    } else {
+      asiento.style.backgroundColor = 'green'; // Asiento disponible
+    }
+  });
+};
+
+
+
+
 const crearticket = async () => {
   const nuevoBoleto = {
     fechas: [
@@ -353,6 +379,13 @@ const crearticket = async () => {
   try {
     console.log("nuevoboleto", nuevoBoleto);
     await boletoStore.agregarBoleto(nuevoBoleto);
+
+    if (asientoSeleccionado.value) {
+      const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos')) || [];
+      asientosVendidosLocalStorage.push(asientoSeleccionado.value);
+      localStorage.setItem('asientosVendidos', JSON.stringify(asientosVendidosLocalStorage));
+    }
+
     cliente.value = "";
     modal.value = false;
     $q.notify({ message: "Boleto de cliente creado", textColor: "white", type: "positive", color: "green" });
@@ -388,9 +421,9 @@ const routeRutas = computed(() => mapRutas());
 
 onMounted(() => {
   const today = new Date();
-  const year = today.getFullYear(); 
-  let month = today.getMonth() + 1; 
-  let day = today.getDate(); 
+  const year = today.getFullYear();
+  let month = today.getMonth() + 1;
+  let day = today.getDate();
 
 
   month = month < 10 ? `0${month}` : month;
@@ -398,6 +431,13 @@ onMounted(() => {
 
   fecha_salida.value = `${year}-${month}-${day}`;
   obtenerInformacion();
+  const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos'));
+
+
+  if (asientosVendidosLocalStorage) {
+    asientosVendidos.value = asientosVendidosLocalStorage;
+  }
+
 });
 </script>
 
@@ -418,6 +458,10 @@ onMounted(() => {
 
 .infoDatos {
   width: 50%;
+}
+
+.asiento-vendido {
+  background-color: red;
 }
 
 .infoDatos2 {
@@ -466,17 +510,17 @@ onMounted(() => {
   justify-content: center;
 }
 
-.numero-con{
+.numero-con {
   display: flex;
   align-items: baseline;
 }
 
-.numero{
+.numero {
   font-size: 50px;
 }
 
 .asiento-seleccionado {
-  background-color: rgb(255, 0, 0);
+  background-color: rgb(255, 208, 0);
   border-radius: 5px;
 }
 
@@ -487,10 +531,9 @@ onMounted(() => {
 }
 
 .icon_img {
-  width: 40px;
+  width: 45px;
   cursor: pointer;
   border: 1px solid black;
-  background-color: #ffffffad;
   border-radius: 5px;
 }
 
