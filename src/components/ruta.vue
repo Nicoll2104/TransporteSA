@@ -3,13 +3,17 @@
 
     <div class="title">
       <h3>Datos Rutas</h3>
-
       <div class="raya"></div>
     </div><br><br>
 
     <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
 
     <q-table title="DATOS RUTAS" :rows="rows" :columns="columns" row-key="origen" class="tableRT">
+      <template v-slot:body-cell-horarios="props">
+        <q-td key="horarios" :props="props">
+          {{ convertirFormatoAMPM(props.row.horarios) }}
+        </q-td>
+      </template>
       <template v-slot:body-cell-status="props">
         <q-td key="status" :props="props">
           <span class="color1" v-if="props.row.status == 1">Activo</span>
@@ -24,6 +28,7 @@
         </q-td>
       </template>
     </q-table>
+
 
 
     <q-dialog v-model="modal">
@@ -127,6 +132,15 @@ async function obtenerRuta() {
     console.error('Error al obtener las rutas:', error);
   }
 }
+
+
+const convertirFormatoAMPM = (hora24) => {
+  const [hh, mm] = hora24.split(':');
+  let horas = parseInt(hh);
+  const sufijo = horas >= 12 ? 'PM' : 'AM';
+  horas = horas % 12 || 12; 
+  return `${horas}:${mm} ${sufijo}`;
+};
 
 
 const errorOrigen = ref("");

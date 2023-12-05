@@ -46,7 +46,14 @@ const columns = [
   { name: "fecha_venta", required: true, label: "Fecha_Venta", align: "center", field: (row) => convertirFecha(row.fechas[0].fecha_venta), sortable: true },
   { name: "hora_venta", required: true, label: "Hora_Venta", align: "center", field: (row) => (row.fechas[0].hora_venta), sortable: true },
   { name: "fecha_salida", required: true, label: "Fecha_Salida", align: "center", field: (row) => convertirFecha(row.fechas[0].fecha_salida), sortable: true },
-  { name: "ruta", required: true, label: "Hora_Salida", align: "center", field: (row) => row.ruta.horarios, sortable: true },
+  { 
+  name: "ruta",
+  required: true,
+  label: "Hora_Salida",
+  align: "center",
+  field: (row) => convertirHora(row.ruta.horarios),
+  sortable: true 
+},
   { name: "cliente", required: true, label: "Cedula cliente", align: "center", field: (row) => row.cliente.cedula, sortable: true },
   { name: "cliente", required: true, label: "Nombre Cliente", align: "center", field: (row) => row.cliente.nombre, sortable: true },
   { name: "conductor", required: true, label: "Conductor", align: "center", field: (row) => row.bus.conductor.nombre, sortable: true },
@@ -70,12 +77,16 @@ function convertirFecha(cadenaFecha) {
 
 function convertirHora(cadenaFecha) {
   const fecha = new Date(cadenaFecha);
-  const horas = fecha.getUTCHours().toString().padStart(2, "0");
-  const minutos = fecha.getUTCMinutes().toString().padStart(2, "0");
+  let horas = fecha.getHours();
+  const amPM = horas >= 12 ? 'PM' : 'AM';
+  horas = horas % 12 || 12;
+  const minutos = fecha.getMinutes().toString().padStart(2, '0');
 
-  const horaFormateada = `${horas}:${minutos}`;
+  const horaFormateada = `${horas}:${minutos} ${amPM}`;
   return horaFormateada;
 }
+
+
 
 const obtenerBoleto = async () => {
   loading.value = true;
