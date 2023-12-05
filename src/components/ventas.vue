@@ -49,6 +49,13 @@
               <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
             </div>
           </div>
+          <div class="conten_input">
+            <label for="PRECIO">Precio</label>
+            <div class="containerInput">
+              <input placeholder="Precio" type="number" id="PRECIO" v-model="Precio" required />
+            </div>
+            <span class="error">{{ errorPrecio }}</span>
+          </div>
 
           <div class="botones">
             <q-btn color="primary" label="Confirmar" @click="crearticket()" />
@@ -91,13 +98,7 @@
               </div>
             </div>
             <br />
-            <div class="conten_input">
-              <label for="PRECIO">Precio</label>
-              <div class="containerInput">
-                <input placeholder="Precio" type="number" id="PRECIO" v-model="Precio" required />
-              </div>
-              <span class="error">{{ errorPrecio }}</span>
-            </div>
+
             <br />
           </div>
         </q-card-section>
@@ -274,13 +275,7 @@ const validarCampos = () => {
     errorBuses.value = "";
   }
 
-  if (Precio.value <= 0) {
-    errorPrecio.value = "Por favor, ingrese un precio válido mayor que 0";
-    ocultarMensajeDeError("errorPrecio");
-    errores = true;
-  } else {
-    errorPrecio.value = "";
-  }
+
   return !errores;
 };
 
@@ -338,28 +333,6 @@ function mostrarFormulario(asiento) {
   mostrarFormularioClientes.value = true;
 }
 
-const actualizarAsientosDisponibles = () => {
-  // Supongamos que tienes una lista de todos los asientos
-  const todosLosAsientos = document.querySelectorAll('.asiento');
-
-  // Lógica para obtener los asientos vendidos del almacenamiento local
-  const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos')) || [];
-
-  // Recorremos todos los asientos y marcamos los vendidos en rojo y los disponibles en verde
-  todosLosAsientos.forEach(asiento => {
-    const numeroAsiento = asiento.dataset.numero; // Supongamos que tienes un atributo 'data-numero' que almacena el número del asiento
-
-    if (asientosVendidosLocalStorage.includes(numeroAsiento)) {
-      asiento.style.backgroundColor = 'red'; // Asiento vendido
-    } else {
-      asiento.style.backgroundColor = 'green'; // Asiento disponible
-    }
-  });
-};
-
-
-
-
 const crearticket = async () => {
   const nuevoBoleto = {
     fechas: [
@@ -377,8 +350,13 @@ const crearticket = async () => {
     asientos: asientoSeleccionado.value,
   };
   try {
-    console.log("nuevoboleto", nuevoBoleto);
-    await boletoStore.agregarBoleto(nuevoBoleto);
+    if (Precio.value <= 0) {
+      errorPrecio.value = "Por favor, ingrese un precio válido mayor que 0";
+      ocultarMensajeDeError("errorPrecio");
+      return;
+    } else {
+      errorPrecio.value = "";
+    }
 
     if (asientoSeleccionado.value) {
       const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos')) || [];
@@ -386,6 +364,8 @@ const crearticket = async () => {
       localStorage.setItem('asientosVendidos', JSON.stringify(asientosVendidosLocalStorage));
     }
 
+    console.log("nuevoboleto", nuevoBoleto);
+    await boletoStore.agregarBoleto(nuevoBoleto);
     cliente.value = "";
     modal.value = false;
     $q.notify({ message: "Boleto de cliente creado", textColor: "white", type: "positive", color: "green" });
@@ -393,7 +373,7 @@ const crearticket = async () => {
     $q.notify({
       type: "negative",
       color: "negative",
-      message: error.response.data.error.errors[0].msg,
+      message: error.response.data.error,
     });
   }
 };
