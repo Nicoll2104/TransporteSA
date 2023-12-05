@@ -172,15 +172,18 @@ async function obtenerInformacion() {
 
 
 function mapRutas() {
-  return rowsRutas.value.map((ruta) => ({
+  const rutasActivas = rowsRutas.value.filter(ruta => ruta.status === 1);
+  return rutasActivas.map((ruta) => ({
     label: `${ruta.origen} / ${ruta.destino} - ${ruta.horarios}`,
     value: ruta._id,
   }));
 }
 
+
 function mapBuses() {
   if (rowsBuses.value && Array.isArray(rowsBuses.value.busesPopulate)) {
-    return rowsBuses.value.busesPopulate.map((bus) => ({
+    const busesActivos = rowsBuses.value.busesPopulate.filter(bus => bus.status === 1);
+    return busesActivos.map((bus) => ({
       label: `${bus.placa} / ${bus.empresa_asignada} - ${bus.numero}`,
       value: bus._id,
       n_asiento: bus.n_asiento,
@@ -274,8 +277,6 @@ const validarCampos = () => {
 } else {
     errorPrecio.value = "";
 }
-
-
   return !errores;
 };
 
@@ -465,6 +466,15 @@ onMounted(() => {
   justify-content: center;
 }
 
+.numero-con{
+  display: flex;
+  align-items: baseline;
+}
+
+.numero{
+  font-size: 50px;
+}
+
 .asiento-seleccionado {
   background-color: rgb(255, 0, 0);
   border-radius: 5px;
@@ -562,15 +572,6 @@ onMounted(() => {
   justify-content: center;
   gap: 25px;
   margin: 15px;
-}
-
-.numero{
-  font-size: 55px;
-}
-
-.numero-con{
-  display: flex;
-  align-items: baseline;
 }
 
 .mensaje-error {

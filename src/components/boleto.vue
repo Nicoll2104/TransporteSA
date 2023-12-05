@@ -46,7 +46,6 @@ const columns = [
   { name: "fecha_venta", required: true, label: "Fecha_Venta", align: "left", field: (row) => convertirFecha(row.fechas[0].fecha_venta), sortable: true },
   { name: "hora_venta", required: true, label: "Hora_Venta", align: "left", field: (row) => (row.fechas[0].hora_venta), sortable: true },
   { name: "fecha_salida", required: true, label: "Fecha_Salida", align: "left", field: (row) => convertirFecha(row.fechas[0].fecha_salida), sortable: true },
-  { name: "hora_salida", required: true, label: "Hora_salida", align: "left", field: (row) => (row.fechas[0].hora_salida), sortable: true },
   { name: "cliente", required: true, label: "Cedula cliente", align: "left", field: (row) => row.cliente.cedula, sortable: true },
   { name: "cliente", required: true, label: "Nombre Cliente", align: "left", field: (row) => row.cliente.nombre, sortable: true },
   { name: "conductor", required: true, label: "Conductor", align: "left", field: (row) => row.bus.conductor.nombre, sortable: true },
