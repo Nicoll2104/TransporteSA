@@ -173,7 +173,7 @@ async function obtenerConductor() {
   try {
     const conductores = await conductorStore.obtener();
     console.log("conductores obtenidos:", conductores);
-    rows.value = conductorStore.datosData;
+    rows.value = conductorStore.datosData.reverse();
   } catch (error) {
     console.error("Error al obtener los conductores:", error);
   }
@@ -250,7 +250,7 @@ const agregarEditarConductor = async () => {
       obtenerConductor();
     } catch (error) {
       console.error("Error al editar el conductor:", error);
-      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
+      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error });
     }
   } else {
     const nuevoConductor = {

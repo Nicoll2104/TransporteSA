@@ -122,7 +122,7 @@ async function obtenerRuta() {
   try {
     const rutas = await rutaStore.obtener();
     console.log('rutas obtenidas:', rutas);
-    rows.value = rutaStore.datosData;
+    rows.value = rutaStore.datosData.reverse();
   } catch (error) {
     console.error('Error al obtener las rutas:', error);
   }
