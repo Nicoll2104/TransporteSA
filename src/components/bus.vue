@@ -508,7 +508,6 @@ h3 {
 }
 
 .containerInput {
-  background-color: #000000;
   border: 1px solid black;
   position: relative;
   border-radius: 5px 5px 5px 5px;
@@ -519,8 +518,6 @@ h3 {
   font-size: 15px;
 }
 
-
-
 .containerInput::before {
   content: "";
   width: 110%;
@@ -530,20 +527,21 @@ h3 {
   margin: auto;
   animation: rotate6234 2.5s ease-in-out infinite;
   z-index: -1;
-  background-image: conic-gradient(from 0deg at 50% 50%,
-      #073aff00 0%,
-      rgb(28, 49, 235) 25%,
-      #073aff00 25%);
+  background-image: conic-gradient(
+    from 0deg at 50% 50%,
+    #073aff00 0%,
+    rgb(28, 49, 235) 25%,
+    #073aff00 25%
+  );
 }
 
-.containerInput>input {
+.containerInput > input {
   width: 100%;
   height: 35px;
   font-size: inherit;
   border: none;
   padding: 12px;
   background-color: #ffffff;
-  outline: 5px solid #0a0a0a;
 }
 
 .containerInput>input:focus {

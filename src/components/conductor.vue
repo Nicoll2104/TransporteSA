@@ -250,7 +250,7 @@ const agregarEditarConductor = async () => {
       obtenerConductor();
     } catch (error) {
       console.error("Error al editar el conductor:", error);
-      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
+      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error });
     }
   } else {
     const nuevoConductor = {

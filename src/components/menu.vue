@@ -152,9 +152,12 @@ export default {
 
 .botoneslate a {
   text-decoration: none;
-  color: #1976d2;
+  color: #000000;
   display: flex;
   gap: 35px;
+}
+.botoneslate a:hover{
+  color: #ffffff;
 }
 .btn {
   height: 80px;
@@ -169,7 +172,8 @@ export default {
 }
 
 .btn:hover {
-  background-color: aliceblue;
+  background-color: rgb(180, 217, 250);
+  
 }
 
 h1 {
