@@ -336,7 +336,7 @@ const agregarEditarVendedor = async () => {
       $q.notify({
         type: "negative",
         color: "negative",
-        message: error.response.data.error.errors[0].msg,
+        message: error.response.data.error,
       });
     }
   } else {
@@ -370,7 +370,7 @@ const agregarEditarVendedor = async () => {
       $q.notify({
         type: "negative",
         color: "negative",
-        message: error.response.data.error,
+        message: error.response.data.error.errors[0].msg,
       });
     }
   }
