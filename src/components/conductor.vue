@@ -67,7 +67,7 @@
                   <div class="conten_input">
                     <label for="N_LICENCIA">Numero de licencia</label>
                     <div class="containerInput">
-                      <input placeholder="Numero de licencia" type="text" id="N_LICENCIA" v-model="n_licencia"
+                      <input placeholder="Numero de licencia" type="number" id="N_LICENCIA" v-model="n_licencia"
                         autocomplete="on">
                     </div>
                     <span class="error">{{ errorN_licencia }}</span>
@@ -172,13 +172,7 @@ const columns = [
     field: "status",
     sortable: true,
   },
-  {
-    name: "acciones",
-    required: true,
-    label: "Acciones",
-    align: "center",
-    field: "acciones",
-  },
+  { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones" },
 ];
 
 async function obtenerConductor() {
@@ -216,7 +210,7 @@ const agregarEditarConductor = async () => {
     return;
   }
 
-  if (!n_licencia.value.trim()) {
+  if (!n_licencia.value) {
     errorN_licencia.value = "Por favor, ingresa tu numero de licencia";
     clearErrors();
     console.log("Error de numero");

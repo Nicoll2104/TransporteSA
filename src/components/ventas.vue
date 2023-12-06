@@ -6,9 +6,10 @@
 
     <div class="contenedor_info">
       <div class="contenedor_asientos" v-if="mostrarContenedorAsientos">
-        <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">{{ asiento }}
+        <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">
+          {{ asiento }}
           <div :class="{ 'asiento-seleccionado': asientoSeleccionado === asiento }">
-            <img  class="icon_img" src="../assets/ii.png" alt="" :class="{ 'asiento-vendido': esAsientoVendido(asiento) }" />
+            <img class="icon_img" src="https://cdn-icons-png.flaticon.com/512/566/566234.png" alt="" />
           </div>
         </div>
       </div>
@@ -194,11 +195,6 @@ function mapBuses() {
   }
 }
 
-const asientosVendidos = ref([]);
-
-const esAsientoVendido = (asiento) => {
-  return asientosVendidos.value.includes(asiento);
-};
 
 const agregarCliente = async () => {
   try {
@@ -350,24 +346,13 @@ const crearticket = async () => {
     asientos: asientoSeleccionado.value,
   };
   try {
-    if (Precio.value) {
-    errorPrecio.value = "Por favor, ingrese el precio del producto";
-    ocultarMensajeDeError("errorPrecio");
-    return;
-  } else if (Precio.value <= 0) {
-    errorPrecio.value = "El precio debe ser mayor que 0";
-    ocultarMensajeDeError("errorPrecio");
-    return;
-  } else {
-    errorPrecio.value = "";
-  }
-
-    if (asientoSeleccionado.value) {
-      const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos')) || [];
-      asientosVendidosLocalStorage.push(asientoSeleccionado.value);
-      localStorage.setItem('asientosVendidos', JSON.stringify(asientosVendidosLocalStorage));
+    if (!Precio.value <= 0) {
+      errorPrecio.value = "Por favor, ingrese un precio válido mayor que 0";
+      ocultarMensajeDeError("errorPrecio");
+      return
+    } else {
+      errorPrecio.value = "";
     }
-
     console.log("nuevoboleto", nuevoBoleto);
     await boletoStore.agregarBoleto(nuevoBoleto);
     cliente.value = "";
@@ -387,7 +372,6 @@ const limpiarTodo = () => {
   nombre.value = "";
   telefono.value = "";
   email.value = "";
-  Precio.value = "";
 };
 
 const limpiarCampos = () => {
@@ -395,7 +379,6 @@ const limpiarCampos = () => {
   nombre.value = "";
   telefono.value = "";
   email.value = "";
-  Precio.value = "";
 };
 
 const confirmarAgregarCliente = () => {
@@ -417,13 +400,6 @@ onMounted(() => {
 
   fecha_salida.value = `${year}-${month}-${day}`;
   obtenerInformacion();
-  const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos'));
-
-
-  if (asientosVendidosLocalStorage) {
-    asientosVendidos.value = asientosVendidosLocalStorage;
-  }
-
 });
 </script>
 
@@ -444,10 +420,6 @@ onMounted(() => {
 
 .infoDatos {
   width: 50%;
-}
-
-.asiento-vendido {
-  background-color: red;
 }
 
 .infoDatos2 {
@@ -502,11 +474,11 @@ onMounted(() => {
 }
 
 .numero {
-  font-size: 35px;
+  font-size: 50px;
 }
 
 .asiento-seleccionado {
-  background-color: rgb(255, 208, 0);
+  background-color: rgb(255, 0, 0);
   border-radius: 5px;
 }
 
@@ -517,9 +489,10 @@ onMounted(() => {
 }
 
 .icon_img {
-  width: 45px;
+  width: 40px;
   cursor: pointer;
   border: 1px solid black;
+  background-color: #ffffffad;
   border-radius: 5px;
 }
 

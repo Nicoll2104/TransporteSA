@@ -19,11 +19,7 @@
             <q-btn class="btnEditar" color="white" text-color="black" label="📄" @click="generarPDF(props.row)" />
           </q-td>
         </template>
-
       </q-table>
-
-
-
     </div>
   </div>
 </template>
@@ -32,6 +28,7 @@
 import { onMounted, ref } from "vue";
 import { useboletoStore } from "../stores/boleto.js";
 import { jsPDF } from "jspdf";
+
 
 const boletoStore = useboletoStore()
 
@@ -43,19 +40,12 @@ const dataLoaded = ref(false);
 const columns = [
   { name: "vendedor", required: true, label: "Cedula vendedor", align: "center", field: (row) => row.vendedor.cedula, sortable: true },
   { name: "vendedor", required: true, label: "Nombre vendedor", align: "center", field: (row) => row.vendedor.nombre, sortable: true },
-  { name: "fecha_venta", required: true, label: "Fecha_Venta", align: "center", field: (row) => convertirFecha(row.fechas[0].fecha_venta), sortable: true },
-  { name: "hora_venta", required: true, label: "Hora_Venta", align: "center", field: (row) => (row.fechas[0].hora_venta), sortable: true },
-  { name: "fecha_salida", required: true, label: "Fecha_Salida", align: "center", field: (row) => convertirFecha(row.fechas[0].fecha_salida), sortable: true },
-  { 
-  name: "hora_salida", 
-  required: true, 
-  label: "Hora_Salida", 
-  align: "center", 
-  field: (row) => convertirHora(row.ruta.horarios), 
-  sortable: true 
-},
-  { name: "cliente", required: true, label: "Cedula cliente", align: "center", field: (row) => row.cliente.cedula, sortable: true },
-  { name: "cliente", required: true, label: "Nombre Cliente", align: "center", field: (row) => row.cliente.nombre, sortable: true },
+  { name: "fecha_venta", required: true, label: "Fecha de Venta", align: "center", field: (row) => convertirFecha(row.fechas[0].fecha_venta), sortable: true },
+  { name: "hora_venta", required: true, label: "Hora de Venta", align: "center", field: (row) => (row.fechas[0].hora_venta), sortable: true },
+  { name: "fecha_salida", required: true, label: "Fecha de Salida", align: "center", field: (row) => convertirFecha(row.fechas[0].fecha_salida), sortable: true },
+  { name: "hora_salida", required: true, label: "Hora de Salida", align: "center", field: (row) => convertirHora(row.ruta.horarios), sortable: true },
+  { name: "cliente", required: true, label: "Cedula de cliente", align: "center", field: (row) => row.cliente.cedula, sortable: true },
+  { name: "cliente", required: true, label: "Nombre de Cliente", align: "center", field: (row) => row.cliente.nombre, sortable: true },
   { name: "conductor", required: true, label: "Conductor", align: "center", field: (row) => row.bus.conductor.nombre, sortable: true },
   { name: "numero", required: true, label: "Numero de bus", align: "center", field: (row) => row.bus.numero, sortable: true },
   { name: "ruta", required: true, label: "Origen", align: "center", field: (row) => row.ruta.origen, sortable: true },
@@ -67,14 +57,15 @@ const columns = [
 
 function convertirFecha(cadenaFecha) {
   const fecha = new Date(cadenaFecha);
+  const offset = 5 * 60;
+  fecha.setMinutes(fecha.getMinutes() + offset);
   const año = fecha.getFullYear();
   const mes = (fecha.getMonth() + 1).toString().padStart(2, "0");
   const dia = fecha.getDate().toString().padStart(2, "0");
 
-  const fechaFormateada = `${año}/${mes}/${dia}`;
+  const fechaFormateada = `${dia}/${mes}/${año}`;
   return fechaFormateada;
 }
-
 
 
 function convertirHora(cadenaHora) {
@@ -91,8 +82,6 @@ function convertirHora(cadenaHora) {
 
   return `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')} ${sufijo}`;
 }
-
-
 
 
 const obtenerBoleto = async () => {
@@ -171,7 +160,6 @@ const generarPDF = (registro) => {
       doc.text(`${info.label}: ${info.value}`, 5, y);
     }
 
-    // Dibujar un cuadro con borde alrededor de cada información del boleto
     drawBorderedRect(4, y - 4, maxWidth - 8, 8);
 
     y += 12;
@@ -195,7 +183,7 @@ onMounted(() => {
   color: red;
 }
 
-.cargando{
+.cargando {
   display: flex;
   position: relative;
   top: 200px;
