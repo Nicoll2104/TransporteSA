@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <div class="cargando">
-      <q-spinner-ios v-if="loading" color="primary" size="100px" />
+      <q-spinner-hourglass v-if="loading" color="blue" size="100px" />
     </div>
 
     <div class="cargar_contenedor" v-if="dataLoaded">
@@ -46,7 +46,14 @@ const columns = [
   { name: "fecha_venta", required: true, label: "Fecha_Venta", align: "center", field: (row) => convertirFecha(row.fechas[0].fecha_venta), sortable: true },
   { name: "hora_venta", required: true, label: "Hora_Venta", align: "center", field: (row) => (row.fechas[0].hora_venta), sortable: true },
   { name: "fecha_salida", required: true, label: "Fecha_Salida", align: "center", field: (row) => convertirFecha(row.fechas[0].fecha_salida), sortable: true },
-  { name: "ruta", required: true, label: "Hora_Salida", align: "center", field: (row) => row.ruta.horarios, sortable: true },
+  { 
+  name: "hora_salida", 
+  required: true, 
+  label: "Hora_Salida", 
+  align: "center", 
+  field: (row) => convertirHora(row.ruta.horarios), 
+  sortable: true 
+},
   { name: "cliente", required: true, label: "Cedula cliente", align: "center", field: (row) => row.cliente.cedula, sortable: true },
   { name: "cliente", required: true, label: "Nombre Cliente", align: "center", field: (row) => row.cliente.nombre, sortable: true },
   { name: "conductor", required: true, label: "Conductor", align: "center", field: (row) => row.bus.conductor.nombre, sortable: true },
@@ -70,14 +77,23 @@ function convertirFecha(cadenaFecha) {
 
 
 
-function convertirHora(cadenaFecha) {
-  const fecha = new Date(cadenaFecha);
-  const horas = fecha.getUTCHours().toString().padStart(2, "0");
-  const minutos = fecha.getUTCMinutes().toString().padStart(2, "0");
+function convertirHora(cadenaHora) {
+  const [horasStr, minutosStr] = cadenaHora.split(':');
+  let horas = parseInt(horasStr, 10);
+  const minutos = parseInt(minutosStr, 10);
 
-  const horaFormateada = `${horas}:${minutos}`;
-  return horaFormateada;
+  const sufijo = horas >= 12 ? 'PM' : 'AM';
+  if (horas > 12) {
+    horas -= 12;
+  } else if (horas === 0) {
+    horas = 12;
+  }
+
+  return `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')} ${sufijo}`;
 }
+
+
+
 
 const obtenerBoleto = async () => {
   loading.value = true;
@@ -100,47 +116,70 @@ const obtenerBoleto = async () => {
 
 const generarPDF = (registro) => {
   const doc = new jsPDF({
-    orientation: 'portrait', 
-    unit: 'mm', 
-    format: [85, 120] 
+    orientation: 'portrait',
+    unit: 'mm',
+    format: [195, 115]
   });
 
-  doc.setLineWidth(0.5); 
-  doc.setFontSize(12); 
+  doc.setLineWidth(0.5);
+  doc.setFontSize(12);
 
-  doc.text(`Boleto de Autobús`, doc.internal.pageSize.getWidth() / 2, 5, { align: 'center' });
+  // Título del boleto
+  const header = 'Boleto de Autobús';
+  const maxWidth = doc.internal.pageSize.getWidth();
+  doc.setFont('times', 'bold');
+  doc.setFontSize(16);
+  const headerWidth = doc.getStringUnitWidth(header) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+  const headerX = (maxWidth - headerWidth) / 2;
+  doc.text(header, headerX, 10);
+
+  // Información del boleto
   const ticketInfo = [
-    { label: "Cedula de vendedor", value: registro.vendedor.cedula },
+    { label: "Cédula de vendedor", value: registro.vendedor.cedula },
     { label: "Nombre de vendedor", value: registro.vendedor.nombre },
     { label: "Fecha de Venta", value: convertirFecha(registro.fechas[0].fecha_salida) },
     { label: "Hora de Venta", value: registro.fechas[0].hora_venta },
     { label: "Fecha de Salida", value: convertirFecha(registro.fechas[0].fecha_salida) },
-    { label: "Hora de Salida", value: registro.ruta.horarios },
-    { type: "line" },
-    { label: "Cedula de cliente", value: registro.cliente.cedula },
+    { label: "Hora de Salida", value: convertirHora(registro.ruta.horarios) },
+    { label: "Cédula de cliente", value: registro.cliente.cedula },
     { label: "Nombre de Cliente", value: registro.cliente.nombre },
     { label: "Nombre de conductor", value: registro.bus.conductor.nombre },
-    { label: "Numero de bus", value: registro.bus.numero },
+    { label: "Número de bus", value: registro.bus.numero },
     { label: "Origen", value: registro.ruta.origen },
     { label: "Destino", value: registro.ruta.destino },
     { label: "Número de asiento", value: registro.asientos },
     { label: "Precio", value: registro.Precio },
   ];
 
-  let y = 15; 
+  let y = 30;
+
+  // Función para dibujar un cuadro con borde
+  const drawBorderedRect = (x, y, width, height) => {
+    doc.setLineWidth(0.2);
+    doc.rect(x, y, width, height);
+  };
 
   ticketInfo.forEach(info => {
-    if (info.type === "line") {
-      doc.line(5, y + 2, 75, y + 2); 
+    doc.setFont('times', 'normal');
+    doc.setFontSize(12);
+
+    if (info.label === "Hora de Salida" || info.label === "Hora de Venta") {
+      doc.setFont('times', 'italic');
+      doc.text(`${info.label}: ${info.value}`, 5, y);
+      doc.setFont('times');
     } else {
       doc.text(`${info.label}: ${info.value}`, 5, y);
     }
-    
-    y += (info.type === "line") ? 12 : 6; 
+
+    // Dibujar un cuadro con borde alrededor de cada información del boleto
+    drawBorderedRect(4, y - 4, maxWidth - 8, 8);
+
+    y += 12;
   });
 
   doc.save(`Boleto_${registro._id}.pdf`);
 };
+
 
 onMounted(() => {
   obtenerBoleto();
@@ -156,34 +195,12 @@ onMounted(() => {
   color: red;
 }
 
-.icono {
-  color: white;
-}
-
-
-.infoDatos {
+.cargando{
   display: flex;
-  margin: 0 auto;
-  flex-direction: column;
-}
-
-.ilDatos {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-}
-
-
-.labelDatos {
-  display: flex;
+  position: relative;
+  top: 200px;
   align-items: center;
-  width: 60px;
-
-}
-
-.inputDatos {
-  width: 200px;
-  padding: 5px;
+  justify-content: center;
 }
 
 .btnEditar {

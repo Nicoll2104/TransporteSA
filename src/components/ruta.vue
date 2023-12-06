@@ -1,95 +1,106 @@
 <template>
   <div class="q-pa-md">
+    <div class="cargar_contenedor">
+      <div class="title">
+        <h3>Datos Rutas</h3>
+      </div>
 
-    <div class="title">
-      <h3>Datos Rutas</h3>
-      <div class="raya"></div>
-    </div><br><br>
+      <div class="spinner-container" v-if="cargando">
+        <q-spinner-hourglass size="100px" color="primary" />
+        <p class="p-carga">Cargando...</p>
+      </div>
 
-    <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
+      <div class="contenedor_TD" v-else>
+        <div class="raya"></div>
+        <br>
+        <div class="agre"><q-btn label="Agregar" color="blue" @click="modal = true" /></div><br><br>
+        <br>
+        <q-table title="DATOS RUTAS" :rows="rows" :columns="columns" row-key="origen" class="tableRT">
+          <template v-slot:body-cell-horarios="props">
+            <q-td key="horarios" :props="props">
+              {{ convertirFormatoAMPM(props.row.horarios) }}
+            </q-td>
+          </template>
+          <template v-slot:body-cell-status="props">
+            <q-td key="status" :props="props">
+              <span class="color1" v-if="props.row.status == 1">Activo</span>
+              <span class="color2" v-else>Inactivo</span>
+            </q-td>
+          </template>
+          <template v-slot:body-cell-acciones="props">
+            <q-td key="acciones" :props="props">
+              <q-btn class="btnEditar" icon="edit" color="blue" @click="editarRuta(props.row)"></q-btn>
+              <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
+              <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
+            </q-td>
+          </template>
+        </q-table>
 
-    <q-table title="DATOS RUTAS" :rows="rows" :columns="columns" row-key="origen" class="tableRT">
-      <template v-slot:body-cell-horarios="props">
-        <q-td key="horarios" :props="props">
-          {{ convertirFormatoAMPM(props.row.horarios) }}
-        </q-td>
-      </template>
-      <template v-slot:body-cell-status="props">
-        <q-td key="status" :props="props">
-          <span class="color1" v-if="props.row.status == 1">Activo</span>
-          <span class="color2" v-else>Inactivo</span>
-        </q-td>
-      </template>
-      <template v-slot:body-cell-acciones="props">
-        <q-td key="acciones" :props="props">
-          <q-btn class="btnEditar" icon="edit" color="blue" @click="editarRuta(props.row)"></q-btn>
-          <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
-          <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
-        </q-td>
-      </template>
-    </q-table>
 
 
-
-    <q-dialog v-model="modal">
-      <q-card class="conten_modal">
-        <q-card-section class="arri">
-          <div class="text-h6">DATOS DE RUTAS</div>
-        </q-card-section>
-        <q-separator />
-        <q-card-section>
-          <div class="imagen_formulario">
-            <div class="infoDatos">
-              <div class="conten_input">
-                <label for="ORIGEN">Origen</label>
-                <div class="containerInput">
-                  <input placeholder="Origen" type="text" id="ORIGEN" v-model="origen" autocomplete="on">
-                </div>
-                <span class="error">{{ errorOrigen }}</span>
+        <q-dialog v-model="modal" no-backdrop-dismiss>
+          <q-card class="conten_modal">
+            <q-card-section class="arri">
+              <div class="text-h6">DATOS DE RUTAS
+                <q-btn flat class="btn_A1" label="❌" color="white" @click="limpiar" v-close-popup />
               </div>
-              <br>
-              <div class="conten_input">
-                <label for="DESTINO">Destino</label>
-                <div class="containerInput">
-                  <input placeholder="Destino" type="text" id="DESTINO" v-model="destino" autocomplete="on">
+            </q-card-section>
+            <q-separator />
+            <q-card-section>
+              <div class="imagen_formulario">
+                <div class="infoDatos">
+                  <div class="conten_input">
+                    <label for="ORIGEN">Origen</label>
+                    <div class="containerInput">
+                      <input placeholder="Origen" type="text" id="ORIGEN" v-model="origen" autocomplete="on">
+                    </div>
+                    <span class="error">{{ errorOrigen }}</span>
+                  </div>
+                  <br>
+                  <div class="conten_input">
+                    <label for="DESTINO">Destino</label>
+                    <div class="containerInput">
+                      <input placeholder="Destino" type="text" id="DESTINO" v-model="destino" autocomplete="on">
+                    </div>
+                    <span class="error">{{ errorDestino }}</span>
+                  </div>
+                  <br>
+                  <div class="conten_input">
+                    <label for="HORARIOS">Horario de salida</label>
+                    <div class="containerInput">
+                      <input placeholder="Horario" type="time" id="HORARIOS" v-model="horarios" autocomplete="on">
+                    </div>
+                    <span class="error">{{ errorHorario }}</span>
+                  </div>
+                  <br>
+                  <div class="conten_input">
+                    <label for="DISTANCIA">Distancia</label>
+                    <div class="containerInput">
+                      <input placeholder="Distancia" type="number" id="DISTANCIA" v-model="distancia" autocomplete="on">
+                    </div>
+                    <span class="error">{{ errorDistancia }}</span>
+                  </div>
+                  <br>
+                  <div class="conten_input">
+                    <label for="DURACION">Duracion</label>
+                    <div class="containerInput">
+                      <input placeholder="Duracion" type="number" id="DURACION" v-model="duracion" autocomplete="on">
+                    </div>
+                    <span class="error">{{ errorDuracion }}</span>
+                  </div>
+                  <br>
                 </div>
-                <span class="error">{{ errorDestino }}</span>
               </div>
-              <br>
-              <div class="conten_input">
-                <label for="HORARIOS">Horario de salida</label>
-                <div class="containerInput">
-                  <input placeholder="Horario" type="time" id="HORARIOS" v-model="horarios" autocomplete="on">
-                </div>
-                <span class="error">{{ errorHorario }}</span>
-              </div>
-              <br>
-              <div class="conten_input">
-                <label for="DISTANCIA">Distancia</label>
-                <div class="containerInput">
-                  <input placeholder="Distancia" type="text" id="DISTANCIA" v-model="distancia" autocomplete="on">
-                </div>
-                <span class="error">{{ errorDistancia }}</span>
-              </div>
-              <br>
-              <div class="conten_input">
-                <label for="DURACION">Duracion</label>
-                <div class="containerInput">
-                  <input placeholder="Duracion" type="text" id="DURACION" v-model="duracion" autocomplete="on">
-                </div>
-                <span class="error">{{ errorDuracion }}</span>
-              </div>
-              <br>
-            </div>
-          </div>
-        </q-card-section>
-        <q-separator />
-        <q-card-actions align="right">
-          <q-btn flat label="Cerrar" color="white" @click="limpiar" class="btnc" v-close-popup />
-          <q-btn flat label="Aceptar" color="white" class="btna" @click="agregarEditarRuta" :loading="cargando" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+            </q-card-section>
+            <q-separator />
+            <q-card-actions align="right">
+              <q-btn flat label="Cerrar" color="white" @click="limpiar" class="btnc" v-close-popup />
+              <q-btn flat label="Aceptar" color="white" class="btna" @click="agregarEditarRuta" :loading="cargando" />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+      </div>
+    </div>
   </div>
 </template>
   
@@ -125,11 +136,14 @@ const columns = [
 
 async function obtenerRuta() {
   try {
+    cargando.value = true;
     const rutas = await rutaStore.obtener();
     console.log('rutas obtenidas:', rutas);
     rows.value = rutaStore.datosData.reverse();
   } catch (error) {
     console.error('Error al obtener las rutas:', error);
+  } finally {
+    cargando.value = false;
   }
 }
 
@@ -138,7 +152,7 @@ const convertirFormatoAMPM = (hora24) => {
   const [hh, mm] = hora24.split(':');
   let horas = parseInt(hh);
   const sufijo = horas >= 12 ? 'PM' : 'AM';
-  horas = horas % 12 || 12; 
+  horas = horas % 12 || 12;
   return `${horas}:${mm} ${sufijo}`;
 };
 
@@ -151,14 +165,14 @@ const errorDuracion = ref("");
 
 const agregarEditarRuta = async () => {
 
-  if (!origen.value) {
+  if (!origen.value.trim()) {
     errorOrigen.value = "Por favor, ingresa un origen";
     clearErrors();
     console.log("Error de origen");
     return;
   }
 
-  if (!destino.value) {
+  if (!destino.value.trim()) {
     errorDestino.value = "Por favor, ingresa un destino";
     clearErrors();
     console.log("Error de destino");
@@ -177,13 +191,27 @@ const agregarEditarRuta = async () => {
     clearErrors();
     console.log("Error de distancia");
     return;
+  } else if (distancia.value <= 0) {
+    errorDistancia.value = "La distancia debe ser mayor que 0";
+    clearErrors();
+    console.log("Error de distancia");
+    return;
+  } else {
+    errorDistancia.value = "";
   }
 
   if (!duracion.value) {
-    errorDuracion.value = "Por favor, ingresa la duracion";
+    errorDuracion.value = "Por favor, ingresa la duración";
     clearErrors();
-    console.log("Error de duracion");
+    console.log("Error de duración");
     return;
+  } else if (duracion.value <= 0) {
+    errorDuracion.value = "La duración debe ser mayor que 0";
+    clearErrors();
+    console.log("Error de duración");
+    return;
+  } else {
+    errorDuracion.value = "";
   }
 
 
@@ -267,13 +295,13 @@ const editarRuta = (ruta) => {
 }
 
 const clearErrors = () => {
-  setTimeout(()=>{
-  errorOrigen.value = "";
-  errorDestino.value = "";
-  errorHorario.value = "";
-  errorDistancia.value = "";
-  errorDuracion.value = "";
-},4000);
+  setTimeout(() => {
+    errorOrigen.value = "";
+    errorDestino.value = "";
+    errorHorario.value = "";
+    errorDistancia.value = "";
+    errorDuracion.value = "";
+  }, 4000);
 };
 
 const limpiar = () => {
@@ -312,21 +340,45 @@ onMounted(() => {
 </script>
     
 <style scoped>
-
 .btna {
   background-color: #1976d2;
 }
 
-.color1{
+.spinner-container {
+  display: grid;
+  margin: 0%;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+.p-carga {
+  position: relative;
+  bottom: 85px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.color1 {
   color: #51ff00;
 }
 
-.color2{
+.color2 {
   color: #f50a0a;
 }
 
 .btnc {
   background-color: rgb(210, 25, 25);
+}
+
+.btn_A1 {
+  position: relative;
+  left: 80%;
+}
+
+.text-h6 {
+  display: flex;
+  align-items: center;
 }
 
 .btnEditar {
@@ -349,33 +401,33 @@ h3 {
 }
 
 .raya {
-    background-color: rgba(50, 107, 253, 0.85);
-    width: 70%;
-    height: 5px;
-    border-radius: 20px;
+  width: 70%;
+  height: 5px;
+  margin: auto;
+  background-color: rgba(82, 131, 253, 0.85);
 }
 
 .infoDatos {
-    width: 55%;
+  width: 55%;
 }
 
 .q-card__section--vert {
-    padding: 0px;
+  padding: 0px;
 }
 
 
 .imagen_formulario {
-    background-image: url("../assets/logo.PNG");
-    background-size: cover;
-    /* Esto ajustará la imagen para que quepa en el contenedor */
-    background-position: center;
-    padding: 15px;
+  background-image: url("../assets/logo.PNG");
+  background-size: cover;
+  /* Esto ajustará la imagen para que quepa en el contenedor */
+  background-position: center;
+  padding: 15px;
 }
 
 .conten_modal {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 
@@ -399,15 +451,13 @@ h3 {
   margin: auto;
   animation: rotate6234 2.5s ease-in-out infinite;
   z-index: -1;
-  background-image: conic-gradient(
-    from 0deg at 50% 50%,
-    #073aff00 0%,
-    rgb(28, 49, 235) 25%,
-    #073aff00 25%
-  );
+  background-image: conic-gradient(from 0deg at 50% 50%,
+      #073aff00 0%,
+      rgb(28, 49, 235) 25%,
+      #073aff00 25%);
 }
 
-.containerInput > input {
+.containerInput>input {
   width: 100%;
   height: 35px;
   font-size: inherit;
@@ -417,58 +467,57 @@ h3 {
 }
 
 .containerInput>input:focus {
-    outline: none;
+  outline: none;
 }
 
 .containerInput>input:not(:placeholder-shown) {
-    outline: none;
+  outline: none;
 }
 
 .containerInput>input:not(:placeholder-shown):valid {
-    outline: 4px solid rgb(0, 81, 255);
-    border-radius: 0;
+  outline: 4px solid rgb(0, 81, 255);
+  border-radius: 0;
 }
 
 @keyframes rotate6234 {
-    from {
-        transform: rotate(0deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
 
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .arri {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #1976d2;
-    height: 50px;
-    background: linear-gradient(90deg, #1976d2, #1976d2, #1976d2, #1976d2, #50a3f7);
-    color: #ffffff;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1976d2;
+  height: 50px;
+  background: linear-gradient(90deg, #1976d2, #1976d2, #1976d2, #1976d2, #50a3f7);
+  color: #ffffff;
+  width: 100%;
 }
 
 @media (max-width: 500px) {
 
-    .infoDatos {
-        width: 95%;
-    }
+  .infoDatos {
+    width: 95%;
+  }
 
-    .imagen_formulario {
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center;
-        padding: 15px;
-    }
+  .imagen_formulario {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    padding: 15px;
+  }
 
 }
 
-.error{
+.error {
   color: red;
 }
-
 </style>
     
   

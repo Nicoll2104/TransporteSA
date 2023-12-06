@@ -9,11 +9,8 @@
           <q-avatar> </q-avatar>
 
           <div @click="cerrarSesion">
-            <router-link to="/"
-              ><img
-                src="https://cdn-icons-png.flaticon.com/128/1176/1176434.png"
-                style="height: 35px; width: 35px"
-            /></router-link>
+            <router-link to="/"><img src="https://cdn-icons-png.flaticon.com/128/1176/1176434.png"
+                style="height: 35px; width: 35px" /></router-link>
           </div>
         </q-toolbar-title>
       </q-toolbar>
@@ -23,77 +20,46 @@
       <div class="perfil">
         <img
           src="https://img.freepik.com/vector-premium/icono-perfil-usuario-estilo-plano-ilustracion-vector-avatar-miembro-sobre-fondo-aislado-concepto-negocio-signo-permiso-humano_157943-15752.jpg"
-          style="height: 180px; width: 180px"
-        />
+          style="height: 180px; width: 180px" />
       </div>
-
+      <p class="txt">Edwin</p>
       <div class="botoneslate">
         <button class="btn">
-          <router-link to="/home"
-            ><img
-              src="https://cdn-icons-png.flaticon.com/128/6281/6281275.png"
-              style="height: 30px; width: 30px"
-            />
+          <router-link to="/home"><img src="https://cdn-icons-png.flaticon.com/128/6281/6281275.png"
+              style="height: 30px; width: 30px" />
             Home
           </router-link>
         </button>
         <button class="btn">
-          <router-link to="/conductor"
-            ><img
-              src="https://cdn-icons-png.flaticon.com/128/1480/1480682.png"
-              style="height: 30px; width: 30px"
-            />Conductores</router-link
-          >
+          <router-link to="/conductor"><img src="https://cdn-icons-png.flaticon.com/128/1480/1480682.png"
+              style="height: 30px; width: 30px" />Conductores</router-link>
         </button>
         <button class="btn">
-          <router-link to="/vendedor"
-            ><img
-              src="https://cdn-icons-png.flaticon.com/128/73/73199.png"
-              style="height: 30px; width: 30px"
-            />Vendedores</router-link
-          >
+          <router-link to="/vendedor"><img src="https://cdn-icons-png.flaticon.com/128/73/73199.png"
+              style="height: 30px; width: 30px" />Vendedores</router-link>
         </button>
         <button class="btn">
-          <router-link to="/bus"
-            ><img
-              src="https://cdn-icons-png.flaticon.com/128/0/308.png"
-              style="height: 30px; width: 30px"
-            />Buses</router-link
-          >
+          <router-link to="/bus"><img src="https://cdn-icons-png.flaticon.com/128/0/308.png"
+              style="height: 30px; width: 30px" />Buses</router-link>
         </button>
         <button class="btn">
-          <router-link to="/clientes"
-            ><img
-              src="https://cdn-icons-png.flaticon.com/128/3126/3126647.png"
-              style="height: 30px; width: 30px"
-            />Clientes</router-link
-          >
+          <router-link to="/clientes"><img src="https://cdn-icons-png.flaticon.com/128/3126/3126647.png"
+              style="height: 30px; width: 30px" />Clientes</router-link>
         </button>
         <button class="btn">
-          <router-link to="/ruta"
-            ><img
-              src="https://cdn-icons-png.flaticon.com/128/3419/3419596.png"
-              style="height: 30px; width: 30px"
-            />Rutas</router-link
-          >
+          <router-link to="/ruta"><img src="https://cdn-icons-png.flaticon.com/128/3419/3419596.png"
+              style="height: 30px; width: 30px" />Rutas</router-link>
         </button>
 
         <button class="btn">
-          <router-link to="/ventas"
-            ><img
-              src="https://cdn-icons-png.flaticon.com/128/7160/7160625.png"
-              style="height: 30px; width: 30px"
-            />Ventas</router-link
-          >
+          <router-link to="/ventas"><img src="https://cdn-icons-png.flaticon.com/128/7160/7160625.png"
+              style="height: 30px; width: 30px" />Ventas</router-link>
         </button>
 
         <button class="btn">
-          <router-link to="/boleto"
-            ><img
+          <router-link to="/boleto"><img
               src="https://t3.ftcdn.net/jpg/06/41/84/02/240_F_641840207_Q30aIf0Aa8h9pIeTCRpFx1CN6kT6f9u3.jpg"
-              style="height: 30px; width: 30px"
-            />Tiquetes</router-link
-          >
+              style="height: 30px; width: 30px" />Tiquetes</router-link>
         </button>
       </div>
     </q-drawer>
@@ -130,6 +96,7 @@ export default {
     };
   },
 };
+
 </script>
 
 <style scoped>
@@ -137,11 +104,22 @@ export default {
   display: flex;
   justify-content: center;
 }
+
 .nombreLogo {
   position: relative;
   top: 9px;
   color: transparent;
   font-size: 20px;
+}
+
+.txt {
+  display: flex;
+  position: relative;
+  align-items: center;
+  font-size: 20px;
+  bottom: 10px;
+  margin: 0;
+  justify-content: center;
 }
 
 .botoneslate {
@@ -156,9 +134,11 @@ export default {
   display: flex;
   gap: 35px;
 }
-.botoneslate a:hover{
+
+.botoneslate a:hover {
   color: #ffffff;
 }
+
 .btn {
   height: 80px;
   border: none;
@@ -173,7 +153,7 @@ export default {
 
 .btn:hover {
   background-color: rgb(180, 217, 250);
-  
+
 }
 
 h1 {

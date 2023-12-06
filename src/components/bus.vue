@@ -3,113 +3,123 @@
     <div class="cargar_contenedor">
       <div class="title">
         <h3>Datos Buses</h3>
+
+      </div>
+
+      <div class="spinner-container" v-if="cargando">
+        <q-spinner-hourglass size="100px" color="primary" />
+        <p class="p-carga">Cargando...</p>
+      </div>
+
+      <div class="contenedor_TD" v-else>
         <div class="raya"></div>
-      </div>
-      <br />
+        <br>
+        <div class="agre">
+          <q-btn label="Agregar" color="blue" @click="modal = true" />
+        </div>
+        <br />
 
-      <div class="agre">
-        <q-btn label="Agregar" color="blue" @click="modal = true" />
-      </div>
-      <br />
+        <q-table title="DATOS BUSES" :rows="rows" :columns="columns" row-key="cedula">
+          <template v-slot:body-cell-status="props">
+            <q-td key="status" :props="props">
+              <span class="color1" v-if="props.row.status == 1">Activo</span>
+              <span class="color2" v-else>Inactivo</span>
+            </q-td>
+          </template>
+          <template v-slot:body-cell-acciones="props">
+            <q-td key="acciones" :props="props">
+              <q-btn class="btnEditar" icon="edit" color="primary" @click="editarBus(props.row)"></q-btn>
+              <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
+              <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
+            </q-td>
+          </template>
+        </q-table>
 
-      <q-table title="DATOS BUSES" :rows="rows" :columns="columns" row-key="cedula">
-        <template v-slot:body-cell-status="props">
-          <q-td key="status" :props="props">
-            <span class="color1" v-if="props.row.status == 1">Activo</span>
-            <span class="color2" v-else>Inactivo</span>
-          </q-td>
-        </template>
-        <template v-slot:body-cell-acciones="props">
-          <q-td key="acciones" :props="props">
-            <q-btn class="btnEditar" icon="edit" color="primary" @click="editarBus(props.row)"></q-btn>
-            <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
-            <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
-          </q-td>
-        </template>
-      </q-table>
-
-      <q-dialog v-model="modal">
-        <q-card class="conten_modal">
-          <q-card-section class="arri">
-            <div class="text-h6">DATOS DE BUSES</div>
-          </q-card-section>
-          <q-separator />
-          <q-card-section>
-            <div class="imagen_formulario">
-              <div class="infoDatos">
-                <div class="conten_input">
-                  <label for="PLACA">Placa</label>
-                  <div class="containerInput">
-                    <input placeholder="Placa" type="text" id="PLACA" v-model="placa" autocomplete="on" />
+        <q-dialog v-model="modal" no-backdrop-dismiss>
+          <q-card class="conten_modal">
+            <q-card-section class="arri">
+              <div class="text-h6">DATOS DE BUSES
+                <q-btn flat class="btn_A1" label="❌" color="white" @click="limpiar" v-close-popup />
+              </div>
+            </q-card-section>
+            <q-separator />
+            <q-card-section>
+              <div class="imagen_formulario">
+                <div class="infoDatos">
+                  <div class="conten_input">
+                    <label for="PLACA">Placa</label>
+                    <div class="containerInput">
+                      <input placeholder="Placa" type="text" id="PLACA" v-model="placa" autocomplete="on" />
+                    </div>
+                    <span>{{ errorPlaca }}</span>
                   </div>
-                  <span>{{ errorPlaca }}</span>
-                </div>
-                <br />
-                <div class="conten_input">
-                  <label for="NUMERO">Numero de bus</label>
-                  <div class="containerInput">
-                    <input placeholder="Numero" type="number" id="NUMERO" v-model="numero" autocomplete="on" />
+                  <br />
+                  <div class="conten_input">
+                    <label for="NUMERO">Numero de bus</label>
+                    <div class="containerInput">
+                      <input placeholder="Numero" type="number" id="NUMERO" v-model="numero" autocomplete="on" />
+                    </div>
+                    <span>{{ errorNumero }}</span>
                   </div>
-                  <span>{{ errorNumero }}</span>
-                </div>
-                <br />
-                <label for="">Conductor</label>
-                <q-select class="input" filled v-model:model-value="conductor" use-input hide-selected fill-input input-debounce="0"
-                  :options="opcionesConductorFiltro" @filter="filterFn" 
-                  style="width: 100%; border: 1px solid black; border-radius: 5px; height: 1%; background: rgba(255, 255, 255, 0);">
-                  <template v-slot:no-option>
-                    <q-item>
-                      <q-item-section class="text-grey">
-                        No results
-                      </q-item-section>
-                    </q-item>
-                  </template>
-                </q-select>
-                <span>{{ errorConductor }}</span>
-                <br />
-                <div class="conten_input">
-                  <label for="MODELO">Modelo</label>
-                  <div class="containerInput">
-                    <input placeholder="Modelo" type="text" id="MODELO" v-model="modelo" autocomplete="on" />
+                  <br />
+                  <label for="">Conductor</label>
+                  <q-select class="input" filled v-model:model-value="conductor" use-input hide-selected fill-input
+                    input-debounce="0" :options="opcionesConductorFiltro" @filter="filterFn"
+                    style="width: 100%; border: 1px solid black; border-radius: 5px; height: 1%; background: rgba(255, 255, 255, 0);">
+                    <template v-slot:no-option>
+                      <q-item>
+                        <q-item-section class="text-grey">
+                          No results
+                        </q-item-section>
+                      </q-item>
+                    </template>
+                  </q-select>
+                  <span>{{ errorConductor }}</span>
+                  <br />
+                  <div class="conten_input">
+                    <label for="MODELO">Modelo</label>
+                    <div class="containerInput">
+                      <input placeholder="Modelo" type="number" id="MODELO" v-model="modelo" autocomplete="on" />
+                    </div>
+                    <span>{{ errorModelo }}</span>
                   </div>
-                  <span>{{ errorModelo }}</span>
-                </div>
-                <br />
-                <div class="conten_input">
-                  <label for="SOAT">Soat</label>
-                  <div class="containerInput">
-                    <input placeholder="Soat" type="date" id="SOAT" v-model="soat" autocomplete="on" />
+                  <br />
+                  <div class="conten_input">
+                    <label for="SOAT">Soat</label>
+                    <div class="containerInput">
+                      <input placeholder="Soat" type="date" id="SOAT" v-model="soat" autocomplete="on" />
+                    </div>
+                    <span>{{ errorSoat }}</span>
                   </div>
-                  <span>{{ errorSoat }}</span>
-                </div>
-                <br />
-                <div class="conten_input">
-                  <label for="NUMERO DE ASIENTOS">Numero de asientos</label>
-                  <div class="containerInput">
-                    <input placeholder="Numero de asientos" type="number" id="N_ASIENTO" v-model="n_asiento"
-                      autocomplete="on" />
+                  <br />
+                  <div class="conten_input">
+                    <label for="NUMERO DE ASIENTOS">Numero de asientos</label>
+                    <div class="containerInput">
+                      <input placeholder="Numero de asientos" type="number" id="N_ASIENTO" v-model="n_asiento"
+                        autocomplete="on" />
+                    </div>
+                    <span>{{ errorAsiento }}</span>
                   </div>
-                  <span>{{ errorAsiento }}</span>
-                </div>
-                <br />
-                <div class="conten_input">
-                  <label for="EMPRESA_ASIGNADA">Empresa asignada </label>
-                  <div class="containerInput">
-                    <input placeholder="Empresa asignada" type="text" id="EMPRESA_ASIGNADA" v-model="empresa_asignada"
-                      autocomplete="on" />
+                  <br />
+                  <div class="conten_input">
+                    <label for="EMPRESA_ASIGNADA">Empresa asignada </label>
+                    <div class="containerInput">
+                      <input placeholder="Empresa asignada" type="text" id="EMPRESA_ASIGNADA" v-model="empresa_asignada"
+                        autocomplete="on" />
+                    </div>
+                    <span>{{ errorEmpresa }}</span>
                   </div>
-                  <span>{{ errorEmpresa }}</span>
                 </div>
               </div>
-            </div>
-          </q-card-section>
-          <q-separator />
-          <q-card-actions align="right">
-            <q-btn flat label="Cerrar" class="btnc" @click="limpiar" color="white" v-close-popup />
-            <q-btn flat label="Aceptar" class="btna" @click="agregarEditarBus" color="white" :loading="cargando" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
+            </q-card-section>
+            <q-separator />
+            <q-card-actions align="right">
+              <q-btn flat label="Cerrar" class="btnc" @click="limpiar" color="white" v-close-popup />
+              <q-btn flat label="Aceptar" class="btna" @click="agregarEditarBus" color="white" :loading="cargando" />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+      </div>
     </div>
   </div>
 </template>
@@ -175,11 +185,14 @@ const columns = [
 
 async function obtenerBus() {
   try {
+    cargando.value = true
     const buses = await busStore.obtener();
     console.log("Buses obtenidos:", buses);
     rows.value = buses.busesPopulate.reverse();
   } catch (error) {
     console.error("Error al obtener los clientes:", error);
+  } finally {
+    cargando.value = false;
   }
 }
 
@@ -237,7 +250,11 @@ const agregarEditarBus = async () => {
     cargando.value = false;
     clearErrors();
     return;
-  } else {
+  } else if (numero.value <= 0) {
+    errorNumero.value = "El numero ingresado debe ser mayor a 0"
+    cargando.value = false;
+    clearErrors();
+  } else{
     errorNumero.value = "";
   }
 
@@ -250,11 +267,15 @@ const agregarEditarBus = async () => {
     errorConductor.value = "";
   }
 
-  if (!modelo.value.trim()) {
+  if (!modelo.value) {
     errorModelo.value = "Por favor, ingresar un modelo para el bus";
     cargando.value = false;
     clearErrors();
     return;
+  } else if (modelo.value <= 0) {
+    errorModelo.value = "El numero ingresado debe ser mayor a 0"
+    cargando.value = false;
+    clearErrors();
   } else {
     errorModelo.value = "";
   }
@@ -285,7 +306,7 @@ const agregarEditarBus = async () => {
     cargando.value = false;
     clearErrors();
     return;
-  } else if (n_asiento.value<= 0) {
+  } else if (n_asiento.value <= 0) {
     errorAsiento.value = "El número de asientos debe ser mayor que 0";
     cargando.value = false;
     clearErrors();
@@ -293,7 +314,7 @@ const agregarEditarBus = async () => {
   } else {
     errorAsiento.value = "";
   }
-  
+
 
   if (!empresa_asignada.value.trim()) {
     errorEmpresa.value = "Por favor, ingresar la empresa asignada del bus";
@@ -303,7 +324,7 @@ const agregarEditarBus = async () => {
   } else {
     errorEmpresa.value = "";
   }
-  
+
   if (busEditando.value) {
     const busEditado = {
       _id: busEditando.value._id,
@@ -390,13 +411,14 @@ const editarBus = (bus) => {
     value: String(bus.conductor._id),
   };
   modelo.value = bus.modelo;
-  soat.value = bus.soat;
+  const fechaFormateada = format(new Date(bus.soat), "yyyy-MM-dd");
+  soat.value = fechaFormateada;
   n_asiento.value = bus.n_asiento;
   empresa_asignada.value = bus.empresa_asignada;
   busEditando.value = bus;
   modal.value = true;
   $q.notify({
-    message: `Editando al conductor ${bus.empresa_asignada}`,
+    message: `Editando al bus ${bus.empresa_asignada} - ${bus.numero}`,
     textColor: "white",
     icon: "edit",
     color: "info",
@@ -447,6 +469,31 @@ onMounted(() => {
   background-color: rgb(210, 25, 25);
 }
 
+.spinner-container {
+  display: grid;
+  margin: 0%;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+.p-carga {
+  position: relative;
+  bottom: 85px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.btn_A1 {
+  position: relative;
+  left: 80%;
+}
+
+.text-h6 {
+  display: flex;
+  align-items: center;
+}
+
 .color1 {
   color: #51ff00;
 }
@@ -455,7 +502,7 @@ onMounted(() => {
   color: #f50a0a;
 }
 
-span{
+span {
   color: red;
 }
 
@@ -479,10 +526,10 @@ h3 {
 }
 
 .raya {
-  background-color: rgba(50, 107, 253, 0.85);
   width: 70%;
   height: 5px;
-  border-radius: 20px;
+  margin: auto;
+  background-color: rgba(82, 131, 253, 0.85);
 }
 
 .infoDatos {
@@ -527,15 +574,13 @@ h3 {
   margin: auto;
   animation: rotate6234 2.5s ease-in-out infinite;
   z-index: -1;
-  background-image: conic-gradient(
-    from 0deg at 50% 50%,
-    #073aff00 0%,
-    rgb(28, 49, 235) 25%,
-    #073aff00 25%
-  );
+  background-image: conic-gradient(from 0deg at 50% 50%,
+      #073aff00 0%,
+      rgb(28, 49, 235) 25%,
+      #073aff00 25%);
 }
 
-.containerInput > input {
+.containerInput>input {
   width: 100%;
   height: 35px;
   font-size: inherit;

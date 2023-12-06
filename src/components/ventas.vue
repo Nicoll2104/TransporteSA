@@ -350,13 +350,17 @@ const crearticket = async () => {
     asientos: asientoSeleccionado.value,
   };
   try {
-    if (Precio.value <= 0) {
-      errorPrecio.value = "Por favor, ingrese un precio válido mayor que 0";
-      ocultarMensajeDeError("errorPrecio");
-      return;
-    } else {
-      errorPrecio.value = "";
-    }
+    if (Precio.value) {
+    errorPrecio.value = "Por favor, ingrese el precio del producto";
+    ocultarMensajeDeError("errorPrecio");
+    return;
+  } else if (Precio.value <= 0) {
+    errorPrecio.value = "El precio debe ser mayor que 0";
+    ocultarMensajeDeError("errorPrecio");
+    return;
+  } else {
+    errorPrecio.value = "";
+  }
 
     if (asientoSeleccionado.value) {
       const asientosVendidosLocalStorage = JSON.parse(localStorage.getItem('asientosVendidos')) || [];

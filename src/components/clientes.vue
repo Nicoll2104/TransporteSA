@@ -6,7 +6,7 @@
       </div>
 
       <div class="spinner-container" v-if="cargando">
-        <q-spinner size="100px" color="primary" />
+        <q-spinner-hourglass size="100px" color="primary" />
         <p class="p-carga">Cargando...</p>
       </div>
 
@@ -17,12 +17,7 @@
           <q-btn label="Agregar" color="blue" @click="modal = true" />
         </div>
         <br />
-        <q-table
-          title="DATOS CLIENTES"
-          :rows="rows"
-          :columns="columns"
-          row-key="cedula"
-        >
+        <q-table title="DATOS CLIENTES" :rows="rows" :columns="columns" row-key="cedula">
           <template v-slot:body-cell-status="props">
             <q-td key="status" :props="props">
               <span class="color1" v-if="props.row.status == 1">Activo</span>
@@ -31,28 +26,18 @@
           </template>
           <template v-slot:body-cell-acciones="props">
             <q-td key="acciones" :props="props">
-              <q-btn
-                class="btnEditar"
-                icon="edit"
-                color="blue"
-                @click="editarCliente(props.row)"
-              ></q-btn>
-              <q-btn
-                class="btnActivar"
-                v-if="props.row.status == 1"
-                @click="desactivar(props.row._id)"
-                >❌</q-btn
-              >
-              <q-btn class="btnActivar" v-else @click="activar(props.row._id)"
-                >✅</q-btn
-              >
+              <q-btn class="btnEditar" icon="edit" color="blue" @click="editarCliente(props.row)"></q-btn>
+              <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
+              <q-btn class="btnActivar" v-else @click="activar(props.row._id)">✅</q-btn>
             </q-td>
           </template>
         </q-table>
-        <q-dialog v-model="modal">
+        <q-dialog v-model="modal" no-backdrop-dismiss>
           <q-card class="conten_modal">
             <q-card-section class="arri">
-              <div class="text-h6">DATOS DE CLIENTE</div>
+              <div class="text-h6">DATOS DE CLIENTE
+                <q-btn flat class="btn_A1" label="❌" color="white" @click="limpiar" v-close-popup />
+              </div>
             </q-card-section>
             <q-separator />
             <q-card-section>
@@ -60,13 +45,7 @@
                 <div class="conten_input">
                   <label for="CEDULA">Cedula</label>
                   <div class="containerInput">
-                    <input
-                      placeholder="Cedula"
-                      type="text"
-                      id="CEDULA"
-                      v-model="cedula"
-                      autocomplete="on"
-                    />
+                    <input placeholder="Cedula" type="text" id="CEDULA" v-model="cedula" autocomplete="on" />
                   </div>
                   <span class="error">{{ errorCedula }}</span>
                 </div>
@@ -74,13 +53,7 @@
                 <div class="conten_input">
                   <label for="NOMBRE">Nombre</label>
                   <div class="containerInput">
-                    <input
-                      placeholder="Nombre"
-                      type="text"
-                      id="NOMBRE"
-                      v-model="nombre"
-                      autocomplete="on"
-                    />
+                    <input placeholder="Nombre" type="text" id="NOMBRE" v-model="nombre" autocomplete="on" />
                   </div>
                   <span class="error">{{ errorNombre }}</span>
                 </div>
@@ -88,13 +61,7 @@
                 <div class="conten_input">
                   <label for="TELEFONO">Telefono</label>
                   <div class="containerInput">
-                    <input
-                      placeholder="Telefono"
-                      type="number"
-                      id="TELEFONO"
-                      v-model="telefono"
-                      autocomplete="on"
-                    />
+                    <input placeholder="Telefono" type="number" id="TELEFONO" v-model="telefono" autocomplete="on" />
                   </div>
                   <span class="error">{{ errorTelefono }}</span>
                 </div>
@@ -102,13 +69,7 @@
                 <div class="conten_input">
                   <label for="EMAIL">Email</label>
                   <div class="containerInput">
-                    <input
-                      placeholder="Gmail"
-                      type="email"
-                      id="EMAIL"
-                      v-model="email"
-                      autocomplete="on"
-                    />
+                    <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
                   </div>
                   <span class="error">{{ errorEmail }}</span>
                 </div>
@@ -116,22 +77,8 @@
             </q-card-section>
             <q-separator />
             <q-card-actions align="right">
-              <q-btn
-                flat
-                label="Cerrar"
-                class="btnc"
-                @click="limpiar"
-                color="white"
-                v-close-popup
-              />
-              <q-btn
-                flat
-                label="Aceptar"
-                class="btna"
-                color="white"
-                @click="agregarEditarCliente"
-                :loading="cargando"
-              />
+              <q-btn flat label="Cerrar" class="btnc" @click="limpiar" color="white" v-close-popup />
+              <q-btn flat label="Aceptar" class="btna" color="white" @click="agregarEditarCliente" :loading="cargando" />
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -404,10 +351,21 @@ onMounted(() => {
   color: #f50a0a;
 }
 
+.btn_A1 {
+  position: relative;
+  left: 80%;
+}
+
+.text-h6 {
+  display: flex;
+  align-items: center;
+}
+
 .p-carga {
   position: relative;
   bottom: 85px;
-  left: 10px;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .conten_modal {
@@ -479,15 +437,13 @@ h3 {
   margin: auto;
   animation: rotate6234 2.5s ease-in-out infinite;
   z-index: -1;
-  background-image: conic-gradient(
-    from 0deg at 50% 50%,
-    #073aff00 0%,
-    rgb(28, 49, 235) 25%,
-    #073aff00 25%
-  );
+  background-image: conic-gradient(from 0deg at 50% 50%,
+      #073aff00 0%,
+      rgb(28, 49, 235) 25%,
+      #073aff00 25%);
 }
 
-.containerInput > input {
+.containerInput>input {
   width: 100%;
   height: 35px;
   font-size: inherit;
@@ -496,15 +452,15 @@ h3 {
   background-color: #ffffff;
 }
 
-.containerInput > input:focus {
+.containerInput>input:focus {
   outline: none;
 }
 
-.containerInput > input:not(:placeholder-shown) {
+.containerInput>input:not(:placeholder-shown) {
   outline: none;
 }
 
-.containerInput > input:not(:placeholder-shown):valid {
+.containerInput>input:not(:placeholder-shown):valid {
   outline: 4px solid rgb(0, 81, 255);
   border-radius: 0;
 }
@@ -523,14 +479,12 @@ h3 {
   display: flex;
   justify-content: center;
   background-color: #f50a0a;
-  background: linear-gradient(
-    90deg,
-    #1976d2,
-    #1976d2,
-    #1976d2,
-    #1976d2,
-    #50a3f7
-  );
+  background: linear-gradient(90deg,
+      #1976d2,
+      #1976d2,
+      #1976d2,
+      #1976d2,
+      #50a3f7);
   color: #ffffff;
   width: 100%;
 }
@@ -538,6 +492,4 @@ h3 {
 .error {
   color: red;
 }
-
-
 </style>
