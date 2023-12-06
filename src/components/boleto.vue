@@ -2,6 +2,7 @@
   <div class="q-pa-md">
     <div class="cargando">
       <q-spinner-hourglass v-if="loading" color="blue" size="100px" />
+      <p class="p-carga">Cargando...</p>
     </div>
 
     <div class="cargar_contenedor" v-if="dataLoaded">
@@ -184,12 +185,19 @@ onMounted(() => {
 }
 
 .cargando {
-  display: flex;
+  display: grid;
   position: relative;
   top: 200px;
   align-items: center;
   justify-content: center;
 }
+
+.p-carga {
+  position: relative;
+  font-size: 20px;
+  font-weight: 600;
+}
+
 
 .btnEditar {
   margin: 5px;

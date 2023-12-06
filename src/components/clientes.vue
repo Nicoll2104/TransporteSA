@@ -188,7 +188,7 @@ const agregarEditarCliente = async () => {
       return;
     }
 
-    if (!nombre.value) {
+    if (!nombre.value.trim()) {
       errorNombre.value = "Por favor, ingrese su nombre";
       clearErrors();
       return;
@@ -200,7 +200,7 @@ const agregarEditarCliente = async () => {
       return;
     }
 
-    if (!email.value) {
+    if (!email.value.trim()) {
       errorEmail.value = "Por favor, ingresar el correo";
       clearErrors();
       return;

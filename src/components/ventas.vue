@@ -1,15 +1,42 @@
 <template>
   <div class="contenedor_principal">
-    <div class="boton_agregar">
+    <div class="boton_agregar" v-if="mostrarBotonAgregar">
       <q-btn label="Agregar" color="blue" @click="modal = true" />
     </div>
+    <q-btn color="primary" class="btn_info" icon="keyboard_arrow_down" label="Datos" v-if="mostrarContenedorAsientos">
+      <q-menu transition-show="flip-right" transition-hide="flip-left">
+        <q-list style="min-width: 100px">
+          <q-item clickable>
+            <q-item-section>
+              <p class="menu_n">Ruta:</p>{{ obtenerNombreRuta(ruta) }}
+            </q-item-section>
+          </q-item>
+          <q-item clickable>
+            <q-item-section>
+              <p class="menu_n">Bus:</p> {{ obtenerInfoBus(bus) }}
+            </q-item-section>
+          </q-item>
+          <q-separator />
+          <q-item clickable>
+            <div class="conten_menu">
+              <p class="menu_n">Asiento seleccionado</p>
+              <q-item-section>
+                <p class="menu1">{{ asientoSeleccionado }}</p>
+              </q-item-section>
+            </div>
+          </q-item>
+        </q-list>
+      </q-menu>
+    </q-btn>
+    <br>
+    <br>
 
     <div class="contenedor_info">
       <div class="contenedor_asientos" v-if="mostrarContenedorAsientos">
         <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">
           {{ asiento }}
           <div :class="{ 'asiento-seleccionado': asientoSeleccionado === asiento }">
-            <img class="icon_img" src="https://cdn-icons-png.flaticon.com/512/566/566234.png" alt="" />
+            <img class="icon_img" src="../assets/ii.png" alt="" />
           </div>
         </div>
       </div>
@@ -19,10 +46,7 @@
             <q-btn color="primary" label="Agregar clientes" @click="confirmarAgregarCliente" />
             <q-btn color="primary" label="Buscar clientes " @click="buscarCliente" />
           </div>
-          <div class="numero-con">
-            <h4>Numero asiento:</h4>
-            <p class="numero">{{ asientoSeleccionado }}</p>
-          </div>
+          <br>
           <div class="conten_input">
             <label for="CEDULA">Cedula</label>
             <div class="containerInput">
@@ -50,6 +74,7 @@
               <input placeholder="Gmail" type="email" id="EMAIL" v-model="email" autocomplete="on" />
             </div>
           </div>
+          <br>
           <div class="conten_input">
             <label for="PRECIO">Precio</label>
             <div class="containerInput">
@@ -152,7 +177,7 @@ let errorBuses = ref("");
 let errorPrecio = ref("");
 
 const asientoSeleccionado = ref(null);
-
+const mostrarBotonAgregar = ref(true);
 const mostrarContenedorAsientos = ref(false);
 const mostrarFormularioClientes = ref(false);
 
@@ -166,6 +191,7 @@ async function obtenerInformacion() {
 
     await rutaStore.obtener();
     rowsRutas.value = rutaStore.datosData;
+    console.log(rutaStore.datosData);
   } catch (error) {
     console.error("Error al obtener la información:", error);
   }
@@ -175,7 +201,7 @@ async function obtenerInformacion() {
 function mapRutas() {
   const rutasActivas = rowsRutas.value.filter(ruta => ruta.status === 1);
   return rutasActivas.map((ruta) => ({
-    label: `${ruta.origen} / ${ruta.destino} - ${ruta.horarios}`,
+    label: `${ruta.origen} / ${ruta.destino} - ${formatoHora(ruta.horarios)}`,
     value: ruta._id,
   }));
 }
@@ -221,6 +247,11 @@ const agregarCliente = async () => {
     });
   }
 };
+
+function formatoHora(hora24) {
+  const horaParsed = new Date(`1970-01-01T${hora24}:00`);
+  return horaParsed.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+}
 
 const buscarCliente = () => {
   const clienteEncontrado = rowsClientes.value.find(
@@ -285,6 +316,7 @@ const ocultarMensajeDeError = (campo) => {
   }, 4000);
 };
 
+
 function generarListaAsientos() {
   const camposValidos = validarCampos();
 
@@ -301,17 +333,41 @@ function generarListaAsientos() {
       );
       if (busSeleccionado) {
         const numeroAsientos = busSeleccionado.n_asiento;
-        const listaAsientos = [];
         asientos.value = [];
         for (let i = 1; i <= numeroAsientos; i++) {
           asientos.value.push(Number(i));
         }
       }
     }
+    if (ruta.value && bus.value) {
+      mostrarBotonAgregar.value = false;
+    }
+
     modal.value = false;
     mostrarContenedorAsientos.value = true;
   }
 }
+
+
+const obtenerNombreRuta = (rutaSeleccionada) => {
+  if (rutaSeleccionada) {
+    const rutaEncontrada = rowsRutas.value.find(ruta => ruta._id === rutaSeleccionada.value);
+    if (rutaEncontrada) {
+      return `${rutaEncontrada.origen} / ${rutaEncontrada.destino} / ${formatoHora(rutaEncontrada.horarios)}`;
+    }
+  }
+  return 'Ruta no seleccionada';
+};
+
+const obtenerInfoBus = (busSeleccionado) => {
+  if (busSeleccionado) {
+    const busEncontrado = rowsBuses.value.busesPopulate.find(bus => bus._id === busSeleccionado.value);
+    if (busEncontrado) {
+      return `${busEncontrado.placa} / ${busEncontrado.empresa_asignada} / ${busEncontrado.numero}`;
+    }
+  }
+  return 'Bus no seleccionado';
+};
 
 function formatAMPM(date) {
   let hours = date.getHours();
@@ -457,6 +513,25 @@ onMounted(() => {
   justify-content: space-between;
 }
 
+.conten_menu {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+
+}
+
+.menu1 {
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.menu_n {
+  display: flex;
+  font-size: 17px;
+  font-weight: 700;
+}
+
 .contenedor_asientos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -464,21 +539,14 @@ onMounted(() => {
   background-color: #bbb8b856;
   border-radius: 10px;
   width: 50%;
-  padding: 10px;
+  padding: 6px;
   justify-content: center;
 }
 
-.numero-con {
-  display: flex;
-  align-items: baseline;
-}
 
-.numero {
-  font-size: 50px;
-}
 
 .asiento-seleccionado {
-  background-color: rgb(255, 0, 0);
+  background-color: rgb(255, 187, 0);
   border-radius: 5px;
 }
 
@@ -492,8 +560,12 @@ onMounted(() => {
   width: 40px;
   cursor: pointer;
   border: 1px solid black;
-  background-color: #ffffffad;
   border-radius: 5px;
+}
+
+.btn_info{
+  display: flex;
+  margin-left: 88%;
 }
 
 .boton_agregar {
@@ -573,12 +645,11 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   gap: 25px;
-  margin: 15px;
+  margin: 40px;
 }
 
 .mensaje-error {
   color: red;
   font-size: 12px;
   margin-top: 5px;
-}
-</style>
+}</style>
