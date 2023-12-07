@@ -100,7 +100,7 @@
         <q-card-section>
           <div class="infoDatos">
             <label for="">Rutas</label>
-            <q-select color="blue" filled v-model:model-value="ruta" :options="routeRutas" label="Selecciona una ruta">
+            <q-select color="blue" filled v-model="ruta" :options="routeRutas" label="Selecciona una ruta">
               <template v-slot:prepend>
                 <img src="https://cdn-icons-png.flaticon.com/128/3419/3419596.png" alt=""
                   style="height: 25px; width: 25px" />
@@ -109,7 +109,7 @@
             <span class="error">{{ errorRutas }}</span>
             <br>
             <label for="">Buses</label>
-            <q-select color="blue" filled v-model:model-value="bus" :options="routeBuses" label="Selecciona un bus">
+            <q-select color="blue" filled v-model="bus" :options="routeBuses" label="Selecciona un bus">
               <template v-slot:prepend>
                 <img src="https://cdn-icons-png.flaticon.com/128/9830/9830523.png" alt=""
                   style="height: 25px; width: 25px" />
@@ -302,7 +302,6 @@ const validarCampos = () => {
     errorBuses.value = "";
   }
 
-
   return !errores;
 };
 
@@ -402,7 +401,7 @@ const crearticket = async () => {
     asientos: asientoSeleccionado.value,
   };
   try {
-    if (!Precio.value <= 0) {
+    if (Precio.value <= 0) {
       errorPrecio.value = "Por favor, ingrese un precio válido mayor que 0";
       ocultarMensajeDeError("errorPrecio");
       return
