@@ -52,7 +52,7 @@ const columns = [
   { name: "ruta", required: true, label: "Origen", align: "center", field: (row) => row.ruta.origen, sortable: true },
   { name: "ruta", required: true, label: "Destino", align: "center", field: (row) => row.ruta.destino, sortable: true },
   { name: "Número de asientos", required: true, label: "Número de asientos", align: "center", field: (row) => row.asientos, sortable: true },
-  { name: "Precio", required: true, label: "Precio", align: "center", field: "Precio", sortable: true },
+  { name: "Precio", required: true, label: "Precio", align: "center", field: "Precio",format:(val) => formatoMonedaLocal(val) ,sortable: true },
   { name: "acciones", required: true, label: "Acciones", align: "center", field: "acciones", },
 ];
 
@@ -138,7 +138,7 @@ const generarPDF = (registro) => {
     { label: "Origen", value: registro.ruta.origen },
     { label: "Destino", value: registro.ruta.destino },
     { label: "Número de asiento", value: registro.asientos },
-    { label: "Precio", value: registro.Precio },
+    { label: "Precio", value: formatoMonedaLocal(registro.Precio) },
   ];
 
   let y = 30;
@@ -169,6 +169,14 @@ const generarPDF = (registro) => {
   doc.save(`Boleto_${registro._id}.pdf`);
 };
 
+const formatoMonedaLocal = (numero) => {
+  return numero.toLocaleString('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+};
 
 onMounted(() => {
   obtenerBoleto();

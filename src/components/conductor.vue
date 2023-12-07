@@ -51,7 +51,7 @@
                   <div class="conten_input">
                     <label for="CEDULA">Cedula</label>
                     <div class="containerInput">
-                      <input placeholder="Cedula" type="text" id="CEDULA" v-model="cedula" autocomplete="on">
+                      <input placeholder="Cedula" type="number" id="CEDULA" v-model="cedula" autocomplete="on">
                     </div>
                     <span class="error">{{ errorCedula }}</span>
                   </div>
