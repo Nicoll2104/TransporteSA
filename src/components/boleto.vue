@@ -114,7 +114,7 @@ const generarPDF = (registro) => {
   doc.setLineWidth(0.5);
   doc.setFontSize(12);
 
-  // Título del boleto
+
   const header = 'Boleto de Autobús';
   const maxWidth = doc.internal.pageSize.getWidth();
   doc.setFont('times', 'bold');
@@ -123,7 +123,7 @@ const generarPDF = (registro) => {
   const headerX = (maxWidth - headerWidth) / 2;
   doc.text(header, headerX, 10);
 
-  // Información del boleto
+
   const ticketInfo = [
     { label: "Cédula de vendedor", value: registro.vendedor.cedula },
     { label: "Nombre de vendedor", value: registro.vendedor.nombre },
@@ -143,7 +143,7 @@ const generarPDF = (registro) => {
 
   let y = 30;
 
-  // Función para dibujar un cuadro con borde
+
   const drawBorderedRect = (x, y, width, height) => {
     doc.setLineWidth(0.2);
     doc.rect(x, y, width, height);
