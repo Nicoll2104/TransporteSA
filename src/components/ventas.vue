@@ -16,11 +16,6 @@
               <p class="menu_n">Bus:</p> {{ obtenerInfoBus(bus) }}
             </q-item-section>
           </q-item>
-          <q-item clickable>
-            <q-item-section>
-              <p class="menu_n">Fecha de salida:</p> {{ fecha_salida }}
-            </q-item-section>
-          </q-item>
           <q-separator />
           <q-item clickable>
             <div class="conten_menu">
@@ -372,8 +367,6 @@ const obtenerInfoBus = (busSeleccionado) => {
   }
   return 'Bus no seleccionado';
 };
-
-
 
 function formatAMPM(date) {
   let hours = date.getHours();

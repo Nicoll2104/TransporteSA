@@ -63,7 +63,7 @@
                   </div>
                   <br />
                   <label for="">Conductor</label>
-                  <q-select class="input" filled v-model:model-value="conductor" use-input hide-selected fill-input
+                  <q-select class="input" filled v-model="conductor" use-input hide-selected fill-input
                     input-debounce="0" :options="opcionesConductorFiltro" @filter="filterFn"
                     style="width: 100%; border: 1px solid black; border-radius: 5px; height: 1%; background: rgba(255, 255, 255, 0);">
                     <template v-slot:no-option>
