@@ -7,8 +7,8 @@ import 'quasar/src/css/index.sass';
 import axios from 'axios';
 import '@quasar/extras/material-icons/material-icons.css'
 
-/* axios.defaults.baseURL = "https://boleto.onrender.com/api/" */
-axios.defaults.baseURL = 'http://localhost:5500/api/'
+ axios.defaults.baseURL = "https://boleto.onrender.com/api/" 
+/* axios.defaults.baseURL = 'http://localhost:5500/api/' */
 
 
 const pinia = createPinia()
