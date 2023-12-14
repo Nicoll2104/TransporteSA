@@ -271,7 +271,7 @@ const agregarEditarRuta = async () => {
       limpiar();
     } catch (error) {
       console.error('Error al agregar la ruta:', error);
-      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
+      $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error });
     }
   }
   cargando.value = false;

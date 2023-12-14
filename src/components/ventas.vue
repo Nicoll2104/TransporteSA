@@ -385,6 +385,15 @@ function mostrarFormulario(asiento) {
 }
 
 const crearticket = async () => {
+  const clienteEncontrado = rowsClientes.value.find((cliente) => cliente._id === idcliente.value);
+  if (!clienteEncontrado || clienteEncontrado.status == 0) {
+    $q.notify({
+      type: "negative",
+      color: "negative",
+      message: "No se puede vender un boleto a un cliente inactivo.",
+    });
+    return;
+  }
   const nuevoBoleto = {
     fechas: [
       {
