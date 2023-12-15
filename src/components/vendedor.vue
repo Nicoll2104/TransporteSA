@@ -272,6 +272,7 @@ const agregarEditarVendedor = async () => {
       });
       obtenerVendedor();
     } catch (error) {
+      load.value = false
       console.error("Error al editar el vendedor:", error);
       $q.notify({
         type: "negative",
@@ -308,6 +309,7 @@ const agregarEditarVendedor = async () => {
       obtenerVendedor();
       limpiar();
     } catch (error) {
+      load.value = false
       console.error("Error al agregar el vendedor:", error);
       $q.notify({
         type: "negative",

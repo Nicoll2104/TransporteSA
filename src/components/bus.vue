@@ -358,6 +358,7 @@ const agregarEditarBus = async () => {
       });
       obtenerBus();
     } catch (error) {
+      load.value = false
       console.error("Error al editar el bus:", error);
       $q.notify({
         type: "negative",
@@ -396,6 +397,7 @@ const agregarEditarBus = async () => {
       obtenerBus();
       limpiar();
     } catch (error) {
+      load.value = false
       console.error("Error al agregar el bus:", error);
       $q.notify({
         type: "negative",

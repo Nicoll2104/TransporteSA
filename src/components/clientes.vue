@@ -244,6 +244,7 @@ const agregarEditarCliente = async () => {
       limpiar();
     }
   } catch (error) {
+    load.value = false
     console.error("Error en la función agregarEditarCliente:", error);
 
     if (
@@ -275,7 +276,7 @@ const agregarEditarCliente = async () => {
         message: "Error en la operación",
       });
     }
-
+    load.value = false
     console.error("Error en la función de editarCliente:", error);
   } finally {
     cargando.value = false;

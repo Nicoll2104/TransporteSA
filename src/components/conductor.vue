@@ -240,6 +240,7 @@ const agregarEditarConductor = async () => {
       });
       obtenerConductor();
     } catch (error) {
+      load.value = false
       console.error("Error al editar el conductor:", error);
       $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error });
     }
@@ -270,6 +271,7 @@ const agregarEditarConductor = async () => {
       obtenerConductor();
       limpiar();
     } catch (error) {
+      load.value = false
       console.error("Error al agregar el conductor:", error);
       $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error });
     }

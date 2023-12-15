@@ -1,7 +1,7 @@
 <template>
   <div class="contenedor_principal">
     <div class="boton_agregar" v-if="mostrarBotonAgregar">
-      <q-btn label="Agregar" color="blue" @click="modal = true" />
+      <q-btn label="Agregar" color="blue" @click="modal = true" :loading="loadTicket" />
     </div>
     <q-btn color="primary" class="btn_info" icon="keyboard_arrow_down" label="Datos" v-if="mostrarContenedorAsientos">
       <q-menu transition-show="flip-right" transition-hide="flip-left">

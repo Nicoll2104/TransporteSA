@@ -242,6 +242,7 @@ const agregarEditarRuta = async () => {
       });
       obtenerRuta();
     } catch (error) {
+      loadingRuta.value = false
       console.error('Error al editar la Ruta:', error);
       $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error.errors[0].msg });
     }
@@ -272,6 +273,7 @@ const agregarEditarRuta = async () => {
       obtenerRuta();
       limpiar();
     } catch (error) {
+      loadingRuta.value = false
       console.error('Error al agregar la ruta:', error);
       $q.notify({ type: 'negative', color: 'negative', message: error.response.data.error });
     }
