@@ -15,8 +15,6 @@
         </template>
         <template v-slot:body-cell-acciones="props">
           <q-td key="acciones" :props="props">
-            <q-btn class="btnEditar" icon="edit" color="primary" @click="editarBoleto(props.row)"></q-btn>
-            <q-btn class="btnActivar" v-if="props.row.status == 1" @click="desactivar(props.row._id)">❌</q-btn>
             <q-btn class="btnEditar" color="white" text-color="black" label="📄" @click="generarPDF(props.row)" />
           </q-td>
         </template>
