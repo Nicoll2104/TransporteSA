@@ -78,7 +78,7 @@
             <q-separator />
             <q-card-actions align="right">
               <q-btn flat label="Cerrar" class="btnc" @click="limpiar" color="white" v-close-popup />
-              <q-btn flat label="Aceptar" class="btna" color="white" @click="agregarEditarCliente" :loading="cargando" />
+              <q-btn flat label="Aceptar" class="btna" color="white" @click="agregarEditarCliente" :loading="load" />
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -106,7 +106,7 @@ const errorCedula = ref("");
 const errorNombre = ref("");
 const errorTelefono = ref("");
 const errorEmail = ref("");
-
+const load = ref(false)
 const cargando = ref(false);
 const modalAbierto = ref(false);
 
@@ -214,7 +214,9 @@ const agregarEditarCliente = async () => {
         telefono: telefono.value,
         email: email.value,
       };
+      load.value = true
       await clienteStore.editarCliente(clienteEditado);
+      load.value = false
       $q.notify({
         message: "Cliente actualizado correctamente",
         textColor: "white",
@@ -229,7 +231,9 @@ const agregarEditarCliente = async () => {
         telefono: telefono.value,
         email: email.value,
       };
+      load.value = true
       await clienteStore.agregarCliente(nuevoCliente);
+      load.value = false
       $q.notify({
         message: "Cliente agregado 👍",
         textColor: "white",

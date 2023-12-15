@@ -224,7 +224,9 @@ const agregarEditarRuta = async () => {
       duracion: duracion.value,
     };
     try {
+      loadingRuta.value = true
       await rutaStore.editarRuta(rutaEditado);
+      loadingRuta.value = false
       origen.value = "";
       destino.value = "";
       horarios.value = "";
@@ -252,7 +254,9 @@ const agregarEditarRuta = async () => {
       duracion: duracion.value,
     };
     try {
+      loadingRuta.value=true
       await rutaStore.agregarRuta(nuevoRuta);
+      loadingRuta.value = false
       origen.value = "";
       destino.value = "";
       horarios.value = "";

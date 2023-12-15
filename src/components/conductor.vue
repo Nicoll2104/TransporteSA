@@ -95,7 +95,7 @@
             <q-card-actions align="right">
               <q-btn flat class="btn_A" label="Cerrar" color="white" @click="limpiar" v-close-popup />
               <q-btn flat class="btn_AC" label="Aceptar" color="white" @click="agregarEditarConductor"
-                :loading="cargando" />
+                :loading="load" />
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -120,7 +120,7 @@ const direccion = ref("");
 const telefono = ref("");
 const conductorEditando = ref(null);
 const $q = useQuasar();
-
+const load = ref(false)
 const cargando = ref(false);
 const modalAbierto = ref(false);
 
@@ -222,7 +222,9 @@ const agregarEditarConductor = async () => {
       telefono: telefono.value,
     };
     try {
+      load.value = true
       await conductorStore.editarConductor(conductorEditado);
+      load.value = false
       cedula.value = "";
       nombre.value = "";
       n_licencia.value = "";
@@ -250,7 +252,9 @@ const agregarEditarConductor = async () => {
       telefono: telefono.value,
     };
     try {
+      load.value=true
       await conductorStore.agregarConductor(nuevoConductor);
+      load.value=false
       cedula.value = "";
       nombre.value = "";
       n_licencia.value = "";

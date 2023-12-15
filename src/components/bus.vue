@@ -115,7 +115,7 @@
             <q-separator />
             <q-card-actions align="right">
               <q-btn flat label="Cerrar" class="btnc" @click="limpiar" color="white" v-close-popup />
-              <q-btn flat label="Aceptar" class="btna" @click="agregarEditarBus" color="white" :loading="cargando" />
+              <q-btn flat label="Aceptar" class="btna" @click="agregarEditarBus" color="white" :loading="load" />
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -149,6 +149,7 @@ const options = ref([])
 const cargando = ref(false);
 const modalAbierto = ref(false);
 const opcionesConductor = ref([]);
+const load = ref(false)
 
 const opcionesConductorFiltro = ref(opcionesConductor.value)
 function filterFn(val, update) {
@@ -337,7 +338,9 @@ const agregarEditarBus = async () => {
       empresa_asignada: empresa_asignada.value,
     };
     try {
+      load.value = true
       await busStore.editarBus(busEditado);
+      load.value = false
       placa.value = "";
       numero.value = "";
       conductor.value = "";
@@ -373,7 +376,9 @@ const agregarEditarBus = async () => {
       empresa_asignada: empresa_asignada.value,
     };
     try {
+      load.value=true
       await busStore.agregarBus(nuevoBus);
+      load.value=false
       placa.value = "";
       numero.value = "";
       conductor.value = "";

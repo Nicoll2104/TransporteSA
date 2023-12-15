@@ -97,7 +97,7 @@
             <q-separator />
             <q-card-actions align="right">
               <q-btn flat label="Cerrar" color="white" @click="limpiar" class="btnc" v-close-popup />
-              <q-btn flat label="Aceptar" color="white" @click="agregarEditarVendedor" class="btna" :loading="cargando" />
+              <q-btn flat label="Aceptar" color="white" @click="agregarEditarVendedor" class="btna" :loading="load" />
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -123,6 +123,7 @@ const usuario = ref("");
 const contrasena = ref("");
 const vendedorEditando = ref(null);
 const $q = useQuasar();
+const load = ref(false)
 
 const cargando = ref(false);
 const modalAbierto = ref(false);
@@ -206,7 +207,6 @@ const errorContrasena = ref("");
 
 const agregarEditarVendedor = async () => {
 
-
   if (!nombre.value.trim()) {
     errorNombre.value = "Por favor, ingresa tu nombre";
     clearErrors();
@@ -253,7 +253,9 @@ const agregarEditarVendedor = async () => {
       contrasena: contrasena.value,
     };
     try {
+      load.value = true
       await vendedorStore.editarVendedor(vendedorEditado);
+      load.value = false
       cedula.value = "";
       nombre.value = "";
       apellido.value = "";
@@ -287,7 +289,9 @@ const agregarEditarVendedor = async () => {
       contrasena: contrasena.value,
     };
     try {
+      load.value=true
       await vendedorStore.agregarVendedor(nuevoVendedor);
+      load.value=false
       cedula.value = "";
       nombre.value = "";
       apellido.value = "";

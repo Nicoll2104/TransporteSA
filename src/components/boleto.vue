@@ -99,9 +99,6 @@ const obtenerBoleto = async () => {
   }
 };
 
-
-
-
 const generarPDF = (registro) => {
   const doc = new jsPDF({
     orientation: 'portrait',
