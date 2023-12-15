@@ -196,12 +196,6 @@ const errorTelefono = ref("");
 
 const agregarEditarConductor = async () => {
 
-  if (!cedula.value.trim()) {
-    errorCedula.value = "Por favor, ingresa el número de cédula";
-    clearErrors();
-    console.log("Error de cédula");
-    return;
-  }
 
   if (!nombre.value.trim()) {
     errorNombre.value = "Por favor, ingresa tu nombre";
@@ -210,24 +204,10 @@ const agregarEditarConductor = async () => {
     return;
   }
 
-  if (!n_licencia.value) {
-    errorN_licencia.value = "Por favor, ingresa tu numero de licencia";
-    clearErrors();
-    console.log("Error de numero");
-    return;
-  }
-
   if (!direccion.value.trim()) {
     errorDireccion.value = "Por favor, ingresa tu dirección";
     clearErrors();
     console.log("Error de direccion");
-    return;
-  }
-
-  if (!telefono.value) {
-    errorTelefono.value = "Por favor, ingresa el número de teléfono";
-    clearErrors();
-    console.log("Error de teléfono");
     return;
   }
 

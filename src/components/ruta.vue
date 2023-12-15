@@ -95,7 +95,7 @@
             <q-separator />
             <q-card-actions align="right">
               <q-btn flat label="Cerrar" color="white" @click="limpiar" class="btnc" v-close-popup />
-              <q-btn flat label="Aceptar" color="white" class="btna" @click="agregarEditarRuta" :loading="cargando" />
+              <q-btn flat label="Aceptar" color="white" class="btna" @click="agregarEditarRuta" :loading="loadingRuta" />
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -120,7 +120,7 @@ const distancia = ref("");
 const duracion = ref("");
 const rutaEditando = ref(null);
 const $q = useQuasar()
-
+const loadingRuta = ref(false)
 const cargando = ref(false);
 const modalAbierto = ref(false);
 
@@ -214,8 +214,6 @@ const agregarEditarRuta = async () => {
     errorDuracion.value = "";
   }
 
-
-
   if (rutaEditando.value) {
     const rutaEditado = {
       _id: rutaEditando.value._id,
@@ -247,8 +245,8 @@ const agregarEditarRuta = async () => {
     }
   } else {
     const nuevoRuta = {
-      origen: origen.value,
-      destino: destino.value,
+      origen: origen.value.trim(),
+      destino: destino.value.trim(),
       horarios: horarios.value,
       distancia: distancia.value,
       duracion: duracion.value,

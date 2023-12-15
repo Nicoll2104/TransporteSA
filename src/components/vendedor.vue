@@ -47,7 +47,7 @@
                   <div class="conten_input">
                     <label for="CEDULA">Cedula</label>
                     <div class="containerInput">
-                      <input placeholder="Cedula" type="text" id="CEDULA" v-model="cedula" autocomplete="on" />
+                      <input placeholder="Cedula" type="number" id="CEDULA" v-model="cedula" autocomplete="on" />
                     </div>
                     <span class="error">{{ errorCedula }}</span>
                   </div>
@@ -206,21 +206,15 @@ const errorContrasena = ref("");
 
 const agregarEditarVendedor = async () => {
 
-  if (!cedula.value) {
-    errorCedula.value = "Por favor, ingresa el número de cédula";
-    clearErrors();
-    console.log("Error de cédula");
-    return;
-  }
 
-  if (!nombre.value) {
+  if (!nombre.value.trim()) {
     errorNombre.value = "Por favor, ingresa tu nombre";
     clearErrors();
     console.log("Error de nombre");
     return;
   }
 
-  if (!apellido.value) {
+  if (!apellido.value.trim()) {
     errorApellido.value = "Por favor, ingresa el apellido";
     clearErrors();
     console.log("Error de apellido");
@@ -234,14 +228,14 @@ const agregarEditarVendedor = async () => {
     return;
   }
 
-  if (!usuario.value) {
+  if (!usuario.value.trim()) {
     errorUsuario.value = "Por favor, ingresa un usuario";
     clearErrors();
     console.log("Error de usuario");
     return;
   }
 
-  if (!contrasena.value) {
+  if (!contrasena.value.trim) {
     errorContrasena.value = "Por favor, ingresa tu contraseña";
     clearErrors();
     console.log("Error de contraseña");
@@ -314,7 +308,7 @@ const agregarEditarVendedor = async () => {
       $q.notify({
         type: "negative",
         color: "negative",
-        message: error.response.data.error.errors[0].msg,
+        message: error.response.data.error,
       });
     }
   }

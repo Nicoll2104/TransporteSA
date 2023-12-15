@@ -47,6 +47,9 @@
             <q-btn color="primary" label="Agregar clientes" @click="confirmarAgregarCliente" />
             <q-btn color="primary" label="Buscar clientes " @click="buscarCliente" />
           </div>
+          <q-item-section>
+            <p class="menu3">Numero de asiento: {{ asientoSeleccionado }}</p>
+          </q-item-section>
           <br>
           <div class="conten_input">
             <label for="CEDULA">Cedula</label>
@@ -146,6 +149,7 @@ import { useRutaStore } from "../stores/ruta.js";
 import { useBusStore } from "../stores/bus.js";
 import { useClienteStore } from "../stores/clientes.js";
 import { useboletoStore } from "../stores/boleto.js";
+import { jsPDF } from "jspdf";
 
 const busStore = useBusStore();
 const rutaStore = useRutaStore();
@@ -199,6 +203,68 @@ async function obtenerInformacion() {
   }
 }
 
+const generarPDF = (registro) => {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: [195, 115]
+  });
+
+  doc.setLineWidth(0.5);
+  doc.setFontSize(12);
+
+
+  const header = 'Boleto de Autobús';
+  const maxWidth = doc.internal.pageSize.getWidth();
+  doc.setFont('times', 'bold');
+  doc.setFontSize(16);
+  const headerWidth = doc.getStringUnitWidth(header) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+  const headerX = (maxWidth - headerWidth) / 2;
+  doc.text(header, headerX, 10);
+console.log(registro);
+
+  const ticketInfo = [
+    { label: "Cédula de vendedor", value: registro.vendedor.cedula },
+    { label: "Nombre de vendedor", value: registro.vendedor.nombre },
+    { label: "Fecha de Venta", value: convertirFecha(registro.fecha_salida) },
+    { label: "Hora de Venta", value: registro.hora_venta },
+    { label: "Fecha de Salida", value: convertirFecha(registro.fecha_salida) },
+    { label: "Hora de Salida", value: convertirHora(registro.ruta.horarios) },
+    { label: "Cédula de cliente", value: registro.cliente.cedula },
+    { label: "Nombre de Cliente", value: registro.cliente.nombre },
+    { label: "Nombre de conductor", value: registro.bus.conductor.nombre },
+    { label: "Número de bus", value: registro.bus.numero },
+    { label: "Origen", value: registro.ruta.origen },
+    { label: "Destino", value: registro.ruta.destino },
+    { label: "Número de asiento", value: registro.asientos },
+    { label: "Precio", value: formatoMonedaLocal(registro.Precio) },
+  ];
+
+  let y = 30;
+
+
+  const drawBorderedRect = (x, y, width, height) => {
+    doc.setLineWidth(0.2);
+    doc.rect(x, y, width, height);
+  };
+
+  ticketInfo.forEach(info => {
+    doc.setFont('times', 'normal');
+    doc.setFontSize(12);
+
+    if (info.label === "Hora de Salida" || info.label === "Hora de Venta") {
+      doc.setFont('times', 'italic');
+      doc.text(`${info.label}: ${info.value}`, 5, y);
+      doc.setFont('times');
+    } else {
+      doc.text(`${info.label}: ${info.value}`, 5, y);
+    }
+
+    y += 10;
+  });
+
+  doc.save(`Boleto_${registro._id}.pdf`);
+};
 
 function mapRutas() {
   const rutasActivas = rowsRutas.value.filter(ruta => ruta.status === 1);
@@ -351,6 +417,33 @@ function generarListaAsientos() {
   }
 }
 
+function convertirFecha(cadenaFecha) {
+  const fecha = new Date(cadenaFecha);
+  const offset = 5 * 60;
+  fecha.setMinutes(fecha.getMinutes() + offset);
+  const año = fecha.getFullYear();
+  const mes = (fecha.getMonth() + 1).toString().padStart(2, "0");
+  const dia = fecha.getDate().toString().padStart(2, "0");
+
+  const fechaFormateada = `${dia}/${mes}/${año}`;
+  return fechaFormateada;
+}
+
+function convertirHora(cadenaHora) {
+  const [horasStr, minutosStr] = cadenaHora.split(':');
+  let horas = parseInt(horasStr, 10);
+  const minutos = parseInt(minutosStr, 10);
+
+  const sufijo = horas >= 12 ? 'PM' : 'AM';
+  if (horas > 12) {
+    horas -= 12;
+  } else if (horas === 0) {
+    horas = 12;
+  }
+
+  return `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')} ${sufijo}`;
+}
+
 
 const obtenerNombreRuta = (rutaSeleccionada) => {
   if (rutaSeleccionada) {
@@ -419,13 +512,15 @@ const crearticket = async () => {
       errorPrecio.value = "";
     }
     console.log("nuevoboleto", nuevoBoleto);
-    await boletoStore.agregarBoleto(nuevoBoleto);
+    const res = await boletoStore.agregarBoleto(nuevoBoleto);
     cliente.value = "";
     modal.value = false;
     $q.notify({ message: "Boleto de cliente creado", textColor: "white", type: "positive", color: "green" });
     ocupados.value.push(nuevoBoleto.asientos)
     asientoSeleccionado.value = '';
     mostrarFormularioClientes.value = false;
+
+    console.log(res);
 
     Precio.value=''
     idcliente.value= ''
@@ -434,7 +529,9 @@ const crearticket = async () => {
     telefono.value = ''
     email.value=''
 
+    generarPDF(res.boleto)
   } catch (error) {
+    console.log(error);
     $q.notify({
       type: "negative",
       color: "negative",
@@ -443,6 +540,15 @@ const crearticket = async () => {
   } finally{
     loadTicket.value = false
   }
+};
+
+const formatoMonedaLocal = (numero) => {
+  return numero.toLocaleString('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
 };
 
 const ocupados = ref([])
@@ -564,6 +670,13 @@ onMounted(() => {
 .menu1 {
   font-size: 40px;
   font-weight: 600;
+}
+
+.menu3 {
+  margin-top: 10px;
+  margin-bottom: 1px;
+  font-size: 20px;
+  font-weight: 100;
 }
 
 .menu_n {
