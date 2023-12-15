@@ -22,7 +22,6 @@
           src="https://img.freepik.com/vector-premium/icono-perfil-usuario-estilo-plano-ilustracion-vector-avatar-miembro-sobre-fondo-aislado-concepto-negocio-signo-permiso-humano_157943-15752.jpg"
           style="height: 180px; width: 180px" />
       </div>
-      <p class="txt">Edwin</p>
       <div class="botoneslate">
         <button class="btn">
           <router-link to="/home"><img src="https://cdn-icons-png.flaticon.com/128/6281/6281275.png"

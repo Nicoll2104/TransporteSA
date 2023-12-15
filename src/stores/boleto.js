@@ -16,6 +16,17 @@ export const useboletoStore = defineStore("boleto", () => {
         }
     };
 
+    const asientos = async(data)=>{
+        try {
+            const response = await axios.post('boleto/asientos', data)
+            console.log(response);
+
+            return response.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
      const agregarBoleto = async (nuevoBoleto) => {
         try {
             const response = await axios.post("boleto/agregar", nuevoBoleto);
@@ -65,6 +76,7 @@ export const useboletoStore = defineStore("boleto", () => {
         obtener,
       agregarBoleto,
         editarBoleto,
+        asientos
     };
 
 });

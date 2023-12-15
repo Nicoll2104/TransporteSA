@@ -33,12 +33,13 @@
 
     <div class="contenedor_info">
       <div class="contenedor_asientos" v-if="mostrarContenedorAsientos">
-        <div v-for="(asiento, index) in asientos" :key="index" @click="mostrarFormulario(asiento)">
+        <q-btn v-for="(asiento, index) in asientos" :disable="ocupados.includes(asiento)" :style="ocupados.includes(asiento) ? 'background-color:red' : ''" :key="index"
+          @click="mostrarFormulario(asiento)">
           {{ asiento }}
           <div :class="{ 'asiento-seleccionado': asientoSeleccionado === asiento }">
             <img class="icon_img" src="../assets/ii.png" alt="" />
           </div>
-        </div>
+        </q-btn>
       </div>
       <div class="conten_clientes" v-if="mostrarFormularioClientes">
         <div class="infoDatos2">
@@ -84,7 +85,7 @@
           </div>
 
           <div class="botones">
-            <q-btn color="primary" label="Confirmar" @click="crearticket()" />
+            <q-btn color="primary" label="Confirmar" @click="crearticket()" :loading="loadTicket" />
             <q-btn color="primary" label="Limpiar" @click="limpiarTodo" />
           </div>
 
@@ -151,6 +152,7 @@ const rutaStore = useRutaStore();
 const clienteStore = useClienteStore();
 const boletoStore = useboletoStore();
 
+const loadTicket = ref(false)
 const modal = ref(false);
 const rowsBuses = ref([]);
 const rowsClientes = ref([]);
@@ -344,6 +346,8 @@ function generarListaAsientos() {
 
     modal.value = false;
     mostrarContenedorAsientos.value = true;
+
+    asientosOcupados()
   }
 }
 
@@ -385,6 +389,7 @@ function mostrarFormulario(asiento) {
 }
 
 const crearticket = async () => {
+  loadTicket.value = true
   const clienteEncontrado = rowsClientes.value.find((cliente) => cliente._id === idcliente.value);
   if (!clienteEncontrado || clienteEncontrado.status == 0) {
     $q.notify({
@@ -395,13 +400,9 @@ const crearticket = async () => {
     return;
   }
   const nuevoBoleto = {
-    fechas: [
-      {
-        fecha_venta: fecha_venta.value,
-        hora_venta: hora_venta.value,
-        fecha_salida: fecha_salida.value,
-      },
-    ],
+    fecha_venta: fecha_venta.value,
+    hora_venta: hora_venta.value,
+    fecha_salida: fecha_salida.value,
     Precio: Precio.value,
     cliente: idcliente.value,
     bus: bus.value.value,
@@ -422,14 +423,45 @@ const crearticket = async () => {
     cliente.value = "";
     modal.value = false;
     $q.notify({ message: "Boleto de cliente creado", textColor: "white", type: "positive", color: "green" });
+    ocupados.value.push(nuevoBoleto.asientos)
+    asientoSeleccionado.value = '';
+    mostrarFormularioClientes.value = false;
+
+    Precio.value=''
+    idcliente.value= ''
+    cedula.value = ''
+    nombre.value = ''
+    telefono.value = ''
+    email.value=''
+
   } catch (error) {
     $q.notify({
       type: "negative",
       color: "negative",
       message: error.response.data.error,
     });
+  } finally{
+    loadTicket.value = false
   }
 };
+
+const ocupados = ref([])
+
+async function asientosOcupados() {
+  try {
+    const response = await boletoStore.asientos({
+      fecha_venta: fecha_venta.value,
+      hora_venta: hora_venta.value,
+      fecha_salida: fecha_salida.value,
+      bus: bus.value.value,
+      ruta: ruta.value.value,
+    })
+    ocupados.value = response.map(a => a.asientos)
+    console.log(ocupados.value);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 const limpiarTodo = () => {
   cedula.value = "";
@@ -571,7 +603,7 @@ onMounted(() => {
   border-radius: 5px;
 }
 
-.btn_info{
+.btn_info {
   display: flex;
   margin-left: 88%;
 }
@@ -661,7 +693,4 @@ onMounted(() => {
   font-size: 12px;
   margin-top: 5px;
 }
-
-
-
 </style>
