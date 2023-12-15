@@ -161,8 +161,6 @@ const generarPDF = (registro) => {
       doc.text(`${info.label}: ${info.value}`, 5, y);
     }
 
-/*      drawBorderedRect(4, y - 4, maxWidth - 8, 8);  */
-
     y += 10;
   });
 
